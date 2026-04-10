@@ -2,9 +2,9 @@
 
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
-import VokDevButton from '@/components/VokDevButton'
-import VokDevCard from '@/components/VokDevCard'
-import VokDevBadge from '@/components/VokDevBadge'
+import { VokDevButton } from '@/components/VokDevButton'
+import { VokDevCard, VokDevCardHeader, VokDevCardTitle, VokDevCardDescription, VokDevCardContent, VokDevCardFooter } from '@/components/VokDevCard'
+import { VokDevBadge } from '@/components/VokDevBadge'
 import { useState } from 'react'
 
 const allProjects = [

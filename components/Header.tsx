@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
-import VokDevButton from './VokDevButton'
+import { VokDevButton } from './VokDevButton'
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
