@@ -18,10 +18,12 @@ export default function LandingPage() {
     <div ref={rootRef} className="landing-v3" data-section="hero">
       <LandingGsap rootRef={rootRef} />
 
-      <div id="cur">
-        <div className="cur-ring" />
+      {/* Cursor — label is a child of ring so it follows the lagged ring automatically */}
+      <div id="cur" aria-hidden="true">
+        <div className="cur-ring">
+          <div className="cur-label">Join</div>
+        </div>
         <div className="cur-dot" />
-        <div className="cur-label">Join</div>
       </div>
 
       <div className="noise" />

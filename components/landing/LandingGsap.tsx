@@ -1,18 +1,13 @@
 'use client'
 
-import { useRef, type RefObject } from 'react'
+import { type RefObject } from 'react'
 import {
   gsap,
   ScrollTrigger,
   registerGsap,
   useGsapSetup,
-  prefersReducedMotion,
-  hasFinePointer,
   scopedQuery,
-  fadeUp,
-  slideUp,
   lineReveal,
-  letterPop,
   stOnce,
 } from '@/lib/motion'
 
@@ -21,7 +16,6 @@ registerGsap()
 type Props = { rootRef: RefObject<HTMLElement | null> }
 
 export function LandingGsap({ rootRef }: Props) {
-  const cleanups = useRef<(() => void)[]>([])
 
   useGsapSetup(({ reducedMotion, finePtr, addCleanup }) => {
     const root = rootRef.current
@@ -31,6 +25,8 @@ export function LandingGsap({ rootRef }: Props) {
 
     /* ══════════════════════════════════════
        DYNAMIC ISLAND NAV
+       CSS owns only child opacity (.expanded class).
+       GSAP owns all dimension animation — no CSS transition conflict.
     ══════════════════════════════════════ */
     const island = qs('#island-nav')
     const islandTrigger = qs('#island-trigger')
@@ -40,13 +36,13 @@ export function LandingGsap({ rootRef }: Props) {
     function expandIsland() {
       if (!island || isExpanded) return
       isExpanded = true
-      if (collapseTimer) clearTimeout(collapseTimer)
+      if (collapseTimer) { clearTimeout(collapseTimer); collapseTimer = null }
       gsap.to(island, {
         width: window.innerWidth < 680 ? '92vw' : 600,
         height: 54,
         borderRadius: 100,
-        duration: 0.55,
-        ease: 'back.out(1.6)',
+        duration: 0.5,
+        ease: 'back.out(1.8)',
       })
     }
 
@@ -56,23 +52,23 @@ export function LandingGsap({ rootRef }: Props) {
       collapseTimer = setTimeout(() => {
         if (!isExpanded) return
         isExpanded = false
+        // Remove class first so content fades out, then size collapses
+        island.classList.remove('expanded')
         gsap.to(island, {
           width: 160,
           height: 36,
           borderRadius: 100,
-          duration: 0.6,
+          duration: 0.55,
           ease: 'expo.inOut',
-          onComplete: () => island.classList.remove('expanded'),
         })
-        island.classList.remove('expanded')
-      }, 320)
+      }, 280)
     }
 
     if (islandTrigger && island) {
       const onTE = () => { island.classList.add('expanded'); expandIsland() }
       const onTL = () => collapseIsland()
       const onIE = () => {
-        if (collapseTimer) clearTimeout(collapseTimer)
+        if (collapseTimer) { clearTimeout(collapseTimer); collapseTimer = null }
         if (!isExpanded) { island.classList.add('expanded'); expandIsland() }
       }
       islandTrigger.addEventListener('mouseenter', onTE)
@@ -89,14 +85,17 @@ export function LandingGsap({ rootRef }: Props) {
 
     ScrollTrigger.create({ start: 'top top', onLeave: () => collapseIsland() })
 
+    // Subtle breathing pulse — paused while expanded
     if (island && !reducedMotion) {
-      gsap.to(island, {
-        scale: 1.015, duration: 2.2, ease: 'sine.inOut', yoyo: true, repeat: -1,
-        onUpdate: function () { if (isExpanded) gsap.set(island, { scale: 1 }) },
+      const breathe = gsap.to(island, {
+        scale: 1.018, duration: 2.4, ease: 'sine.inOut', yoyo: true, repeat: -1,
       })
+      // Pause the breathe when expanded so it doesn't fight user interaction
+      island.addEventListener('mouseenter', () => breathe.pause())
+      island.addEventListener('mouseleave', () => { if (!isExpanded) breathe.resume() })
     }
 
-    /* Active nav links */
+    /* ── Active nav link highlighting ── */
     function setActive(id: string) {
       qsa('.island-link').forEach((a) => {
         a.classList.toggle('active', a.getAttribute('href') === `#${id}`)
@@ -113,34 +112,62 @@ export function LandingGsap({ rootRef }: Props) {
 
     /* ══════════════════════════════════════
        CURSOR SYSTEM
+       ─────────────────────────────────────
+       • xPercent:-50 / yPercent:-50 owns centering — NO CSS transform on elements
+       • quickSetter: dot follows instantly (zero tween overhead)
+       • gsap.ticker: ring lerps smoothly behind mouse on GSAP's own RAF
+       • curLabel is a DOM child of curRing — moves with the ring for free
+       • Hover scale and section dot rotation are GSAP-owned (no CSS transform conflict)
     ══════════════════════════════════════ */
-    const cur = qs('#cur')
+    const cur     = qs('#cur')
     const curRing = cur?.querySelector<HTMLElement>('.cur-ring') ?? null
     const curDot  = cur?.querySelector<HTMLElement>('.cur-dot')  ?? null
 
     if (cur && curDot && curRing && finePtr) {
-      let mx = window.innerWidth / 2, my = window.innerHeight / 2
-      let rx = mx, ry = my, raf = 0
+      // Centre each element via GSAP's own percentage system
+      gsap.set([curDot, curRing], { xPercent: -50, yPercent: -50 })
+
+      // quickSetter: pre-compiled single-property setters — fastest possible update
+      const setDotX  = gsap.quickSetter(curDot,  'x', 'px')
+      const setDotY  = gsap.quickSetter(curDot,  'y', 'px')
+      const setRingX = gsap.quickSetter(curRing, 'x', 'px')
+      const setRingY = gsap.quickSetter(curRing, 'y', 'px')
+
+      let mx = window.innerWidth  / 2
+      let my = window.innerHeight / 2
+      let rx = mx, ry = my
 
       const onMove = (e: MouseEvent) => {
-        mx = e.clientX; my = e.clientY
-        gsap.to(curDot, { x: mx, y: my, duration: 0.06, ease: 'none' })
+        mx = e.clientX
+        my = e.clientY
+        setDotX(mx)
+        setDotY(my)
       }
-      window.addEventListener('mousemove', onMove)
+      window.addEventListener('mousemove', onMove, { passive: true })
 
-      const loop = () => {
-        rx += (mx - rx) * 0.1; ry += (my - ry) * 0.1
-        gsap.set(curRing, { x: rx, y: ry })
-        raf = requestAnimationFrame(loop)
+      // Ring lerp runs on GSAP's own ticker — no extra RAF needed
+      const LERP = 0.11
+      const ringTick = () => {
+        rx += (mx - rx) * LERP
+        ry += (my - ry) * LERP
+        setRingX(rx)
+        setRingY(ry)
       }
-      raf = requestAnimationFrame(loop)
+      gsap.ticker.add(ringTick)
 
+      // Section observer → update data-section + handle dot rotation
       const secIO = new IntersectionObserver(
         (entries) => {
-          entries.forEach((e) => {
-            if (e.isIntersecting && e.intersectionRatio > 0.3) {
-              const sec = (e.target as HTMLElement).dataset.sec
-              if (sec) L.setAttribute('data-section', sec)
+          entries.forEach((entry) => {
+            if (entry.isIntersecting && entry.intersectionRatio > 0.3) {
+              const sec = (entry.target as HTMLElement).dataset.sec
+              if (!sec) return
+              L.setAttribute('data-section', sec)
+              gsap.to(curDot, {
+                rotation: sec === 'marquee' ? 45 : 0,
+                duration: 0.35,
+                ease: sec === 'marquee' ? 'back.out(1.4)' : 'expo.out',
+              })
             }
           })
         },
@@ -148,87 +175,62 @@ export function LandingGsap({ rootRef }: Props) {
       )
       qsa('[data-sec]').forEach((s) => secIO.observe(s))
 
-      const onHE = () => L.classList.add('cur-hover')
-      const onHL = () => L.classList.remove('cur-hover')
-      qsa('button,a,.pill,.pc,.island-link,.hsc-card').forEach((el) => {
+      // Hover scale handled by GSAP (avoids CSS transform conflict)
+      const onHE = () => {
+        L.classList.add('cur-hover')
+        const sec = L.dataset.section ?? 'hero'
+        const scl = sec === 'cta' ? 1.12 : sec === 'projects' ? 1.5 : 1.52
+        gsap.to(curRing, { scale: scl, duration: 0.28, ease: 'back.out(1.6)' })
+        if (sec === 'projects') gsap.to(curDot, { scale: 0, duration: 0.18, ease: 'power2.in' })
+      }
+      const onHL = () => {
+        L.classList.remove('cur-hover')
+        gsap.to(curRing, { scale: 1, duration: 0.4,  ease: 'expo.out' })
+        gsap.to(curDot,  { scale: 1, duration: 0.28, ease: 'back.out(1.8)' })
+      }
+
+      const hoverTargets = qsa('button,a,.pill,.pc,.island-link,.hsc-card')
+      hoverTargets.forEach((el) => {
         el.addEventListener('mouseenter', onHE)
         el.addEventListener('mouseleave', onHL)
       })
 
       addCleanup(() => {
         window.removeEventListener('mousemove', onMove)
-        cancelAnimationFrame(raf)
+        gsap.ticker.remove(ringTick)
         secIO.disconnect()
-        qsa('button,a,.pill,.pc,.island-link,.hsc-card').forEach((el) => {
+        hoverTargets.forEach((el) => {
           el.removeEventListener('mouseenter', onHE)
           el.removeEventListener('mouseleave', onHL)
         })
       })
     }
 
-    /* ══════════════════════════════════════
-       HERO ENTRANCE
-    ══════════════════════════════════════ */
-    if (reducedMotion) {
-      L.querySelectorAll<HTMLElement>('[data-count]').forEach((node) => {
-        node.textContent = parseInt(node.dataset.count ?? '0', 10).toLocaleString()
-      })
-    } else {
-      /* ── initial hidden + blurred states ── */
-      gsap.set('#hbadge',          { opacity: 0, filter: 'blur(10px)', y: -6 })
-      gsap.set(qsa('.h1-word'),    { opacity: 0, filter: 'blur(8px)',  y: '110%' })
-      gsap.set('#hsubt',           { opacity: 0, filter: 'blur(10px)', y: 8 })
-      gsap.set('#hvok',            { opacity: 0, filter: 'blur(8px)',  y: 6 })
-      gsap.set('#hdesc',           { opacity: 0, filter: 'blur(7px)',  y: 6 })
-      gsap.set('#hctas',           { opacity: 0, filter: 'blur(6px)',  y: 4 })
-      gsap.set('#hstats',          { opacity: 0, filter: 'blur(6px)',  y: 4 })
-      gsap.set('#scind',           { opacity: 0, filter: 'blur(4px)' })
-
-      /* ── staggered blur-focus + slide timeline ── */
-      const htl = gsap.timeline({ defaults: { ease: 'expo.out' } })
-      htl
-        .to('#hbadge',         { opacity: 1, filter: 'blur(0px)', y: 0,    duration: 0.95 }, 0.3)
-        .to(qsa('.h1-word'),   { opacity: 1, filter: 'blur(0px)', y: '0%', duration: 1.1, stagger: 0.13 }, 0.5)
-        .to('#hsubt',          { opacity: 1, filter: 'blur(0px)', y: 0,    duration: 0.85 }, 0.88)
-        .to('#hvok',           { opacity: 1, filter: 'blur(0px)', y: 0,    duration: 0.75 }, 1.12)
-        .to('#hdesc',          { opacity: 1, filter: 'blur(0px)', y: 0,    duration: 0.75 }, 1.27)
-        .to('#hctas',          { opacity: 1, filter: 'blur(0px)', y: 0,    duration: 0.75 }, 1.42)
-        .to('#hstats',         { opacity: 1, filter: 'blur(0px)', y: 0,    duration: 0.75 }, 1.57)
-        .to('#scind',          { opacity: 1, filter: 'blur(0px)',           duration: 0.65 }, 1.92)
-
-      L.querySelectorAll<HTMLElement>('[data-count]').forEach((node) => {
-        const target = parseInt(node.dataset.count ?? '0', 10)
-        const obj = { v: 0 }
-        gsap.to(obj, {
-          v: target, duration: 2.4, ease: 'power3.out', delay: 1.6,
-          onUpdate: () => { node.textContent = Math.round(obj.v).toLocaleString() },
-        })
-      })
-    }
+    /* Hero entrance + counters are self-managed by HeroSection.tsx */
 
     /* ══════════════════════════════════════
-       HERO PARALLAX
+       HERO SCROLL PARALLAX
+       scrub: 1.5 gives a cushioned, cinematic scroll response
     ══════════════════════════════════════ */
     if (!reducedMotion) {
       gsap.to('.hero-h1', {
-        yPercent: -28, ease: 'none',
-        scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true },
+        yPercent: -26, ease: 'none',
+        scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1.5 },
       })
       gsap.to('#hdesc,#hctas', {
-        yPercent: -18, opacity: 0, ease: 'none',
-        scrollTrigger: { trigger: '.hero', start: '35% top', end: 'bottom top', scrub: true },
+        yPercent: -16, opacity: 0, ease: 'none',
+        scrollTrigger: { trigger: '.hero', start: '35% top', end: 'bottom top', scrub: 1.5 },
       })
       gsap.to('#hstats', {
-        yPercent: -12, opacity: 0, ease: 'none',
-        scrollTrigger: { trigger: '.hero', start: '45% top', end: 'bottom top', scrub: true },
+        yPercent: -10, opacity: 0, ease: 'none',
+        scrollTrigger: { trigger: '.hero', start: '45% top', end: 'bottom top', scrub: 1.5 },
       })
 
-      /* orb scroll parallax */
+      // Orb scroll parallax
       gsap.to('#o1', { yPercent:  35, xPercent:  8, ease: 'none', scrollTrigger: { trigger: L, start: 'top top', end: 'bottom bottom', scrub: 1   } })
       gsap.to('#o2', { yPercent: -28,               ease: 'none', scrollTrigger: { trigger: L, start: 'top top', end: 'bottom bottom', scrub: 1.5 } })
       gsap.to('#o3', { yPercent:  22,               ease: 'none', scrollTrigger: { trigger: L, start: 'top top', end: 'bottom bottom', scrub: 0.8 } })
 
-      /* bg grid drift */
       gsap.to('#bgGrid', {
         backgroundPositionY: '25%', ease: 'none',
         scrollTrigger: { trigger: L, start: 'top top', end: 'bottom bottom', scrub: 2.5 },
@@ -236,41 +238,56 @@ export function LandingGsap({ rootRef }: Props) {
     }
 
     /* ══════════════════════════════════════
-       MOUSE PARALLAX — orbs follow cursor
+       ORB MOUSE PARALLAX
+       gsap.quickTo pre-compiles the tween so each call just updates
+       the destination — no per-frame tween allocation.
     ══════════════════════════════════════ */
     if (!reducedMotion && finePtr) {
       const o1 = qs('#o1'), o2 = qs('#o2'), o3 = qs('#o3')
+      // Pre-compile quickTo for each axis; different durations for depth feel
+      const o1x = o1 ? gsap.quickTo(o1, 'x', { duration: 1.8, ease: 'power2.out' }) : null
+      const o1y = o1 ? gsap.quickTo(o1, 'y', { duration: 2.0, ease: 'power2.out' }) : null
+      const o2x = o2 ? gsap.quickTo(o2, 'x', { duration: 2.4, ease: 'power2.out' }) : null
+      const o2y = o2 ? gsap.quickTo(o2, 'y', { duration: 2.6, ease: 'power2.out' }) : null
+      const o3x = o3 ? gsap.quickTo(o3, 'x', { duration: 1.5, ease: 'power2.out' }) : null
+      const o3y = o3 ? gsap.quickTo(o3, 'y', { duration: 1.7, ease: 'power2.out' }) : null
       const onMP = (e: MouseEvent) => {
         const cx = e.clientX / window.innerWidth  - 0.5
         const cy = e.clientY / window.innerHeight - 0.5
-        if (o1) gsap.to(o1, { x: cx *  38, y: cy *  28, duration: 1.8, ease: 'power2.out' })
-        if (o2) gsap.to(o2, { x: cx * -28, y: cy * -18, duration: 2.2, ease: 'power2.out' })
-        if (o3) gsap.to(o3, { x: cx *  18, y: cy *  22, duration: 1.6, ease: 'power2.out' })
+        o1x?.(cx *  36); o1y?.(cy *  26)
+        o2x?.(cx * -26); o2y?.(cy * -16)
+        o3x?.(cx *  16); o3y?.(cy *  20)
       }
       window.addEventListener('mousemove', onMP, { passive: true })
       addCleanup(() => window.removeEventListener('mousemove', onMP))
     }
 
-    /* MarqueeStrip manages its own velocity + hover-pause. */
-
     /* ══════════════════════════════════════
-       ABOUT — scroll reveals
+       SCROLL TEXT REVEALS
+       blur-focus style — mirrors hero entrance for consistency.
+       Headings get more y-travel and longer duration than body copy.
     ══════════════════════════════════════ */
     if (!reducedMotion) {
       qsa('.gsap-fade').forEach((el) => {
-        gsap.fromTo(el, fadeUp.from, {
-          ...fadeUp.to(),
-          scrollTrigger: stOnce(el, 'top 90%'),
-        })
-      })
-      qsa('.gsap-up').forEach((el) => {
-        gsap.fromTo(el, slideUp.from, {
-          ...slideUp.to(),
-          scrollTrigger: stOnce(el, 'top 88%'),
-        })
+        gsap.fromTo(el,
+          { opacity: 0, y: 20, filter: 'blur(7px)' },
+          { opacity: 1, y: 0,  filter: 'blur(0px)',
+            duration: 0.9, ease: 'expo.out',
+            scrollTrigger: stOnce(el, 'top 90%') },
+        )
       })
 
-      /* code-card + chips parallax + idle float */
+      qsa('.gsap-up').forEach((el) => {
+        const isHeading = /^h[1-6]$/i.test(el.tagName)
+        gsap.fromTo(el,
+          { opacity: 0, y: isHeading ? 52 : 34, filter: 'blur(10px)' },
+          { opacity: 1, y: 0, filter: 'blur(0px)',
+            duration: isHeading ? 1.1 : 0.88, ease: 'expo.out',
+            scrollTrigger: stOnce(el, 'top 88%') },
+        )
+      })
+
+      // About section visual: code card + chips scroll parallax + idle float
       gsap.to('#codeCard', { yPercent: -14, ease: 'none', scrollTrigger: { trigger: '#about', start: 'top bottom', end: 'bottom top', scrub: 1.2 } })
       gsap.to('.chip1',    { yPercent: -22, xPercent:  6, ease: 'none', scrollTrigger: { trigger: '#about', start: 'top bottom', end: 'bottom top', scrub: 1.5 } })
       gsap.to('.chip2',    { yPercent:  18, xPercent: -6, ease: 'none', scrollTrigger: { trigger: '#about', start: 'top bottom', end: 'bottom top', scrub: 1   } })
@@ -283,26 +300,33 @@ export function LandingGsap({ rootRef }: Props) {
     }
 
     /* ══════════════════════════════════════
-       PROJECT CARDS — tilt + reveal
+       CARD 3D TILT + ENTRANCE
+       quickTo pre-compiles rotateX/Y/scale for smooth high-frequency updates.
+       Leave uses gsap.to with expo.out for a natural spring-back.
     ══════════════════════════════════════ */
     const cardCleanups: (() => void)[] = []
     qsa('.gsap-card').forEach((card, i) => {
       if (!reducedMotion) {
         gsap.fromTo(card,
-          { opacity: 0, y: 44 },
-          { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', delay: i * 0.06,
+          { opacity: 0, y: 48, filter: 'blur(8px)' },
+          { opacity: 1, y: 0,  filter: 'blur(0px)',
+            duration: 0.85, ease: 'expo.out', delay: i * 0.07,
             scrollTrigger: stOnce(card, 'top 92%') },
         )
       }
       if (finePtr) {
+        gsap.set(card, { transformPerspective: 700 })
+        const tiltY  = gsap.quickTo(card, 'rotateY', { duration: 0.38, ease: 'power2.out' })
+        const tiltX  = gsap.quickTo(card, 'rotateX', { duration: 0.38, ease: 'power2.out' })
+        const tiltSc = gsap.quickTo(card, 'scale',   { duration: 0.38, ease: 'power2.out' })
         const onMm = (e: Event) => {
           const ev = e as MouseEvent
           const r  = card.getBoundingClientRect()
-          const dx = (ev.clientX - r.left) / r.width  - 0.5
-          const dy = (ev.clientY - r.top)  / r.height - 0.5
-          gsap.to(card, { rotateY: dx * 10, rotateX: -dy * 7, duration: 0.35, ease: 'power2.out', transformPerspective: 700, scale: 1.02 })
+          tiltY((ev.clientX - r.left) / r.width  - 0.5)
+          tiltX(-((ev.clientY - r.top)  / r.height - 0.5) * 7)
+          tiltSc(1.025)
         }
-        const onMl = () => gsap.to(card, { rotateY: 0, rotateX: 0, scale: 1, duration: 0.6, ease: 'expo.out' })
+        const onMl = () => gsap.to(card, { rotateY: 0, rotateX: 0, scale: 1, duration: 0.55, ease: 'expo.out' })
         card.addEventListener('mousemove', onMm)
         card.addEventListener('mouseleave', onMl)
         cardCleanups.push(() => {
@@ -314,7 +338,35 @@ export function LandingGsap({ rootRef }: Props) {
     addCleanup(() => cardCleanups.forEach((fn) => fn()))
 
     /* ══════════════════════════════════════
-       DIVIDERS  /  CTA  /  PILLS  /  VOK
+       MAGNETIC CTA BUTTONS
+       quickTo updates the target position each frame; mouse-leave snaps
+       back with an elastic spring for a satisfying "release" feel.
+    ══════════════════════════════════════ */
+    if (finePtr) {
+      const magBtns = qsa('.btn-p,.btn-g,.btn-l,.island-cta')
+      const magCleanups: (() => void)[] = []
+      magBtns.forEach((btn) => {
+        const moveX = gsap.quickTo(btn, 'x', { duration: 0.45, ease: 'power3.out' })
+        const moveY = gsap.quickTo(btn, 'y', { duration: 0.45, ease: 'power3.out' })
+        const onMm = (e: Event) => {
+          const ev = e as MouseEvent
+          const r = btn.getBoundingClientRect()
+          moveX((ev.clientX - r.left - r.width  / 2) * 0.3)
+          moveY((ev.clientY - r.top  - r.height / 2) * 0.3)
+        }
+        const onMl = () => gsap.to(btn, { x: 0, y: 0, duration: 0.65, ease: 'elastic.out(1, 0.4)' })
+        btn.addEventListener('mousemove', onMm)
+        btn.addEventListener('mouseleave', onMl)
+        magCleanups.push(() => {
+          btn.removeEventListener('mousemove', onMm)
+          btn.removeEventListener('mouseleave', onMl)
+        })
+      })
+      addCleanup(() => magCleanups.forEach((fn) => fn()))
+    }
+
+    /* ══════════════════════════════════════
+       MISC: DIVIDERS · PILLS · VOK LETTER POP · CTA PARALLAX
     ══════════════════════════════════════ */
     if (!reducedMotion) {
       qsa('.gsap-divider').forEach((el) => {
@@ -329,20 +381,7 @@ export function LandingGsap({ rootRef }: Props) {
         scrollTrigger: { trigger: '.cta-sec', start: 'top bottom', end: 'bottom top', scrub: 1 },
       })
 
-      qsa('.pills').forEach((wrap) => {
-        gsap.fromTo(
-          Array.from(wrap.querySelectorAll('.pill')),
-          { opacity: 0, y: 14 },
-          { opacity: 1, y: 0, stagger: 0.05, duration: 0.45, ease: 'back.out(1.5)',
-            scrollTrigger: stOnce(wrap, 'top 92%') },
-        )
-      })
-
-      ScrollTrigger.create({
-        trigger: '.vok-line', start: 'top 90%', once: true,
-        onEnter: () =>
-          gsap.fromTo('.vok-line .L', letterPop.from, { ...letterPop.to(), stagger: 0.14 }),
-      })
+      /* pills + vok-line .L letter-pop are now owned by AboutSection.tsx */
     }
 
     ScrollTrigger.refresh()
