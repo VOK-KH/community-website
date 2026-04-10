@@ -12,41 +12,40 @@
 .nb-zone {
   position: fixed;
   top: 0;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
   z-index: 100;
   pointer-events: none;
   padding-top: 16px;
-  width: min(720px, 100vw);
 }
 
 .nb {
   pointer-events: auto;
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
   font-family: var(--font-landing-dm), ui-sans-serif, system-ui, sans-serif;
-  background: rgba(10, 14, 20, 0.92);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(10, 14, 20, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 100px;
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  backdrop-filter: blur(32px) saturate(180%);
+  -webkit-backdrop-filter: blur(32px) saturate(180%);
   box-shadow:
     0 0 0 1px rgba(0, 0, 0, 0.5),
-    0 20px 60px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  height: 46px;
+    0 8px 32px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  height: 48px;
   overflow: hidden;
   will-change: width, height, border-radius;
 }
 
-/* ── Pill (collapsed state) ── */
+/* ── Pill (collapsed bar) ── */
 .nb-pill {
   display: flex;
   align-items: center;
-  padding: 0 0.5rem 0 1.4rem;
-  height: 46px;
-  white-space: nowrap;
+  justify-content: center;
+  gap: 0;
+  height: 48px;
+  padding: 0 8px 0 20px;
 }
 
 .nb-logo {
@@ -57,30 +56,38 @@
   font-style: italic;
   color: #eef2f7;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
   text-decoration: none;
-  margin-right: 0.75rem;
+  line-height: 1;
 }
 
 .nb-v { color: #00e5ff; }
 
 .nb-links {
   display: flex;
-  gap: 0.2rem;
+  gap: 2px;
   flex: 1;
   justify-content: center;
   align-items: center;
+  margin: 0 8px;
 }
 
 .nb-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 0.78rem;
   font-weight: 500;
   color: rgba(138, 154, 176, 0.85);
   text-decoration: none;
-  padding: 0.32rem 0.7rem;
+  padding: 6px 12px;
   border-radius: 100px;
   transition: background 0.2s, color 0.2s;
   letter-spacing: 0.01em;
+  line-height: 1;
 }
 
 .nb-link:hover {
@@ -93,22 +100,21 @@
   color: #00e5ff;
 }
 
-/* icon buttons in collapsed pill */
 .nb-icons {
   display: flex;
   align-items: center;
-  gap: 0.1rem;
-  margin-left: 0.25rem;
+  gap: 2px;
+  margin-left: 4px;
 }
 
 .nb-icon-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  color: rgba(138, 154, 176, 0.65);
+  color: rgba(138, 154, 176, 0.6);
   text-decoration: none;
   transition: background 0.2s, color 0.2s;
   flex-shrink: 0;
@@ -123,9 +129,9 @@
 
 .nb-sep {
   width: 1px;
-  height: 16px;
+  height: 18px;
   background: rgba(255, 255, 255, 0.08);
-  margin: 0 0.3rem;
+  margin: 0 6px;
   flex-shrink: 0;
 }
 
@@ -135,7 +141,7 @@
   background: #00e5ff;
   color: #060a0f;
   border: none;
-  padding: 0.38rem 1rem;
+  padding: 7px 16px;
   border-radius: 100px;
   transition: box-shadow 0.2s;
   white-space: nowrap;
@@ -145,43 +151,51 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  line-height: 1;
 }
 
 .nb-cta:hover {
-  box-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.35);
 }
 
+/* Burger — pill style with three dot lines */
 .nb-burger {
   display: none;
   align-items: center;
   justify-content: center;
-  background: none;
+  width: 34px;
+  height: 34px;
+  background: rgba(255, 255, 255, 0.06);
   border: none;
+  border-radius: 50%;
   color: #eef2f7;
   cursor: pointer;
-  padding: 0.4rem;
-  margin-left: 0.2rem;
-  border-radius: 50%;
   transition: background 0.2s;
   flex-shrink: 0;
+  margin-left: auto;
 }
 
 .nb-burger:hover {
-  background: rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.12);
 }
 
-/* ── Expanded island content (hidden by default) ── */
+.nb-burger svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* ── Expanded island content ── */
 .nb-expanded {
   display: none;
   flex-direction: column;
-  padding: 0.65rem 1rem 1rem;
+  padding: 14px 16px 16px;
 }
 
 .nb-exp-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-bottom: 0.6rem;
+  margin-bottom: 10px;
 }
 
 .nb-exp-top .nb-logo {
@@ -192,35 +206,41 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.06);
   border: none;
-  color: rgba(138, 154, 176, 0.85);
+  color: rgba(180, 190, 205, 0.85);
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
 }
 
 .nb-exp-close:hover {
   background: rgba(255, 255, 255, 0.12);
-  color: #eef2f7;
+  color: #fff;
+}
+
+.nb-exp-close svg {
+  width: 15px;
+  height: 15px;
 }
 
 .nb-exp-links {
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
+  gap: 2px;
 }
 
 .nb-exp-link {
-  font-size: 0.88rem;
+  font-size: 0.92rem;
   font-weight: 500;
-  color: rgba(138, 154, 176, 0.85);
+  color: rgba(160, 175, 195, 0.9);
   text-decoration: none;
-  padding: 0.55rem 0.75rem;
+  padding: 10px 12px;
   border-radius: 10px;
-  transition: background 0.2s, color 0.2s;
+  transition: background 0.18s, color 0.18s;
+  line-height: 1;
 }
 
 .nb-exp-link:hover {
@@ -229,40 +249,42 @@
 }
 
 .nb-exp-link.nb-active {
-  background: rgba(255, 255, 255, 0.07);
+  background: rgba(0, 229, 255, 0.08);
   color: #00e5ff;
 }
 
 .nb-exp-divider {
   height: 1px;
   background: rgba(255, 255, 255, 0.06);
-  margin: 0.4rem 0;
+  margin: 8px 0;
 }
 
 .nb-exp-icons {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.1rem;
+  gap: 2px;
 }
 
 .nb-exp-icon-link {
   display: flex;
   align-items: center;
-  gap: 0.55rem;
+  gap: 8px;
   font-size: 0.82rem;
   font-weight: 500;
   color: rgba(138, 154, 176, 0.7);
   text-decoration: none;
-  padding: 0.5rem 0.75rem;
+  padding: 9px 12px;
   border-radius: 10px;
-  transition: background 0.2s, color 0.2s;
+  transition: background 0.18s, color 0.18s;
   flex: 1;
   min-width: 0;
+  line-height: 1;
 }
 
 .nb-exp-icon-link svg {
   flex-shrink: 0;
-  opacity: 0.65;
+  width: 15px;
+  height: 15px;
+  opacity: 0.6;
 }
 
 .nb-exp-icon-link:hover {
@@ -282,30 +304,30 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 0.5rem;
-  font-size: 0.8rem;
+  margin-top: 8px;
+  font-size: 0.82rem;
   font-weight: 600;
   background: #00e5ff;
   color: #060a0f;
   border: none;
-  padding: 0.55rem 1.2rem;
+  padding: 10px 20px;
   border-radius: 10px;
   text-decoration: none;
   letter-spacing: 0.02em;
   transition: box-shadow 0.2s;
+  line-height: 1;
 }
 
 .nb-exp-cta:hover {
   box-shadow: 0 0 24px rgba(0, 229, 255, 0.35);
 }
 
-/* When expanded (.nb-exp), swap visibility */
+/* Swap visibility when expanded */
 .nb.nb-exp .nb-pill { display: none; }
 .nb.nb-exp .nb-expanded { display: flex; }
 
 /* ── Responsive ── */
 
-/* Tablet: hide text links, show burger + icons */
 @media (max-width: 900px) {
   .nb-links { display: none; }
   .nb-icons { flex: 1; justify-content: flex-end; }
@@ -313,15 +335,17 @@
   .nb-burger { display: flex; }
 }
 
-/* Small mobile: only logo + burger */
 @media (max-width: 520px) {
   .nb-icons { display: none; }
   .nb-burger { display: flex; }
   .nb-cta { display: none; }
-  .nb { height: 42px; }
-  .nb-pill { padding: 0 0.5rem 0 1.1rem; height: 42px; }
-  .nb-logo { font-size: 0.92rem; margin-right: 0; }
-  .nb-burger { margin-left: auto; }
+  .nb { height: 44px; }
+  .nb-pill {
+    height: 44px;
+    padding: 0 6px 0 16px;
+    gap: 8px;
+  }
+  .nb-logo { font-size: 0.95rem; }
 }
 
 /* ── Page wrapper ── */

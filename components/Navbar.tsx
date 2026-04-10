@@ -45,9 +45,10 @@ export default function Navbar() {
     setExpanded(false)
     gsap.killTweensOf(el)
     el.classList.remove('nb-exp')
+    const h = window.innerWidth <= 520 ? 44 : 48
     gsap.to(el, {
-      width: window.innerWidth < 520 ? 180 : 'auto',
-      height: 46,
+      width: 'auto',
+      height: h,
       borderRadius: 100,
       duration: 0.45,
       ease: 'expo.inOut',
@@ -60,13 +61,13 @@ export default function Navbar() {
     setExpanded(true)
     gsap.killTweensOf(el)
     el.classList.add('nb-exp')
-    const w = Math.min(window.innerWidth - 32, 420)
+    const w = Math.min(window.innerWidth - 32, 380)
     gsap.to(el, {
       width: w,
       height: 'auto',
-      borderRadius: 22,
+      borderRadius: 20,
       duration: 0.5,
-      ease: 'back.out(1.4)',
+      ease: 'back.out(1.2)',
     })
   }, [])
 
