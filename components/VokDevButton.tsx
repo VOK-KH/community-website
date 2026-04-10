@@ -1,5 +1,8 @@
-import React from 'react';
-import { cn } from '@/lib/utils';
+'use client'
+
+import React from 'react'
+import { motion } from 'framer-motion'
+import { cn } from '@/lib/utils'
 
 interface VokDevButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -48,7 +51,7 @@ export function VokDevButton({
   };
 
   return (
-    <button
+    <motion.button
       className={cn(
         baseClasses,
         variantClasses[variant],
@@ -56,16 +59,25 @@ export function VokDevButton({
         className
       )}
       disabled={disabled || isLoading}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 17 }}
       {...props}
     >
       {isLoading ? (
         <>
-          <span className="animate-spin">⚙️</span>
+          <motion.span
+            className="inline-block"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+          >
+            ⚙️
+          </motion.span>
           <span>Loading...</span>
         </>
       ) : (
         children
       )}
-    </button>
-  );
+    </motion.button>
+  )
 }

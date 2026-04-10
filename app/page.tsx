@@ -5,6 +5,10 @@ import Footer from '@/components/Footer'
 import { VokDevButton } from '@/components/VokDevButton'
 import { VokDevCard, VokDevCardHeader, VokDevCardTitle, VokDevCardDescription, VokDevCardContent, VokDevCardFooter } from '@/components/VokDevCard'
 import { VokDevBadge } from '@/components/VokDevBadge'
+import { AnimatedSection } from '@/components/AnimatedSection'
+import { AnimatedCard } from '@/components/AnimatedCard'
+import { StaggerContainer, StaggerItem } from '@/components/StaggerContainer'
+import { HeroTitle, HeroSubtitle, HeroButton } from '@/components/HeroAnimation'
 import Link from 'next/link'
 
 const featuredProjects = [
@@ -94,30 +98,32 @@ export default function Home() {
             <div className="absolute bottom-20 right-10 w-72 h-72 bg-secondary/20 rounded-full blur-3xl animate-pulse-glow opacity-50 animation-delay-2000" />
           </div>
 
-          <div className="max-w-7xl mx-auto text-center">
+          <AnimatedSection className="max-w-7xl mx-auto text-center space-y-6">
             <div className="mb-6 inline-block">
               <VokDevBadge variant="secondary" size="lg">
                 Welcome to VokDev Community
               </VokDevBadge>
             </div>
 
-            <h1 className="text-5xl md:text-7xl font-bold text-balance mb-6 text-transparent bg-clip-text bg-gradient-to-r from-primary via-foreground to-secondary">
+            <HeroTitle>
               Where Tech Meets Creativity
-            </h1>
+            </HeroTitle>
 
-            <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto text-balance">
+            <HeroSubtitle>
               Collaborate with designers, developers, and innovators. Build amazing projects, share knowledge, and grow together in the VokDev community.
-            </p>
+            </HeroSubtitle>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <VokDevButton variant="primary" size="lg">
-                Start Exploring
-              </VokDevButton>
-              <VokDevButton variant="secondary" size="lg">
-                Watch Demo
-              </VokDevButton>
-            </div>
-          </div>
+            <HeroButton>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <VokDevButton variant="primary" size="lg">
+                  Start Exploring
+                </VokDevButton>
+                <VokDevButton variant="secondary" size="lg">
+                  Watch Demo
+                </VokDevButton>
+              </div>
+            </HeroButton>
+          </AnimatedSection>
         </section>
 
         {/* Stats Section */}
@@ -146,30 +152,33 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {featuredProjects.map((project) => (
-                <VokDevCard
-                  key={project.id}
-                  variant="interactive"
-                  className="hover-lift"
-                >
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="text-4xl">{project.image}</div>
-                    <VokDevBadge variant="secondary" size="sm">
-                      {project.category}
-                    </VokDevBadge>
-                  </div>
-                  <VokDevCard.Title>{project.title}</VokDevCard.Title>
-                  <VokDevCard.Description className="mb-4">
-                    {project.description}
-                  </VokDevCard.Description>
-                  <div className="flex items-center justify-between text-sm text-muted-foreground border-t border-border/40 pt-4">
-                    <span>{project.members} members</span>
-                    <span>⭐ {project.stars}</span>
-                  </div>
-                </VokDevCard>
+            <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {featuredProjects.map((project, index) => (
+                <StaggerItem key={project.id}>
+                  <AnimatedCard index={index}>
+                    <VokDevCard
+                      variant="interactive"
+                      className="hover-lift h-full"
+                    >
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="text-4xl">{project.image}</div>
+                        <VokDevBadge variant="secondary" size="sm">
+                          {project.category}
+                        </VokDevBadge>
+                      </div>
+                      <VokDevCard.Title>{project.title}</VokDevCard.Title>
+                      <VokDevCard.Description className="mb-4">
+                        {project.description}
+                      </VokDevCard.Description>
+                      <div className="flex items-center justify-between text-sm text-muted-foreground border-t border-border/40 pt-4">
+                        <span>{project.members} members</span>
+                        <span>⭐ {project.stars}</span>
+                      </div>
+                    </VokDevCard>
+                  </AnimatedCard>
+                </StaggerItem>
               ))}
-            </div>
+            </StaggerContainer>
 
             <div className="text-center mt-12">
               <Link href="/projects">
@@ -191,47 +200,28 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-              <VokDevCard variant="featured">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="text-4xl">👥</div>
-                  <div>
-                    <h3 className="font-semibold text-lg">Networking</h3>
-                    <p className="text-sm text-muted-foreground">Connect with like-minded professionals</p>
-                  </div>
-                </div>
-              </VokDevCard>
-
-              <VokDevCard variant="featured">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="text-4xl">🚀</div>
-                  <div>
-                    <h3 className="font-semibold text-lg">Build Together</h3>
-                    <p className="text-sm text-muted-foreground">Collaborate on exciting projects</p>
-                  </div>
-                </div>
-              </VokDevCard>
-
-              <VokDevCard variant="featured">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="text-4xl">📚</div>
-                  <div>
-                    <h3 className="font-semibold text-lg">Learn & Grow</h3>
-                    <p className="text-sm text-muted-foreground">Share knowledge and expertise</p>
-                  </div>
-                </div>
-              </VokDevCard>
-
-              <VokDevCard variant="featured">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="text-4xl">🎯</div>
-                  <div>
-                    <h3 className="font-semibold text-lg">Showcase Work</h3>
-                    <p className="text-sm text-muted-foreground">Display your projects to the world</p>
-                  </div>
-                </div>
-              </VokDevCard>
-            </div>
+            <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+              {[
+                { icon: '👥', title: 'Networking', desc: 'Connect with like-minded professionals' },
+                { icon: '🚀', title: 'Build Together', desc: 'Collaborate on exciting projects' },
+                { icon: '📚', title: 'Learn & Grow', desc: 'Share knowledge and expertise' },
+                { icon: '🎯', title: 'Showcase Work', desc: 'Display your projects to the world' },
+              ].map((item, i) => (
+                <StaggerItem key={item.title}>
+                  <AnimatedCard index={i}>
+                    <VokDevCard variant="featured">
+                      <div className="flex items-center gap-4 mb-4">
+                        <div className="text-4xl">{item.icon}</div>
+                        <div>
+                          <h3 className="font-semibold text-lg">{item.title}</h3>
+                          <p className="text-sm text-muted-foreground">{item.desc}</p>
+                        </div>
+                      </div>
+                    </VokDevCard>
+                  </AnimatedCard>
+                </StaggerItem>
+              ))}
+            </StaggerContainer>
           </div>
         </section>
 
@@ -245,25 +235,29 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-              {recentBlog.map((post) => (
-                <VokDevCard key={post.id} variant="interactive">
-                  <div className="flex items-center justify-between mb-3">
-                    <VokDevBadge variant="tertiary" size="sm">
-                      {post.category}
-                    </VokDevBadge>
-                    <span className="text-xs text-muted-foreground">{post.date}</span>
-                  </div>
-                  <VokDevCard.Title className="mb-2">{post.title}</VokDevCard.Title>
-                  <VokDevCard.Description className="mb-4">
-                    {post.excerpt}
-                  </VokDevCard.Description>
-                  <p className="text-sm text-muted-foreground border-t border-border/40 pt-4">
-                    by {post.author}
-                  </p>
-                </VokDevCard>
+            <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+              {recentBlog.map((post, index) => (
+                <StaggerItem key={post.id}>
+                  <AnimatedCard index={index}>
+                    <VokDevCard variant="interactive">
+                      <div className="flex items-center justify-between mb-3">
+                        <VokDevBadge variant="tertiary" size="sm">
+                          {post.category}
+                        </VokDevBadge>
+                        <span className="text-xs text-muted-foreground">{post.date}</span>
+                      </div>
+                      <VokDevCard.Title className="mb-2">{post.title}</VokDevCard.Title>
+                      <VokDevCard.Description className="mb-4">
+                        {post.excerpt}
+                      </VokDevCard.Description>
+                      <p className="text-sm text-muted-foreground border-t border-border/40 pt-4">
+                        by {post.author}
+                      </p>
+                    </VokDevCard>
+                  </AnimatedCard>
+                </StaggerItem>
               ))}
-            </div>
+            </StaggerContainer>
 
             <div className="text-center">
               <Link href="/blog">

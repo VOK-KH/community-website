@@ -311,3 +311,84 @@
     animation: fade-in 0.5s ease-out;
   }
 }
+
+/* Accessibility & Performance Optimizations */
+@layer utilities {
+  /* Reduced motion support for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+  
+  /* GPU acceleration for smooth animations */
+  .will-animate {
+    @apply will-change-transform;
+  }
+  
+  .gpu-accelerate {
+    @apply transform-gpu;
+  }
+  
+  /* Optimized touch interactions */
+  .touch-friendly {
+    @apply min-h-12 min-w-12;
+  }
+  
+  /* Focus-visible for better keyboard navigation */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2;
+  }
+  
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Prevent layout shift */
+  .prevent-shift {
+    @apply scrollbar-gutter-stable;
+  }
+  
+  /* Text rendering optimization */
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  
+  /* Image optimization utilities */
+  img {
+    @apply max-w-full h-auto;
+  }
+  
+  /* Lazy load placeholder */
+  .lazy-placeholder {
+    @apply bg-muted animate-pulse;
+  }
+  
+  /* Mobile menu optimization */
+  @media (max-width: 768px) {
+    .desktop-only {
+      @apply hidden;
+    }
+    
+    .mobile-nav {
+      @apply will-change-transform;
+    }
+    
+    /* Larger touch targets on mobile */
+    button, a {
+      @apply min-h-10;
+    }
+  }
+  
+  /* Desktop optimizations */
+  @media (min-width: 769px) {
+    .mobile-only {
+      @apply hidden;
+    }
+  }
+}
