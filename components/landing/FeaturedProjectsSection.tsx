@@ -3,7 +3,7 @@
 import { useLayoutEffect, useRef } from 'react'
 import Link from 'next/link'
 import { featuredProjects } from './data'
-import { gsap, registerGsap, prefersReducedMotion } from '@/lib/motion'
+import { gsap, registerGsap, prefersReducedMotion, hasFinePointer } from '@/lib/motion'
 
 registerGsap()
 
@@ -18,7 +18,6 @@ export function FeaturedProjectsSection() {
 
     if (prefersReducedMotion()) return
 
-    /* ── Initial hidden states (header only — cards handled by LandingGsap) ── */
     gsap.set(qs('.sec-tag'),      { opacity: 0, x: -18, filter: 'blur(6px)' })
     gsap.set(qsa('.split-inner'), { y: '110%' })
     gsap.set(qs('.va'),           { opacity: 0, x: 14, filter: 'blur(5px)' })
@@ -29,24 +28,50 @@ export function FeaturedProjectsSection() {
     })
 
     tl
-      /* 1. Section tag from left */
       .to(qs('.sec-tag'), {
         opacity: 1, x: 0, filter: 'blur(0px)', duration: 0.62,
       }, 0)
-
-      /* 2. Heading: line-by-line clip-reveal */
       .to(qsa('.split-inner'), {
         y: '0%', duration: 1.05, stagger: 0.15,
       }, 0.1)
-
-      /* 3. "View all →" link drifts in from the right */
       .to(qs('.va'), {
         opacity: 1, x: 0, filter: 'blur(0px)', duration: 0.65,
       }, 0.35)
 
+
+    let removeGridGlow: (() => void) | undefined
+    if (hasFinePointer()) {
+      const grid = sec.querySelector<HTMLElement>('.grid12')
+      const cards = qsa('.pc')
+      if (grid && cards.length) {
+        const onGridMove = (e: MouseEvent) => {
+          for (const card of cards) {
+            const r = card.getBoundingClientRect()
+            card.style.setProperty('--gx', `${e.clientX - r.left}px`)
+            card.style.setProperty('--gy', `${e.clientY - r.top}px`)
+          }
+        }
+        const onGridEnter = () => {
+          for (const card of cards) card.classList.add('glow-active')
+        }
+        const onGridLeave = () => {
+          for (const card of cards) card.classList.remove('glow-active')
+        }
+        grid.addEventListener('mousemove', onGridMove)
+        grid.addEventListener('mouseenter', onGridEnter)
+        grid.addEventListener('mouseleave', onGridLeave)
+        removeGridGlow = () => {
+          grid.removeEventListener('mousemove', onGridMove)
+          grid.removeEventListener('mouseenter', onGridEnter)
+          grid.removeEventListener('mouseleave', onGridLeave)
+        }
+      }
+    }
+
     return () => {
       tl.scrollTrigger?.kill()
       tl.kill()
+      removeGridGlow?.()
     }
   }, [])
 

@@ -11,30 +11,14 @@ import { gsap, ScrollTrigger, registerGsap } from './core'
 import { hasFinePointer, prefersReducedMotion } from './dom'
 import { fadeUp, stOnce } from './presets'
 
-// ── 1. Generic imperative GSAP setup ──────────────────────────────────────
-
 export interface GsapCtx {
   gsap: typeof gsap
   ScrollTrigger: typeof ScrollTrigger
   reducedMotion: boolean
   finePtr: boolean
-  /** Push a cleanup fn to be called on unmount. */
   addCleanup: (fn: () => void) => void
 }
 
-/**
- * Runs `setup(ctx)` inside useLayoutEffect after registering GSAP plugins.
- * Automatically kills all registered ScrollTriggers on unmount.
- *
- * @example
- * useGsapSetup(({ gsap, reducedMotion, addCleanup }) => {
- *   if (reducedMotion) return
- *   gsap.from('.hero', { opacity: 0 })
- *   const onScroll = () => { ... }
- *   window.addEventListener('scroll', onScroll)
- *   addCleanup(() => window.removeEventListener('scroll', onScroll))
- * }, [])
- */
 export function useGsapSetup(
   setup: (ctx: GsapCtx) => void,
   deps: DependencyList = [],
@@ -46,25 +30,23 @@ export function useGsapSetup(
     cleanups.current = []
     const addCleanup = (fn: () => void) => cleanups.current.push(fn)
 
-    setup({
-      gsap,
-      ScrollTrigger,
-      reducedMotion: prefersReducedMotion(),
-      finePtr: hasFinePointer(),
-      addCleanup,
+    const ctx = gsap.context(() => {
+      setup({
+        gsap,
+        ScrollTrigger,
+        reducedMotion: prefersReducedMotion(),
+        finePtr: hasFinePointer(),
+        addCleanup,
+      })
     })
 
     return () => {
       cleanups.current.forEach((fn) => fn())
       cleanups.current = []
-      ScrollTrigger.getAll().forEach((t) => t.kill())
+      ctx.revert()
     }
-    // deps controlled by caller
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, deps)
+  }, deps) // eslint-disable-line react-hooks/exhaustive-deps
 }
-
-// ── 2. Scroll reveal ──────────────────────────────────────────────────────
 
 interface ScrollRevealOptions {
   /** translateY start value (px). Default 36. */
@@ -96,8 +78,6 @@ export function useScrollReveal(
   }, [ref])
 }
 
-// ── 3. Parallax ──────────────────────────────────────────────────────────
-
 /**
  * Scrub-parallax: element moves `yPercent` over its scroll travel.
  * @param scrub  GSAP scrub value (0 = instant, higher = more lag). Default 1.
@@ -123,8 +103,6 @@ export function useParallax(
     }
   }, [ref, yPercent, scrub])
 }
-
-// ── 4. 3-D tilt on hover ─────────────────────────────────────────────────
 
 interface TiltOptions {
   /** Max rotateX degrees. Default 7. */
@@ -174,8 +152,6 @@ export function useTilt(
   }, [ref, options])
 }
 
-// ── 5. Stagger reveal for a list ─────────────────────────────────────────
-
 /**
  * Stagger fade-up for a group of children when the container enters view.
  * @param containerRef  Ref to the parent element.
@@ -210,8 +186,6 @@ export function useStaggerReveal(
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [containerRef, childSel])
 }
-
-// ── 6. Counter animation ──────────────────────────────────────────────────
 
 /**
  * Animates `[data-count]` text nodes from 0 to their target value.

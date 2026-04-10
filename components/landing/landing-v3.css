@@ -32,137 +32,6 @@
   position: relative;
 }
 
-@media (pointer: fine) {
-  .landing-v3 {
-    cursor: none;
-  }
-}
-
-@media (pointer: coarse) {
-  .landing-v3 #cur {
-    display: none;
-  }
-}
-
-.landing-v3 #cur {
-  position: fixed;
-  pointer-events: none;
-  z-index: 9999;
-  top: 0;
-  left: 0;
-  /* No transform — GSAP positions children directly */
-}
-
-.landing-v3 .cur-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--vok-accent);
-  position: absolute;
-  top: 0; left: 0;             /* GSAP sets xPercent:-50 yPercent:-50 at init  */
-  transition: background 0.28s, width 0.28s, height 0.28s, border-radius 0.28s;
-  will-change: transform;
-}
-
-.landing-v3 .cur-ring {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(0, 229, 255, 0.5);
-  position: absolute;
-  top: 0; left: 0;
-  /* scale handled by GSAP, not CSS — no transform here */
-  transition:
-    width 0.32s cubic-bezier(0.34, 1.56, 0.64, 1),
-    height 0.32s cubic-bezier(0.34, 1.56, 0.64, 1),
-    border-radius 0.32s,
-    border-color 0.32s,
-    background 0.32s,
-    border-width 0.32s;
-  will-change: transform;
-}
-
-.landing-v3 .cur-label {
-  /* lives inside .cur-ring — uses ring's own size as its bounding box */
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-landing-mono), ui-monospace, monospace;
-  font-size: 0.55rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--vok-bg);
-  white-space: nowrap;
-  opacity: 0;
-  transition: opacity 0.25s;
-  font-weight: 700;
-  pointer-events: none;
-}
-
-/* ── Section-based cursor morphs (visual only — no transform) ── */
-.landing-v3[data-section='hero'] .cur-dot {
-  background: var(--vok-accent);
-}
-.landing-v3[data-section='hero'] .cur-ring {
-  width: 32px; height: 32px;
-  border-color: rgba(0, 229, 255, 0.5);
-}
-.landing-v3[data-section='marquee'] .cur-dot {
-  background: var(--vok-violet);
-  border-radius: 2px;
-  /* rotation handled by GSAP in secIO callback */
-}
-.landing-v3[data-section='marquee'] .cur-ring {
-  width: 28px; height: 28px;
-  border-radius: 4px;
-  border-color: rgba(124, 58, 237, 0.6);
-}
-.landing-v3[data-section='about'] .cur-dot {
-  background: var(--vok-emerald);
-  width: 10px; height: 10px;
-}
-.landing-v3[data-section='about'] .cur-ring {
-  width: 44px; height: 44px;
-  border-color: rgba(16, 185, 129, 0.45);
-  border-width: 1px;
-}
-.landing-v3[data-section='projects'] .cur-dot {
-  background: var(--vok-amber);
-  border-radius: 2px;
-  width: 7px; height: 7px;
-}
-.landing-v3[data-section='projects'] .cur-ring {
-  width: 24px; height: 24px;
-  border-radius: 3px;
-  border-color: rgba(245, 158, 11, 0.6);
-}
-.landing-v3[data-section='cta'] .cur-dot {
-  background: #fff;
-  width: 12px; height: 12px;
-}
-.landing-v3[data-section='cta'] .cur-ring {
-  width: 80px; height: 30px;
-  border-radius: 100px;
-  background: var(--vok-accent);
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.landing-v3[data-section='cta'] .cur-label {
-  opacity: 1;
-}
-
-/* hover: project dot vanishes — visual only */
-.landing-v3[data-section='projects'].cur-hover .cur-ring {
-  width: 48px; height: 48px;
-  border-radius: 8px;
-  background: rgba(245, 158, 11, 0.08);
-}
-/* scale-on-hover handled by GSAP */
-
 /* ─── NOISE ─── */
 .landing-v3 .noise {
   position: fixed;
@@ -220,12 +89,43 @@
 }
 
 /* ─── DYNAMIC ISLAND NAV ─── */
-.landing-v3 #island-nav {
+/* Zone: fixed strip; children are pointer targets (parent pointer-events: none). */
+.landing-v3 .island-zone {
   position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 800;
+  width: min(700px, 100vw);
+  height: 80px;
+  pointer-events: none;
+}
+
+.landing-v3 .island-zone #island-trigger {
+  position: absolute;
+  inset: 0;
+  width: auto;
+  height: auto;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  transform: none;
+  z-index: 0;
+  pointer-events: auto;
+}
+
+.landing-v3 .island-zone #island-nav {
+  position: absolute;
   top: 18px;
   left: 50%;
-  z-index: 800;
   transform: translateX(-50%);
+  z-index: 1;
+  pointer-events: auto;
+}
+
+.landing-v3 #island-nav {
+  position: absolute;
   background: var(--vok-island-bg);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 100px;
@@ -236,12 +136,10 @@
     0 20px 60px rgba(0, 0, 0, 0.5),
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
   overflow: hidden;
-  /* width/height/borderRadius are animated entirely by GSAP — no CSS transition here */
   will-change: width, height;
-  width: 160px;
+  width: 212px;
   height: 36px;
 }
-/* .expanded only controls child opacity — GSAP owns the dimensions */
 
 .landing-v3 .island-pill {
   position: absolute;
@@ -249,8 +147,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 0 1.25rem;
+  gap: 0.45rem;
+  padding: 0 0.85rem 0 1rem;
   opacity: 1;
   transition: opacity 0.2s 0.1s;
 }
@@ -262,31 +160,58 @@
 .landing-v3 .pill-logo {
   font-family: var(--font-landing-syne), ui-sans-serif, sans-serif;
   font-weight: 800;
-  font-size: 0.88rem;
+  font-size: 0.84rem;
   letter-spacing: -0.03em;
+  font-style: italic;
+  flex-shrink: 0;
+  line-height: 1;
 }
 .landing-v3 .pill-logo .v {
   color: var(--vok-accent);
 }
-.landing-v3 .pill-dot {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--vok-text3);
+.landing-v3 .pill-divider {
+  width: 1px;
+  height: 1.1rem;
+  background: rgba(255, 255, 255, 0.12);
+  flex-shrink: 0;
 }
-.landing-v3 .pill-status {
+.landing-v3 .pill-metrics {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-shrink: 0;
+}
+.landing-v3 .pill-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  line-height: 1.05;
+  gap: 0.04rem;
+}
+.landing-v3 .pill-stat-num {
   font-family: var(--font-landing-mono), ui-monospace, monospace;
-  font-size: 0.58rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: var(--vok-text2);
+  letter-spacing: 0.02em;
+}
+.landing-v3 .pill-stat-label {
+  font-family: var(--font-landing-mono), ui-monospace, monospace;
+  font-size: 0.5rem;
+  font-weight: 500;
   color: var(--vok-text3);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
 }
 .landing-v3 .pill-live {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: var(--vok-emerald);
   animation: landing-livePulse 1.8s ease-in-out infinite;
   flex-shrink: 0;
+  box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.35);
 }
 @keyframes landing-livePulse {
   0%,
@@ -343,11 +268,6 @@
   transition: all 0.2s;
   letter-spacing: 0.01em;
 }
-@media (pointer: fine) {
-  .landing-v3 .island-link {
-    cursor: none;
-  }
-}
 .landing-v3 .island-link:hover,
 .landing-v3 .island-link.active {
   background: rgba(255, 255, 255, 0.07);
@@ -374,24 +294,8 @@
   align-items: center;
   justify-content: center;
 }
-@media (pointer: fine) {
-  .landing-v3 .island-cta {
-    cursor: none;
-  }
-}
 .landing-v3 .island-cta:hover {
   box-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
-}
-
-.landing-v3 #island-trigger {
-  position: fixed;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 700px;
-  height: 80px;
-  z-index: 799;
-  pointer-events: all;
 }
 
 /* ─── HERO ─── */
@@ -782,11 +686,6 @@
   background: var(--vok-border2);
 }
 
-/* ── mq-wrap: perspective for 3-D tilt ── */
-.landing-v3 .mq-wrap {
-  transform-style: preserve-3d;
-}
-
 /* ─── SECTIONS SHARED ─── */
 .landing-v3 section.z1 {
   position: relative;
@@ -1083,11 +982,6 @@
   letter-spacing: 0.02em;
   transition: all 0.2s;
 }
-@media (pointer: fine) {
-  .landing-v3 .pill {
-    cursor: none;
-  }
-}
 .landing-v3 .pill:hover {
   border-color: var(--vok-accent);
   color: var(--vok-accent);
@@ -1221,11 +1115,6 @@
   gap: 0.4rem;
   transition: gap 0.2s;
 }
-@media (pointer: fine) {
-  .landing-v3 .va {
-    cursor: none;
-  }
-}
 .landing-v3 .va:hover {
   gap: 0.7rem;
 }
@@ -1235,6 +1124,8 @@
   gap: 1.1rem;
 }
 .landing-v3 .pc {
+  --gx: 50%;
+  --gy: 50%;
   background: var(--vok-surface);
   border: 1px solid var(--vok-border);
   border-radius: 10px;
@@ -1242,27 +1133,76 @@
   position: relative;
   overflow: hidden;
   will-change: transform;
-  transition: border-color 0.3s;
+  transition: border-color 0.35s, box-shadow 0.35s;
 }
-@media (pointer: fine) {
-  .landing-v3 .pc {
-    cursor: none;
-  }
+
+.landing-v3 .pc::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: radial-gradient(
+    600px circle at var(--gx) var(--gy),
+    rgba(0, 229, 255, 0.09),
+    transparent 40%
+  );
+  opacity: 0;
+  transition: opacity 0.32s;
+  pointer-events: none;
+  z-index: 0;
 }
 .landing-v3 .pc::after {
   content: '';
   position: absolute;
-  inset: 0;
+  inset: -1px;
+  border-radius: inherit;
+  background: radial-gradient(
+    400px circle at var(--gx) var(--gy),
+    rgba(0, 229, 255, 0.25),
+    transparent 40%
+  );
   opacity: 0;
-  transition: opacity 0.4s;
-  border-radius: 10px;
+  transition: opacity 0.32s;
   pointer-events: none;
+  z-index: 0;
+  mask: linear-gradient(#000, #000) content-box,
+        linear-gradient(#000, #000);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+  padding: 1px;
 }
+
+/* Proximity glow — visible whenever cursor is over the grid */
+.landing-v3 .pc.glow-active::before {
+  opacity: 1;
+}
+.landing-v3 .pc.glow-active::after {
+  opacity: 0.55;
+}
+
+/* Direct hover — stronger glow + border color + shadow lift */
 .landing-v3 .pc:hover {
-  border-color: var(--vok-border2);
+  border-color: rgba(0, 229, 255, 0.22);
+  box-shadow:
+    0 0 0 1px rgba(0, 229, 255, 0.08),
+    0 8px 32px rgba(0, 0, 0, 0.35);
+}
+.landing-v3 .pc:hover::before {
+  opacity: 1;
+  background: radial-gradient(
+    500px circle at var(--gx) var(--gy),
+    rgba(0, 229, 255, 0.16),
+    transparent 45%
+  );
 }
 .landing-v3 .pc:hover::after {
   opacity: 1;
+}
+
+/* Card children sit above the glow */
+.landing-v3 .pc > * {
+  position: relative;
+  z-index: 1;
 }
 .landing-v3 .col8 {
   grid-column: span 8;
@@ -1478,11 +1418,6 @@
   align-items: center;
   justify-content: center;
 }
-@media (pointer: fine) {
-  .landing-v3 .btn-l {
-    cursor: none;
-  }
-}
 .landing-v3 .btn-l.p {
   background: var(--vok-accent);
   color: var(--vok-bg);
@@ -1567,11 +1502,6 @@
   text-decoration: none;
   transition: color 0.2s;
 }
-@media (pointer: fine) {
-  .landing-v3 .f-links a {
-    cursor: none;
-  }
-}
 .landing-v3 .f-links a:hover {
   color: var(--vok-text);
 }
@@ -1608,6 +1538,12 @@
     width: 90vw;
   }
 }
+@media (max-width: 420px) {
+  .landing-v3 .pill-metrics .pill-stat:last-child {
+    display: none;
+  }
+}
+
 @media (max-width: 640px) {
   .landing-v3 .col4,
   .landing-v3 .col6,
