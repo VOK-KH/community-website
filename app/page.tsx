@@ -30,6 +30,7 @@ function HomeGsapEffects({ rootRef }: { rootRef: RefObject<HTMLElement | null> }
 
     const island = qs('#island-nav')
     const islandZone = qs('#island-zone')
+    const trigger = qs('#island-trigger')
     const SCROLL_TOP_EPS = 2
     let hot = false
     let collapseTimer: ReturnType<typeof setTimeout> | null = null
@@ -99,40 +100,40 @@ function HomeGsapEffects({ rootRef }: { rootRef: RefObject<HTMLElement | null> }
       }
     }
 
-    if (island) {
+    if (island && islandZone) {
       const onScrollIsland = () => applyIslandFromScroll()
       window.addEventListener('scroll', onScrollIsland, { passive: true })
       applyIslandFromScroll()
 
-      let removeZoneListeners: (() => void) | undefined
-      if (islandZone) {
-        const relatedTargetLeavesZone = (rel: EventTarget | null) =>
-          !(rel instanceof Node && islandZone.contains(rel))
+      const isInsideZone = (node: EventTarget | null) =>
+        node instanceof Node && islandZone.contains(node)
 
-        const onZoneOver = (e: MouseEvent) => {
-          if (!relatedTargetLeavesZone(e.relatedTarget)) return
-          hot = true
-          expandIsland()
-        }
-        const onZoneOut = (e: MouseEvent) => {
-          if (!relatedTargetLeavesZone(e.relatedTarget)) return
-          hot = false
-          if (atScrollTop()) expandIsland()
-          else collapseIsland(false)
-        }
+      /* Listen on trigger, nav, AND zone for maximum reliability */
+      const hoverTargets = [trigger, island, islandZone].filter(Boolean) as HTMLElement[]
 
-        islandZone.addEventListener('mouseover', onZoneOver)
-        islandZone.addEventListener('mouseout', onZoneOut)
-        removeZoneListeners = () => {
-          islandZone.removeEventListener('mouseover', onZoneOver)
-          islandZone.removeEventListener('mouseout', onZoneOut)
-        }
+      const onPointerEnter = () => {
+        hot = true
+        expandIsland()
       }
+      const onPointerLeave = (e: MouseEvent) => {
+        if (isInsideZone(e.relatedTarget)) return
+        hot = false
+        if (atScrollTop()) expandIsland()
+        else collapseIsland(false)
+      }
+
+      hoverTargets.forEach((el) => {
+        el.addEventListener('mouseenter', onPointerEnter)
+        el.addEventListener('mouseleave', onPointerLeave)
+      })
 
       addCleanup(() => {
         window.removeEventListener('scroll', onScrollIsland)
         if (collapseTimer) clearTimeout(collapseTimer)
-        removeZoneListeners?.()
+        hoverTargets.forEach((el) => {
+          el.removeEventListener('mouseenter', onPointerEnter)
+          el.removeEventListener('mouseleave', onPointerLeave)
+        })
       })
     }
 
@@ -143,9 +144,16 @@ function HomeGsapEffects({ rootRef }: { rootRef: RefObject<HTMLElement | null> }
       refreshIslandBreathe()
     }
 
+    /* Match link href to section id — links use /about style routes */
+    const sectionToHref: Record<string, string> = {
+      about: '/about',
+      projects: '/projects',
+      community: '/community',
+    }
     function setActive(id: string) {
+      const target = sectionToHref[id]
       qsa('.island-link').forEach((a) => {
-        a.classList.toggle('active', a.getAttribute('href') === `#${id}`)
+        a.classList.toggle('active', a.getAttribute('href') === target)
       })
     }
     ;(['about', 'projects', 'community'] as const).forEach((id) => {

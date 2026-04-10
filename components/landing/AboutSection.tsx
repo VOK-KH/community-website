@@ -1,29 +1,34 @@
 'use client'
 
-import { useLayoutEffect, useRef } from 'react'
+import { useEffect, useLayoutEffect, useRef } from 'react'
 import { aboutPills } from './data'
-import { gsap, registerGsap, prefersReducedMotion } from '@/lib/motion'
+import { gsap, ScrollTrigger, registerGsap, prefersReducedMotion, hasFinePointer } from '@/lib/motion'
 
 registerGsap()
 
 export function AboutSection() {
   const secRef = useRef<HTMLElement>(null)
+  const visRef = useRef<HTMLDivElement>(null)
+  const glowRef = useRef<HTMLDivElement>(null)
 
   useLayoutEffect(() => {
     const sec = secRef.current
     if (!sec) return
-    const qs  = (sel: string) => sec.querySelector<HTMLElement>(sel)
+    const qs = (sel: string) => sec.querySelector<HTMLElement>(sel)
     const qsa = (sel: string) => Array.from(sec.querySelectorAll<HTMLElement>(sel))
 
     if (prefersReducedMotion()) return
 
     /* ── Initial hidden states ── */
-    gsap.set(qs('.sec-tag'),       { opacity: 0, x: -18, filter: 'blur(6px)' })
-    gsap.set(qsa('.split-inner'),  { y: '110%' })
-    gsap.set(qs('.vok-line'),      { opacity: 0, y: 14,  filter: 'blur(7px)' })
-    gsap.set(qsa('.vok-line .L'),  { opacity: 0, scale: 0.45, y: 8 })
-    gsap.set(qsa('.a-body'),       { opacity: 0, y: 22, filter: 'blur(8px)' })
-    gsap.set(qsa('.pill'),         { opacity: 0, scale: 0.85, y: 10, filter: 'blur(4px)' })
+    gsap.set(qs('.sec-tag'), { opacity: 0, x: -18, filter: 'blur(6px)' })
+    gsap.set(qsa('.split-inner'), { y: '110%' })
+    gsap.set(qs('.vok-line'), { opacity: 0, y: 14, filter: 'blur(7px)' })
+    gsap.set(qsa('.vok-line .L'), { opacity: 0, scale: 0.45, y: 8 })
+    gsap.set(qsa('.a-body'), { opacity: 0, y: 22, filter: 'blur(8px)' })
+    gsap.set(qsa('.pill'), { opacity: 0, scale: 0.85, y: 10, filter: 'blur(4px)' })
+    gsap.set(qs('.a-vis'), { opacity: 0 })
+    gsap.set(qs('.code-card'), { opacity: 0, y: 40, scale: 0.95, filter: 'blur(6px)' })
+    gsap.set(qsa('.chip'), { opacity: 0, scale: 0.7, filter: 'blur(6px)' })
 
     /* ── Coordinated entrance timeline ── */
     const tl = gsap.timeline({
@@ -32,41 +37,134 @@ export function AboutSection() {
     })
 
     tl
-      /* 1. Section tag: slides in from left */
       .to(qs('.sec-tag'), {
         opacity: 1, x: 0, filter: 'blur(0px)', duration: 0.62,
       }, 0)
-
-      /* 2. Heading: line-by-line clip-reveal (y 110% → 0%) */
       .to(qsa('.split-inner'), {
         y: '0%', duration: 1.05, stagger: 0.13,
       }, 0.1)
-
-      /* 3. VOK definition line fades in */
       .to(qs('.vok-line'), {
         opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.7,
       }, 0.58)
-
-      /* 4. V · O · K letters pop in with back.out spring */
       .to(qsa('.vok-line .L'), {
         opacity: 1, scale: 1, y: 0,
         duration: 0.55, stagger: 0.14, ease: 'back.out(2.8)',
       }, 0.82)
-
-      /* 5. Body paragraphs: blur-focus staggered */
       .to(qsa('.a-body'), {
         opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.82, stagger: 0.17,
       }, 0.74)
-
-      /* 6. Tech pills pop in */
       .to(qsa('.pill'), {
         opacity: 1, scale: 1, y: 0, filter: 'blur(0px)',
         duration: 0.44, stagger: 0.05, ease: 'back.out(1.7)',
       }, 1.1)
+      /* visual column entrance */
+      .to(qs('.a-vis'), { opacity: 1, duration: 0.01 }, 0.5)
+      .to(qs('.code-card'), {
+        opacity: 1, y: 0, scale: 1, filter: 'blur(0px)',
+        duration: 1, ease: 'expo.out',
+      }, 0.55)
+      .to(qsa('.chip'), {
+        opacity: 1, scale: 1, filter: 'blur(0px)',
+        duration: 0.5, stagger: 0.12, ease: 'back.out(2.5)',
+      }, 0.9)
+
+    /* ── Text parallax: heading & body move at different rates ── */
+    const heading = qs('.a-h')
+    const bodies = qsa('.a-body')
+    const pills = qs('.pills')
+
+    if (heading) {
+      gsap.to(heading, {
+        yPercent: -8, ease: 'none',
+        scrollTrigger: { trigger: sec, start: 'top bottom', end: 'bottom top', scrub: 1.2 },
+      })
+    }
+    bodies.forEach((b, i) => {
+      gsap.to(b, {
+        yPercent: -4 - i * 2, ease: 'none',
+        scrollTrigger: { trigger: sec, start: 'top bottom', end: 'bottom top', scrub: 1.5 },
+      })
+    })
+    if (pills) {
+      gsap.to(pills, {
+        yPercent: -3, ease: 'none',
+        scrollTrigger: { trigger: sec, start: 'top bottom', end: 'bottom top', scrub: 1.8 },
+      })
+    }
+
+    /* ── Code card line-by-line reveal ── */
+    const codeLines = qsa('.code-card > div')
+    if (codeLines.length > 1) {
+      gsap.set(codeLines.slice(1), { opacity: 0, x: -8 })
+      ScrollTrigger.create({
+        trigger: qs('.code-card'),
+        start: 'top 75%',
+        once: true,
+        onEnter: () => {
+          gsap.to(codeLines.slice(1), {
+            opacity: 1, x: 0,
+            duration: 0.35, stagger: 0.06, ease: 'power2.out', delay: 0.6,
+          })
+        },
+      })
+    }
+
+    /* ── Pill magnetic hover (fine pointer only) ── */
+    const pillCleanups: (() => void)[] = []
+    if (hasFinePointer()) {
+      qsa('.pill').forEach((pill) => {
+        const mx = gsap.quickTo(pill, 'x', { duration: 0.4, ease: 'power3.out' })
+        const my = gsap.quickTo(pill, 'y', { duration: 0.4, ease: 'power3.out' })
+        const onMove = (e: MouseEvent) => {
+          const r = pill.getBoundingClientRect()
+          mx((e.clientX - r.left - r.width / 2) * 0.25)
+          my((e.clientY - r.top - r.height / 2) * 0.25)
+        }
+        const onLeave = () => {
+          gsap.to(pill, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.4)' })
+        }
+        pill.addEventListener('mousemove', onMove)
+        pill.addEventListener('mouseleave', onLeave)
+        pillCleanups.push(() => {
+          pill.removeEventListener('mousemove', onMove)
+          pill.removeEventListener('mouseleave', onLeave)
+        })
+      })
+    }
 
     return () => {
       tl.scrollTrigger?.kill()
       tl.kill()
+      pillCleanups.forEach((fn) => fn())
+    }
+  }, [])
+
+  /* ── Cursor glow on code card ── */
+  useEffect(() => {
+    const vis = visRef.current
+    const glow = glowRef.current
+    if (!vis || !glow || prefersReducedMotion() || !hasFinePointer()) return
+
+    const onMove = (e: MouseEvent) => {
+      const r = vis.getBoundingClientRect()
+      gsap.to(glow, {
+        x: e.clientX - r.left,
+        y: e.clientY - r.top,
+        duration: 0.5,
+        ease: 'power3.out',
+        overwrite: 'auto',
+      })
+    }
+    const onEnter = () => gsap.to(glow, { opacity: 1, scale: 1, duration: 0.4, ease: 'back.out(1.4)' })
+    const onLeave = () => gsap.to(glow, { opacity: 0, scale: 0.5, duration: 0.4, ease: 'power2.inOut' })
+
+    vis.addEventListener('mousemove', onMove)
+    vis.addEventListener('mouseenter', onEnter)
+    vis.addEventListener('mouseleave', onLeave)
+    return () => {
+      vis.removeEventListener('mousemove', onMove)
+      vis.removeEventListener('mouseenter', onEnter)
+      vis.removeEventListener('mouseleave', onLeave)
     }
   }, [])
 
@@ -76,7 +174,6 @@ export function AboutSection() {
         <div>
           <div className="sec-tag">What is VokDev</div>
 
-          {/* Heading: each line is a .split-line clip container */}
           <h2 className="a-h">
             <span className="split-line">
               <span className="split-inner">A community built on</span>
@@ -120,7 +217,13 @@ export function AboutSection() {
           </div>
         </div>
 
-        <div className="a-vis" id="avis">
+        <div ref={visRef} className="a-vis" id="avis">
+          <div
+            ref={glowRef}
+            className="a-vis-glow"
+            aria-hidden
+            style={{ opacity: 0, transform: 'translate(-50%, -50%) scale(0.5)' }}
+          />
           <div className="chip chip3">
             <span className="chip-dot" />⚡ 98% uptime
           </div>

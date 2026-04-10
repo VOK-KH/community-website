@@ -1,5 +1,3 @@
-/* VokDev landing v3 — scoped to .landing-v3 (matches vokdev-landing-v3.html) */
-
 .landing-v3,
 .landing-v3 *,
 .landing-v3 *::before,
@@ -98,19 +96,12 @@
   z-index: 800;
   width: min(700px, 100vw);
   height: 80px;
-  pointer-events: none;
+  pointer-events: auto;
 }
 
 .landing-v3 .island-zone #island-trigger {
   position: absolute;
   inset: 0;
-  width: auto;
-  height: auto;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  transform: none;
   z-index: 0;
   pointer-events: auto;
 }
@@ -541,6 +532,9 @@
   color: var(--vok-text3);
   letter-spacing: 0.1em;
   text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
 }
 .landing-v3 .scroll-ind {
   position: absolute;
@@ -768,6 +762,8 @@
 
 /* ── feature cards ── */
 .landing-v3 .hsc-card {
+  --gx: 50%;
+  --gy: 0%;
   flex-shrink: 0;
   width: clamp(290px, 26vw, 390px);
   min-height: 460px;
@@ -780,45 +776,104 @@
   gap: 1rem;
   position: relative;
   overflow: hidden;
-  transition: border-color 0.25s, transform 0.25s;
+  transition: border-color 0.35s, transform 0.4s ease, box-shadow 0.4s ease;
   cursor: default;
 }
+
+/* cursor-following glow overlay */
 .landing-v3 .hsc-card::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(600px circle at 50% -80px, rgba(255,255,255,0.04), transparent 60%);
+  background: radial-gradient(
+    400px circle at var(--gx) var(--gy),
+    var(--hsc-glow, rgba(255, 255, 255, 0.04)),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.4s;
   pointer-events: none;
+  z-index: 0;
 }
+
+.landing-v3 .hsc-card:hover::before {
+  opacity: 1;
+}
+
 .landing-v3 .hsc-card:hover {
-  border-color: var(--vok-border2);
-  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--hsc-ac, var(--vok-accent)) 35%, transparent);
+  transform: translateY(-6px);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--hsc-ac, var(--vok-accent)) 12%, transparent),
+    0 12px 40px rgba(0, 0, 0, 0.4),
+    0 0 60px -10px var(--hsc-glow, transparent);
 }
 
 /* accent colours per card */
-.landing-v3 .hsc-cy { --hsc-ac: var(--vok-accent);   --hsc-glow: rgba(0,229,255,0.08); }
-.landing-v3 .hsc-vi { --hsc-ac: var(--vok-violet);   --hsc-glow: rgba(124,58,237,0.10); }
-.landing-v3 .hsc-em { --hsc-ac: var(--vok-emerald);  --hsc-glow: rgba(16,185,129,0.09); }
-.landing-v3 .hsc-am { --hsc-ac: var(--vok-amber);    --hsc-glow: rgba(245,158,11,0.09); }
-.landing-v3 .hsc-pk { --hsc-ac: var(--vok-pink);     --hsc-glow: rgba(236,72,153,0.09); }
+.landing-v3 .hsc-cy { --hsc-ac: var(--vok-accent);   --hsc-glow: rgba(0,229,255,0.10); }
+.landing-v3 .hsc-vi { --hsc-ac: var(--vok-violet);   --hsc-glow: rgba(124,58,237,0.12); }
+.landing-v3 .hsc-em { --hsc-ac: var(--vok-emerald);  --hsc-glow: rgba(16,185,129,0.11); }
+.landing-v3 .hsc-am { --hsc-ac: var(--vok-amber);    --hsc-glow: rgba(245,158,11,0.11); }
+.landing-v3 .hsc-pk { --hsc-ac: var(--vok-pink);     --hsc-glow: rgba(236,72,153,0.11); }
 
+/* bottom accent glow */
 .landing-v3 .hsc-card::after {
   content: '';
   position: absolute;
   bottom: 0; left: 0; right: 0;
-  height: 120px;
-  background: radial-gradient(ellipse at 50% 100%, var(--hsc-glow,transparent), transparent 70%);
+  height: 140px;
+  background: radial-gradient(ellipse at 50% 100%, var(--hsc-glow, transparent), transparent 70%);
+  opacity: 0.5;
+  transition: opacity 0.4s;
   pointer-events: none;
+  z-index: 0;
+}
+
+.landing-v3 .hsc-card:hover::after {
+  opacity: 1;
 }
 
 .landing-v3 .hsc-card-top {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
+  position: relative;
+  z-index: 1;
 }
 .landing-v3 .hsc-icon {
-  font-size: 2rem;
-  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--vok-border);
+  transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+}
+.landing-v3 .hsc-card:hover .hsc-icon {
+  border-color: color-mix(in srgb, var(--hsc-ac, var(--vok-accent)) 30%, transparent);
+  box-shadow: 0 0 24px -4px var(--hsc-glow, transparent);
+  transform: scale(1.05);
+}
+.landing-v3 .hsc-illust {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+.landing-v3 .hsc-card:hover .hsc-illust {
+  transform: scale(1.08);
+}
+
+/* ensure text stays above glow layers */
+.landing-v3 .hsc-title,
+.landing-v3 .hsc-desc,
+.landing-v3 .hsc-tags,
+.landing-v3 .hsc-metric {
+  position: relative;
+  z-index: 1;
 }
 .landing-v3 .hsc-tag {
   font-family: var(--font-landing-mono), ui-monospace, monospace;
@@ -993,6 +1048,24 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.landing-v3 .a-vis-glow {
+  position: absolute;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(
+    circle at center,
+    rgba(0, 229, 255, 0.10) 0%,
+    rgba(0, 229, 255, 0.04) 40%,
+    transparent 70%
+  );
+  filter: blur(18px);
+  will-change: transform, opacity;
+  transform: translate(-50%, -50%) scale(0.5);
+  mix-blend-mode: screen;
 }
 .landing-v3 .code-card {
   background: var(--vok-surface);

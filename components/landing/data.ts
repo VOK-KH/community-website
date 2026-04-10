@@ -38,7 +38,7 @@ export type LandingProject = {
   colClass: 'col8' | 'col4'
   cardClass: 'c-cy' | 'c-vi' | 'c-em' | 'c-am' | 'c-pk' | 'c-bl'
   iconClass: 'i-cy' | 'i-vi' | 'i-em' | 'i-am' | 'i-pk' | 'i-bl'
-  emoji: string
+  icon: string
   stars: number
   title: string
   description: string
@@ -52,7 +52,7 @@ export const featuredProjects: LandingProject[] = [
     colClass: 'col8',
     cardClass: 'c-cy',
     iconClass: 'i-cy',
-    emoji: '🌊',
+    icon: 'Waves',
     stars: 284,
     title: 'FlowCanvas',
     description:
@@ -65,7 +65,7 @@ export const featuredProjects: LandingProject[] = [
     colClass: 'col4',
     cardClass: 'c-vi',
     iconClass: 'i-vi',
-    emoji: '🔮',
+    icon: 'Sparkles',
     stars: 142,
     title: 'Prism CLI',
     description:
@@ -78,7 +78,7 @@ export const featuredProjects: LandingProject[] = [
     colClass: 'col4',
     cardClass: 'c-em',
     iconClass: 'i-em',
-    emoji: '🌿',
+    icon: 'Leaf',
     stars: 198,
     title: 'GreenQueue',
     description:
@@ -91,7 +91,7 @@ export const featuredProjects: LandingProject[] = [
     colClass: 'col4',
     cardClass: 'c-am',
     iconClass: 'i-am',
-    emoji: '⚡',
+    icon: 'Zap',
     stars: 91,
     title: 'HotDiff',
     description:
@@ -104,7 +104,7 @@ export const featuredProjects: LandingProject[] = [
     colClass: 'col4',
     cardClass: 'c-pk',
     iconClass: 'i-pk',
-    emoji: '💎',
+    icon: 'Gem',
     stars: 217,
     title: 'GemUI',
     description:
@@ -117,7 +117,7 @@ export const featuredProjects: LandingProject[] = [
     colClass: 'col4',
     cardClass: 'c-bl',
     iconClass: 'i-bl',
-    emoji: '🔭',
+    icon: 'Telescope',
     stars: 76,
     title: 'Orbiter',
     description:

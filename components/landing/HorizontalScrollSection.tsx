@@ -1,7 +1,8 @@
 'use client'
 
 import { useLayoutEffect, useRef } from 'react'
-import { gsap, ScrollTrigger, registerGsap, prefersReducedMotion, isMobile } from '@/lib/motion'
+import Image from 'next/image'
+import { gsap, ScrollTrigger, registerGsap, prefersReducedMotion, isMobile, hasFinePointer } from '@/lib/motion'
 
 registerGsap()
 
@@ -9,7 +10,7 @@ registerGsap()
 
 const FEATURES = [
   {
-    icon: '🚀',
+    illust: 'Rocket',
     cardCls: 'hsc-cy',
     tag: 'Build',
     title: 'Ship real projects',
@@ -19,7 +20,7 @@ const FEATURES = [
     extra: ['TypeScript', 'React', 'Next.js'],
   },
   {
-    icon: '📖',
+    illust: 'BookOpen',
     cardCls: 'hsc-vi',
     tag: 'Learn',
     title: 'Learn in public',
@@ -29,7 +30,7 @@ const FEATURES = [
     extra: ['Dev Journals', 'Pair Programming'],
   },
   {
-    icon: '🤝',
+    illust: 'Handshake',
     cardCls: 'hsc-em',
     tag: 'Connect',
     title: 'Find your people',
@@ -39,7 +40,7 @@ const FEATURES = [
     extra: ['Mentorship', 'Hack Nights'],
   },
   {
-    icon: '⚡',
+    illust: 'Zap',
     cardCls: 'hsc-am',
     tag: 'Grow',
     title: 'Level up, fast',
@@ -49,7 +50,7 @@ const FEATURES = [
     extra: ['Weekly Challenges', 'Code Reviews'],
   },
   {
-    icon: '✨',
+    illust: 'Sparkles',
     cardCls: 'hsc-pk',
     tag: 'Share',
     title: 'No gatekeeping — ever',
@@ -81,7 +82,7 @@ function LabelCard() {
 }
 
 function FeatureCard({
-  icon,
+  illust,
   cardCls,
   tag,
   title,
@@ -94,7 +95,15 @@ function FeatureCard({
   return (
     <article className={`hsc-card ${cardCls}`} style={{ '--card-i': index } as React.CSSProperties}>
       <div className="hsc-card-top">
-        <span className="hsc-icon">{icon}</span>
+        <span className="hsc-icon">
+          <Image
+            src={`/illust/${illust}.svg`}
+            alt={tag}
+            width={48}
+            height={48}
+            className="hsc-illust"
+          />
+        </span>
         <span className="hsc-tag">{tag}</span>
       </div>
       <h3 className="hsc-title">{title}</h3>
@@ -174,10 +183,25 @@ export function HorizontalScrollSection() {
       })
     })
 
+    /* cursor-following glow on cards */
+    const glowCleanups: (() => void)[] = []
+    if (hasFinePointer()) {
+      cards.forEach((card) => {
+        const onMove = (e: MouseEvent) => {
+          const r = card.getBoundingClientRect()
+          card.style.setProperty('--gx', `${e.clientX - r.left}px`)
+          card.style.setProperty('--gy', `${e.clientY - r.top}px`)
+        }
+        card.addEventListener('mousemove', onMove)
+        glowCleanups.push(() => card.removeEventListener('mousemove', onMove))
+      })
+    }
+
     ScrollTrigger.refresh()
 
     return () => {
       tween.kill()
+      glowCleanups.forEach((fn) => fn())
       ScrollTrigger.getAll().forEach((t) => {
         if (t.vars.trigger === pin) t.kill()
       })

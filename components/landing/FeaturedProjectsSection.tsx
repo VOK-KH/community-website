@@ -2,8 +2,13 @@
 
 import { useLayoutEffect, useRef } from 'react'
 import Link from 'next/link'
+import { Waves, Sparkles, Leaf, Zap, Gem, Telescope, type LucideIcon } from 'lucide-react'
 import { featuredProjects } from './data'
 import { gsap, registerGsap, prefersReducedMotion, hasFinePointer } from '@/lib/motion'
+
+const iconMap: Record<string, LucideIcon> = {
+  Waves, Sparkles, Leaf, Zap, Gem, Telescope,
+}
 
 registerGsap()
 
@@ -98,7 +103,9 @@ export function FeaturedProjectsSection() {
         {featuredProjects.map((p) => (
           <div key={p.id} className={`pc ${p.cardClass} ${p.colClass} gsap-card`}>
             <div className="pt">
-              <div className={`pi ${p.iconClass}`}>{p.emoji}</div>
+              <div className={`pi ${p.iconClass}`}>
+                {(() => { const Icon = iconMap[p.icon]; return Icon ? <Icon size={20} /> : null })()}
+              </div>
               <div className="pst">
                 <span className="star">★</span> {p.stars}
               </div>

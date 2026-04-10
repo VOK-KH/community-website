@@ -2,6 +2,7 @@
 
 import { useLayoutEffect, useRef } from 'react'
 import Link from 'next/link'
+import { Users, FolderKanban, GitCommitHorizontal } from 'lucide-react'
 import { gsap, registerGsap, prefersReducedMotion } from '@/lib/motion'
 
 registerGsap()
@@ -161,19 +162,19 @@ export function HeroSection() {
           <span className="s-num" style={{ color: 'var(--vok-accent)' }}>
             <span data-count="4200">0</span>+
           </span>
-          <span className="s-lbl">Members</span>
+          <span className="s-lbl"><Users size={14} /> Members</span>
         </div>
         <div className="stat-item">
           <span className="s-num" style={{ color: 'var(--vok-violet)' }}>
             <span data-count="830">0</span>+
           </span>
-          <span className="s-lbl">Projects</span>
+          <span className="s-lbl"><FolderKanban size={14} /> Projects</span>
         </div>
         <div className="stat-item">
           <span className="s-num" style={{ color: 'var(--vok-emerald)' }}>
             <span data-count="12000">0</span>+
           </span>
-          <span className="s-lbl">Commits</span>
+          <span className="s-lbl"><GitCommitHorizontal size={14} /> Commits</span>
         </div>
       </div>
 
