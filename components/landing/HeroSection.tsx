@@ -1,43 +1,74 @@
 'use client'
 
-import { AnimatedSection } from '@/components/AnimatedSection'
-import { HeroTitle, HeroSubtitle, HeroButton } from '@/components/HeroAnimation'
-import { VokDevBadge } from '@/components/VokDevBadge'
-import { VokDevButton } from '@/components/VokDevButton'
+import Link from 'next/link'
 
 export function HeroSection() {
   return (
-    <section className="relative overflow-hidden px-4 py-20 md:py-32">
-      <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute left-0 top-1/4 h-72 w-72 rounded-full bg-primary/20 blur-3xl" />
-        <div className="absolute right-0 top-1/3 h-72 w-72 rounded-full bg-secondary/20 blur-3xl" />
+    <section className="hero" id="hero" data-sec="hero">
+      <div className="hero-badge" id="hbadge">
+        <span className="badge-live" aria-hidden />
+        <span className="badge-text">Open Developer Community</span>
       </div>
-
-      <AnimatedSection className="mx-auto max-w-7xl text-center">
-        <div className="mb-6 inline-flex rounded-full border border-border/60 bg-card/70 px-2 py-1 backdrop-blur">
-          <VokDevBadge variant="secondary" size="sm" withGlow={false}>
-            VokDev Community Platform
-          </VokDevBadge>
+      <h1 className="hero-h1">
+        <span className="h1-line">
+          <span className="h1-word">Build.</span>
+          <span className="h1-word ac">Share.</span>
+        </span>
+        <span className="h1-line">
+          <span className="h1-word">Grow.</span>
+        </span>
+      </h1>
+      <div className="hero-subtitle" id="hsubt">
+        <span className="st-word">Vision</span>
+        <span className="st-dot" aria-hidden>
+          •
+        </span>
+        <span className="st-word">Of</span>
+        <span className="st-dot" aria-hidden>
+          •
+        </span>
+        <span className="st-word">Knowledge</span>
+      </div>
+      <p className="vok-def" id="hvok">
+        <span className="vc">V</span>ision &nbsp;<span className="vo">O</span>f &nbsp;
+        <span className="vk">K</span>nowledge — where developers build what matters
+      </p>
+      <p className="hero-desc" id="hdesc">
+        VokDev is the open community for developers who ship real projects, learn in public, and grow
+        alongside people who genuinely get it.
+      </p>
+      <div className="hero-ctas" id="hctas">
+        <Link href="/projects" className="btn-p">
+          Start Building
+        </Link>
+        <Link href="/projects" className="btn-g">
+          Explore Projects
+        </Link>
+      </div>
+      <div className="hero-stats" id="hstats">
+        <div className="stat-item">
+          <span className="s-num" style={{ color: 'var(--vok-accent)' }}>
+            <span data-count="4200">0</span>+
+          </span>
+          <span className="s-lbl">Members</span>
         </div>
-
-        <HeroTitle>Build Faster With People Who Ship</HeroTitle>
-
-        <HeroSubtitle>
-          Join a modern community where developers, designers, and product teams
-          collaborate on real projects, share practical knowledge, and ship work.
-        </HeroSubtitle>
-
-        <HeroButton>
-          <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
-            <VokDevButton variant="primary" size="lg">
-              Explore Projects
-            </VokDevButton>
-            <VokDevButton variant="secondary" size="lg" withGlow={false}>
-              View Community Guide
-            </VokDevButton>
-          </div>
-        </HeroButton>
-      </AnimatedSection>
+        <div className="stat-item">
+          <span className="s-num" style={{ color: 'var(--vok-violet)' }}>
+            <span data-count="830">0</span>+
+          </span>
+          <span className="s-lbl">Projects</span>
+        </div>
+        <div className="stat-item">
+          <span className="s-num" style={{ color: 'var(--vok-emerald)' }}>
+            <span data-count="12000">0</span>+
+          </span>
+          <span className="s-lbl">Commits</span>
+        </div>
+      </div>
+      <div className="scroll-ind" id="scind">
+        <span>Scroll</span>
+        <div className="s-line" />
+      </div>
     </section>
   )
 }

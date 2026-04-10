@@ -1,18 +1,33 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { DM_Sans, Space_Mono, Syne } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { ThemeProvider } from '@/components/theme-provider'
 import './globals.css'
 
-const _geist = Geist({ subsets: ["latin"] });
-const _geistMono = Geist_Mono({ subsets: ["latin"] });
+const fontSyne = Syne({
+  subsets: ['latin'],
+  variable: '--font-landing-syne',
+  weight: ['400', '600', '700', '800'],
+})
+
+const fontDmSans = DM_Sans({
+  subsets: ['latin'],
+  variable: '--font-landing-dm',
+  weight: ['300', '400', '500', '600'],
+})
+
+const fontSpaceMono = Space_Mono({
+  subsets: ['latin'],
+  variable: '--font-landing-mono',
+  weight: ['400', '700'],
+})
 
 export const metadata: Metadata = {
-  title: 'VokDev - Modern Design System for Tech Communities',
-  description: 'VokDev is a futuristic, developer-friendly design system with smooth interactions, creative expression, and accessibility at its core. Built with Next.js, Tailwind CSS, and Framer Motion.',
-  generator: 'v0.app',
-  keywords: ['design system', 'UI components', 'tech community', 'accessibility', 'Tailwind CSS'],
-  authors: [{ name: 'VokDev Team' }],
+  title: 'VokDev — Vision Of Knowledge',
+  description:
+    'VokDev is the open community for developers who ship real projects, learn in public, and grow alongside people who genuinely get it.',
+  keywords: ['developer community', 'open source', 'Vision Of Knowledge', 'VokDev', 'Next.js'],
+  authors: [{ name: 'VokDev' }],
   creator: 'VokDev',
   icons: {
     icon: [
@@ -39,7 +54,12 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
+    <html
+      lang="en"
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
+      className={`${fontSyne.variable} ${fontDmSans.variable} ${fontSpaceMono.variable}`}
+    >
       <body className="font-sans antialiased">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}

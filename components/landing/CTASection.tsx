@@ -1,20 +1,41 @@
-import { VokDevButton } from '@/components/VokDevButton'
+'use client'
+
+import Link from 'next/link'
 
 export function CTASection() {
   return (
-    <section className="border-y border-border/40 bg-card/60 px-4 py-20">
-      <div className="mx-auto max-w-4xl text-center">
-        <h2 className="mb-4 text-3xl font-bold md:text-4xl">Ready to Join?</h2>
-        <p className="mb-8 text-lg text-muted-foreground">
-          Start collaborating with thousands of builders and contributors today.
+    <section className="cta-sec" id="community" data-sec="cta">
+      <div className="cta-glow" />
+      <div className="cta-wrap">
+        <div className="cta-tag gsap-fade">✦ Join the community</div>
+        <h2 className="cta-h gsap-up">
+          Ready to build
+          <br />
+          <span className="gr">something real?</span>
+        </h2>
+        <p className="cta-body gsap-fade">
+          Join thousands of developers sharing what they build, learning in public, and making things worth
+          making — under the banner of Vision Of Knowledge.
         </p>
-        <div className="flex flex-col justify-center gap-4 sm:flex-row">
-          <VokDevButton variant="primary" size="lg">
-            Create Account
-          </VokDevButton>
-          <VokDevButton variant="secondary" size="lg" withGlow={false}>
-            Learn More
-          </VokDevButton>
+        <div className="cta-btns gsap-fade">
+          <Link href="/community" className="btn-l p">
+            Join VokDev Free →
+          </Link>
+          <Link href="/projects" className="btn-l o">
+            Browse Projects
+          </Link>
+        </div>
+        <div className="sp gsap-fade">
+          <div className="sp-avs">
+            <div className="sp-av av-c">AK</div>
+            <div className="sp-av av-v">MJ</div>
+            <div className="sp-av av-e">SR</div>
+            <div className="sp-av av-a">TK</div>
+            <div className="sp-av av-p">LC</div>
+          </div>
+          <span className="sp-txt">
+            Joined by <strong>4,200+ developers</strong> this year
+          </span>
         </div>
       </div>
     </section>

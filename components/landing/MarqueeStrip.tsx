@@ -1,26 +1,32 @@
 'use client'
 
-import { useScrollTrigger } from '@/hooks/useScrollTrigger'
-import { marqueeTopics } from './data'
+import { marqueeRow1, marqueeRow2 } from './data'
+
+function rowItems(row: readonly { text: string; mod?: 'c' | 'v' | 'e' }[]) {
+  const doubled = [...row, ...row]
+  return doubled.map((item, index) => (
+    <div key={`${item.text}-${index}`} className="mq-item">
+      <span className={item.mod ? `mq-w ${item.mod}` : 'mq-w'}>{item.text}</span>
+      <span className="mq-dot" />
+    </div>
+  ))
+}
 
 export function MarqueeStrip() {
-  const { ref, isVisible } = useScrollTrigger({ threshold: 0.25 })
-  const items = [...marqueeTopics, ...marqueeTopics]
-
   return (
-    <section ref={ref} className="border-y border-border/40 bg-muted/30 py-4">
-      <div className="overflow-hidden">
-        <div className={isVisible ? 'animate-marquee flex w-max gap-4' : 'flex w-max gap-4 opacity-0'}>
-          {items.map((topic, index) => (
-            <span
-              key={`${topic}-${index}`}
-              className="rounded-full border border-border/60 bg-background/70 px-4 py-2 text-sm text-foreground/85 backdrop-blur"
-            >
-              {topic}
-            </span>
-          ))}
+    <div className="mq-wrap" id="marquee" data-sec="marquee">
+      <div className="mq-fl" />
+      <div className="mq-fr" />
+      <div className="mq-row">
+        <div className="mq-inner" id="mq1">
+          {rowItems(marqueeRow1)}
         </div>
       </div>
-    </section>
+      <div className="mq-row">
+        <div className="mq-inner" id="mq2">
+          {rowItems(marqueeRow2)}
+        </div>
+      </div>
+    </div>
   )
 }
