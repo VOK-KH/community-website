@@ -1,9 +1,7 @@
 'use client'
 
-import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { VokDevButton } from '@/components/VokDevButton'
-import { VokDevCard } from '@/components/VokDevCard'
 import { VokDevInput } from '@/components/VokDevInput'
 import { useState } from 'react'
 import type { LucideIcon } from 'lucide-react'
@@ -48,6 +46,25 @@ const joinBenefits = [
   'Community recognition and badges',
 ]
 
+const contactFaqs = [
+  {
+    q: 'Is VokDev free to join?',
+    a: 'Yes! VokDev is completely free to join. We offer a premium membership option with additional features, but the community is always free.',
+  },
+  {
+    q: 'How do I submit a project?',
+    a: 'Once you\'re logged in, navigate to your profile and click "Submit Project". Fill in the details and our team will review it within 48 hours.',
+  },
+  {
+    q: 'Can I collaborate with other members?',
+    a: 'Absolutely! You can browse projects, request to join teams, and connect with other members through our messaging system.',
+  },
+  {
+    q: 'What support options are available?',
+    a: 'We offer email support, Discord community chat, and a knowledge base. Premium members also get priority support.',
+  },
+]
+
 export default function ContactPage() {
   const [formData, setFormData] = useState({
     name: '',
@@ -73,70 +90,71 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <Header />
-
+    <div className="pg">
       <main className="flex-1">
-        {/* Hero Section */}
-        <section className="relative px-4 py-16 md:py-24 border-b border-border/40">
-          <div className="max-w-7xl mx-auto">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Get in Touch</h1>
-            <p className="text-lg text-muted-foreground mb-8 max-w-2xl">
-              Have questions? Want to collaborate? We&apos;d love to hear from you. Reach out and let&apos;s start a conversation.
+        <section className="pg-hero" aria-labelledby="contact-hero-title">
+          <div className="pg-hero-inner">
+            <p className="pg-hero-chip">
+              <span className="chip-dot" aria-hidden />
+              Contact
+            </p>
+            <h1 id="contact-hero-title">
+              Get in <span className="gradient-text">Touch</span>
+            </h1>
+            <p className="hero-sub">
+              Whether you need help, want to partner, or have product feedback, our team reads every message and routes it to the right people. Pick a channel below or write to us directly.
             </p>
           </div>
         </section>
 
-        {/* Contact Methods */}
-        <section className="px-4 py-20">
-          <div className="max-w-7xl mx-auto mb-20">
-            <div className="mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Contact Information</h2>
-              <p className="text-muted-foreground text-lg">
-                Reach out to us through any of these channels
-              </p>
-            </div>
+        <section className="pg-sec" aria-labelledby="methods-heading">
+          <div className="pg-sec-inner">
+            <header className="pg-sec-hd">
+              <h2 id="methods-heading">Ways to reach us</h2>
+              <p>Choose the option that fits your question. We monitor all channels and aim to respond as quickly as we can.</p>
+            </header>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
               {contactMethods.map((method, index) => (
-                <VokDevCard key={index} variant="interactive">
-                  <div className="mb-4 text-primary">
-                    <method.icon className="h-8 w-8" />
+                <article key={index} className="pg-card pg-card-accent">
+                  <div className="pg-icon pg-icon-lg mb-5" aria-hidden>
+                    <method.icon className="h-7 w-7" strokeWidth={1.75} />
                   </div>
-                  <h3 className="text-xl font-semibold mb-2">{method.title}</h3>
-                  <p className="text-muted-foreground mb-4">{method.description}</p>
-                  <div className="border-t border-border/40 pt-4">
-                    <p className="font-medium text-foreground mb-1">{method.contact}</p>
-                    <p className="text-sm text-muted-foreground">{method.time}</p>
+                  <h3 className="text-xl font-semibold tracking-tight text-foreground">{method.title}</h3>
+                  <p className="mt-2 text-muted-foreground leading-relaxed">{method.description}</p>
+                  <div className="mt-6 border-t border-border/50 pt-5">
+                    <p className="font-medium text-foreground">{method.contact}</p>
+                    <p className="mt-1 text-sm text-muted-foreground">{method.time}</p>
                   </div>
-                </VokDevCard>
+                </article>
               ))}
             </div>
           </div>
+        </section>
 
-          {/* Contact Form */}
-          <div className="max-w-2xl mx-auto">
-            <div className="mb-8">
-              <h2 className="text-3xl font-bold mb-4">Send us a Message</h2>
-              <p className="text-muted-foreground">
-                Fill out the form below and we&apos;ll get back to you as soon as possible.
-              </p>
-            </div>
+        <div className="pg-divider mx-auto max-w-3xl px-4" aria-hidden />
 
-            <VokDevCard variant="featured">
+        <section className="pg-sec pt-0 md:pt-0" aria-labelledby="form-heading">
+          <div className="pg-sec-inner max-w-2xl">
+            <header className="pg-sec-hd">
+              <h2 id="form-heading">Send a message</h2>
+              <p>Share a few details and we will reply by email. For urgent issues, Discord is usually fastest.</p>
+            </header>
+
+            <div className="pg-form-card">
               {submitted ? (
-                <div className="text-center py-8">
-                  <div className="mb-4 flex justify-center text-primary">
-                    <CheckCircle2 className="h-12 w-12" />
+                <div className="py-6 text-center">
+                  <div className="mb-4 flex justify-center text-primary" aria-hidden>
+                    <CheckCircle2 className="h-14 w-14" strokeWidth={1.5} />
                   </div>
-                  <h3 className="text-2xl font-bold mb-2">Thank you!</h3>
-                  <p className="text-muted-foreground">
+                  <h3 className="text-2xl font-bold tracking-tight text-foreground">Thank you!</h3>
+                  <p className="mt-2 text-muted-foreground leading-relaxed">
                     Your message has been sent successfully. We&apos;ll be in touch soon.
                   </p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                     <VokDevInput
                       label="Full Name"
                       name="name"
@@ -165,124 +183,108 @@ export default function ContactPage() {
                     required
                   />
 
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Message</label>
+                  <div className="w-full space-y-2">
+                    <label htmlFor="contact-message" className="block text-sm font-medium text-foreground">
+                      Message
+                    </label>
                     <textarea
+                      id="contact-message"
                       name="message"
                       value={formData.message}
                       onChange={handleChange}
                       placeholder="Tell us more about your inquiry..."
                       required
                       rows={6}
-                      className="w-full px-4 py-3 rounded-lg bg-background border border-border text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
+                      className="min-h-40 w-full resize-y rounded-lg border border-border bg-input px-4 py-3 text-foreground transition-all duration-300 placeholder:text-muted-foreground hover:border-secondary/50 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-background"
                     />
                   </div>
 
-                  <VokDevButton variant="primary" size="lg" type="submit" className="w-full">
+                  <VokDevButton variant="primary" size="lg" type="submit" withGlow className="w-full">
                     Send Message
                   </VokDevButton>
                 </form>
               )}
-            </VokDevCard>
+            </div>
           </div>
         </section>
 
-        {/* Join Section */}
-        <section className="px-4 py-20 bg-muted/30 border-y border-border/40">
-          <div className="max-w-7xl mx-auto">
-            <div className="mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Join VokDev Today</h2>
-              <p className="text-muted-foreground text-lg max-w-2xl">
-                Become part of our thriving community and unlock amazing opportunities for collaboration and growth.
+        <section className="pg-sec pg-sec-alt" aria-labelledby="join-heading">
+          <div className="pg-sec-inner">
+            <header className="pg-sec-hd">
+              <h2 id="join-heading">Join VokDev today</h2>
+              <p>
+                Become part of our thriving community and unlock opportunities for collaboration, learning, and visibility.
               </p>
-            </div>
+            </header>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              {/* Benefits List */}
+            <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-2 lg:gap-16">
               <div>
-                <h3 className="text-2xl font-bold mb-6">What You Get</h3>
-                <ul className="space-y-4">
+                <h3 className="mb-6 text-xl font-semibold tracking-tight text-foreground">What you get</h3>
+                <ul className="space-y-4" role="list">
                   {joinBenefits.map((benefit, index) => (
-                    <li key={index} className="flex items-start gap-3">
-                      <div className="mt-1 flex-shrink-0 text-primary">
-                        <Check className="h-5 w-5" />
-                      </div>
-                      <span className="text-lg text-foreground">{benefit}</span>
+                    <li key={index} className="pg-check-item">
+                      <span className="pg-check-icon" aria-hidden>
+                        <Check className="h-3.5 w-3.5" strokeWidth={2.5} />
+                      </span>
+                      <span className="text-base leading-relaxed text-foreground">{benefit}</span>
                     </li>
                   ))}
                 </ul>
               </div>
 
-              {/* Signup Form */}
-              <VokDevCard variant="featured" className="h-fit">
-                <h3 className="text-2xl font-bold mb-6">Create Your Account</h3>
-                
-                <form className="space-y-4">
-                  <VokDevInput
-                    label="Full Name"
-                    placeholder="Your name"
-                  />
-                  <VokDevInput
-                    label="Email Address"
-                    type="email"
-                    placeholder="your@email.com"
-                  />
-                  <VokDevInput
-                    label="Password"
-                    type="password"
-                    placeholder="Secure password"
-                  />
+              <div className="pg-form-card h-fit">
+                <h3 className="mb-6 text-xl font-semibold tracking-tight text-foreground">Create your account</h3>
 
-                  <VokDevButton variant="primary" size="lg" className="w-full">
+                <form className="space-y-4">
+                  <VokDevInput label="Full Name" placeholder="Your name" />
+                  <VokDevInput label="Email Address" type="email" placeholder="your@email.com" />
+                  <VokDevInput label="Password" type="password" placeholder="Secure password" />
+
+                  <VokDevButton variant="primary" size="lg" withGlow className="w-full">
                     Sign Up Free
                   </VokDevButton>
 
-                  <p className="text-xs text-center text-muted-foreground">
+                  <p className="text-center text-xs text-muted-foreground">
                     By signing up, you agree to our Terms of Service and Privacy Policy
                   </p>
                 </form>
 
-                <div className="border-t border-border/40 pt-6 mt-6">
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Already have an account?
-                  </p>
+                <div className="mt-6 border-t border-border/50 pt-6">
+                  <p className="mb-4 text-sm text-muted-foreground">Already have an account?</p>
                   <VokDevButton variant="ghost" size="sm" className="w-full justify-center">
                     Sign In
                   </VokDevButton>
                 </div>
-              </VokDevCard>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* FAQ Section */}
-        <section className="px-4 py-20">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold mb-12 text-center">Frequently Asked Questions</h2>
+        <section className="pg-sec" aria-labelledby="faq-heading">
+          <div className="pg-sec-inner max-w-3xl">
+            <header className="pg-sec-hd pg-sec-hd-center">
+              <h2 id="faq-heading">Frequently asked questions</h2>
+              <p>Quick answers about membership, projects, and how we support the community.</p>
+            </header>
 
-            <div className="space-y-4">
-              {[
-                {
-                  q: 'Is VokDev free to join?',
-                  a: 'Yes! VokDev is completely free to join. We offer a premium membership option with additional features, but the community is always free.',
-                },
-                {
-                  q: 'How do I submit a project?',
-                  a: 'Once you&apos;re logged in, navigate to your profile and click "Submit Project". Fill in the details and our team will review it within 48 hours.',
-                },
-                {
-                  q: 'Can I collaborate with other members?',
-                  a: 'Absolutely! You can browse projects, request to join teams, and connect with other members through our messaging system.',
-                },
-                {
-                  q: 'What support options are available?',
-                  a: 'We offer email support, Discord community chat, and a knowledge base. Premium members also get priority support.',
-                },
-              ].map((faq, index) => (
-                <VokDevCard key={index} variant="default">
-                  <h4 className="text-lg font-semibold mb-2">{faq.q}</h4>
-                  <p className="text-muted-foreground">{faq.a}</p>
-                </VokDevCard>
+            <div className="space-y-3">
+              {contactFaqs.map((faq, index) => (
+                <details key={index} className="pg-faq">
+                  <summary>
+                    <span>{faq.q}</span>
+                    <svg
+                      className="chevron"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                      aria-hidden
+                    >
+                      <path d="m6 9 6 6 6-6" />
+                    </svg>
+                  </summary>
+                  <div className="faq-body">{faq.a}</div>
+                </details>
               ))}
             </div>
           </div>

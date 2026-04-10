@@ -34,15 +34,17 @@ export default function Footer() {
         <Link href="/about" className="text-xs transition-colors hover:text-[#eef2f7]" style={{ color: '#3d4e62' }}>
           About
         </Link>
-        <Link
-          href="/projects"
-          className="text-xs transition-colors hover:text-[#eef2f7]"
-          style={{ color: '#3d4e62' }}
-        >
+        <Link href="/projects" className="text-xs transition-colors hover:text-[#eef2f7]" style={{ color: '#3d4e62' }}>
           Projects
+        </Link>
+        <Link href="/community" className="text-xs transition-colors hover:text-[#eef2f7]" style={{ color: '#3d4e62' }}>
+          Community
         </Link>
         <Link href="/blog" className="text-xs transition-colors hover:text-[#eef2f7]" style={{ color: '#3d4e62' }}>
           Blog
+        </Link>
+        <Link href="/contact" className="text-xs transition-colors hover:text-[#eef2f7]" style={{ color: '#3d4e62' }}>
+          Contact
         </Link>
         <a
           href="https://discord.com"
@@ -62,11 +64,7 @@ export default function Footer() {
         >
           GitHub
         </a>
-        <Link
-          href="/privacy"
-          className="text-xs transition-colors hover:text-[#eef2f7]"
-          style={{ color: '#3d4e62' }}
-        >
+        <Link href="/privacy" className="text-xs transition-colors hover:text-[#eef2f7]" style={{ color: '#3d4e62' }}>
           Privacy
         </Link>
       </nav>

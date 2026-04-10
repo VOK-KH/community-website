@@ -1,6 +1,5 @@
 'use client'
 
-import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { VokDevButton } from '@/components/VokDevButton'
 import { VokDevCard } from '@/components/VokDevCard'
@@ -8,7 +7,6 @@ import { VokDevBadge } from '@/components/VokDevBadge'
 import { useState } from 'react'
 import type { LucideIcon } from 'lucide-react'
 import {
-  CircleUserRound,
   Palette,
   Code2,
   Wrench,
@@ -144,64 +142,73 @@ export default function CommunityPage() {
   const [selectedRole, setSelectedRole] = useState('All')
 
   const roles = ['All', ...Array.from(new Set(communityMembers.map(m => m.role)))]
-  
+
   const filteredMembers = selectedRole === 'All'
     ? communityMembers
     : communityMembers.filter(m => m.role === selectedRole)
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <Header />
-
+    <div className="pg">
       <main className="flex-1">
-        {/* Hero Section */}
-        <section className="relative px-4 py-16 md:py-24 border-b border-border/40 bg-muted/30">
-          <div className="max-w-7xl mx-auto">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Meet Our Community</h1>
-            <p className="text-lg text-muted-foreground mb-8 max-w-2xl">
-              Connect with talented designers, developers, and innovators. Learn, collaborate, and build amazing things together.
+        <section className="pg-hero">
+          <div className="pg-hero-inner">
+            <div className="pg-hero-chip">
+              <span className="chip-dot" aria-hidden />
+              Community
+            </div>
+            <h1>
+              Meet Our{' '}
+              <span className="gradient-text">Community</span>
+            </h1>
+            <p className="hero-sub">
+              Designers, engineers, and builders in one place—share work, learn from peers, and ship
+              better products with people who care about craft as much as you do.
             </p>
           </div>
         </section>
 
-        {/* Features Section */}
-        <section className="px-4 py-20">
-          <div className="max-w-7xl mx-auto">
-            <div className="mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Why Join VokDev?</h2>
-              <p className="text-muted-foreground text-lg">
-                Be part of a thriving community focused on growth and collaboration
+        <section className="pg-sec">
+          <div className="pg-sec-inner">
+            <div className="pg-sec-hd">
+              <h2>Why join VokDev</h2>
+              <p>
+                Everything you need to grow your skills, find collaborators, and stay connected to
+                what is happening across the ecosystem.
               </p>
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
               {communityFeatures.map((feature, index) => (
-                <VokDevCard key={index} variant="default">
-                  <div className="mb-4 text-primary">
-                    <feature.icon className="h-8 w-8" />
+                <VokDevCard
+                  key={index}
+                  variant="default"
+                  isHoverable={false}
+                  hasGlow={false}
+                  className="pg-card pg-card-accent flex h-full flex-col !shadow-none"
+                >
+                  <div className="pg-icon mb-4">
+                    <feature.icon className="h-6 w-6" aria-hidden />
                   </div>
-                  <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-                  <p className="text-muted-foreground">{feature.description}</p>
+                  <h3 className="mb-2 text-lg font-semibold text-foreground">{feature.title}</h3>
+                  <p className="text-sm leading-relaxed text-muted-foreground">{feature.description}</p>
                 </VokDevCard>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Members Filter Section */}
-        <section className="px-4 py-12 bg-card/50 border-y border-border/40">
-          <div className="max-w-7xl mx-auto">
-            <h3 className="text-sm font-semibold text-muted-foreground mb-4">Filter by Role</h3>
+        <section className="pg-sec pg-sec-alt">
+          <div className="pg-sec-inner">
+            <div className="pg-sec-hd">
+              <h2>Browse by role</h2>
+              <p>Filter member spotlights to match the kind of collaboration you are looking for.</p>
+            </div>
             <div className="flex flex-wrap gap-2">
               {roles.map((role) => (
                 <button
                   key={role}
+                  type="button"
                   onClick={() => setSelectedRole(role)}
-                  className={`px-4 py-2 rounded-lg font-medium text-sm transition-all ${
-                    selectedRole === role
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-muted text-muted-foreground hover:bg-muted/80'
-                  }`}
+                  className={`pg-pill ${selectedRole === role ? 'pg-pill-active' : ''}`}
                 >
                   {role}
                 </button>
@@ -210,94 +217,100 @@ export default function CommunityPage() {
           </div>
         </section>
 
-        {/* Members Grid */}
-        <section className="px-4 py-20">
-          <div className="max-w-7xl mx-auto">
-            <div className="mb-8">
-              <p className="text-muted-foreground">
-                Showing {filteredMembers.length} of {communityMembers.length} members
+        <section className="pg-sec">
+          <div className="pg-sec-inner">
+            <div className="pg-sec-hd">
+              <h2>Member spotlights</h2>
+              <p>
+                Showing {filteredMembers.length} of {communityMembers.length} profiles for the
+                selected filter.
               </p>
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {filteredMembers.map((member) => (
-                <VokDevCard key={member.id} variant="interactive" className="hover-lift flex flex-col">
-                  <div className="mb-4 flex justify-center">
-                    <span className="inline-flex rounded-full border border-border bg-card p-3 text-primary">
-                      <member.avatar className="h-7 w-7" />
-                    </span>
+                <div key={member.id} className="pg-card flex flex-col items-center text-center">
+                  <div className="relative mb-5 inline-flex">
+                    <div className="pg-avatar-ring">
+                      <div className="pg-avatar">
+                        <member.avatar className="h-7 w-7 shrink-0" aria-hidden />
+                      </div>
+                    </div>
+                    <span className="pg-online" title="Active" aria-hidden />
                   </div>
-                  
-                  <h3 className="text-lg font-semibold text-center mb-1">{member.name}</h3>
-                  <p className="text-sm text-primary text-center font-medium mb-4">{member.role}</p>
-
-                  {/* Specialties */}
-                  <div className="flex flex-wrap gap-2 mb-4 justify-center">
-                    {member.specialties.slice(0, 2).map((specialty) => (
-                      <VokDevBadge key={specialty} variant="secondary" size="sm">
+                  <h3 className="mb-1 text-lg font-semibold text-foreground">{member.name}</h3>
+                  <p className="mb-4 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                    {member.role}
+                  </p>
+                  <div className="mb-5 flex flex-wrap justify-center gap-2">
+                    {member.specialties.map((specialty) => (
+                      <VokDevBadge
+                        key={specialty}
+                        variant="secondary"
+                        size="sm"
+                        withGlow={false}
+                        className="pg-tag !gap-0"
+                      >
                         {specialty}
                       </VokDevBadge>
                     ))}
                   </div>
-
-                  {/* Stats */}
-                  <div className="flex justify-around text-center py-3 border-y border-border/40 mb-4">
-                    <div>
-                      <div className="text-lg font-semibold text-primary">{member.projects}</div>
-                      <p className="text-xs text-muted-foreground">Projects</p>
+                  <div className="mb-5 flex w-full justify-around gap-4 border-y border-border/40 py-4">
+                    <div className="text-center">
+                      <div className="text-xl font-bold text-foreground">{member.projects}</div>
+                      <p className="pg-stat-label">Projects</p>
                     </div>
-                    <div>
-                      <div className="text-lg font-semibold text-secondary">{member.followers}</div>
-                      <p className="text-xs text-muted-foreground">Followers</p>
+                    <div className="text-center">
+                      <div className="text-xl font-bold text-foreground">{member.followers}</div>
+                      <p className="pg-stat-label">Followers</p>
                     </div>
                   </div>
-
                   <VokDevButton variant="secondary" size="sm" className="w-full">
                     View Profile
                   </VokDevButton>
-                </VokDevCard>
+                </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Community Stats Section */}
-        <section className="px-4 py-20 bg-card/60 border-y border-border/40">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <hr className="pg-divider mx-auto max-w-5xl border-0" />
+
+        <section className="pg-sec pg-sec-alt">
+          <div className="pg-sec-inner">
+            <div className="grid grid-cols-2 gap-8 text-center md:grid-cols-4 md:gap-10">
               <div>
-                <div className="text-3xl md:text-4xl font-bold text-primary mb-2">2,450+</div>
-                <p className="text-muted-foreground">Active Members</p>
+                <div className="pg-stat-num gradient-text">2,450+</div>
+                <p className="pg-stat-label">Active members</p>
               </div>
               <div>
-                <div className="text-3xl md:text-4xl font-bold text-secondary mb-2">180+</div>
-                <p className="text-muted-foreground">Projects</p>
+                <div className="pg-stat-num gradient-text">180+</div>
+                <p className="pg-stat-label">Projects</p>
               </div>
               <div>
-                <div className="text-3xl md:text-4xl font-bold text-tertiary mb-2">45+</div>
-                <p className="text-muted-foreground">Events</p>
+                <div className="pg-stat-num gradient-text">45+</div>
+                <p className="pg-stat-label">Events</p>
               </div>
               <div>
-                <div className="text-3xl md:text-4xl font-bold text-primary mb-2">89%</div>
-                <p className="text-muted-foreground">Satisfaction Rate</p>
+                <div className="pg-stat-num gradient-text">89%</div>
+                <p className="pg-stat-label">Satisfaction rate</p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Join CTA */}
-        <section className="px-4 py-20">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Join Us?</h2>
-            <p className="text-muted-foreground text-lg mb-8">
-              Become part of the VokDev community and connect with thousands of talented professionals.
+        <section className="pg-cta">
+          <div className="pg-cta-inner">
+            <h2>Ready to join us?</h2>
+            <p>
+              Create an account to follow builders, join discussions, and get early access to events
+              and programs.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <VokDevButton variant="primary" size="lg">
-                Create Account
+            <div className="flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
+              <VokDevButton variant="primary" size="lg" withGlow>
+                Create account
               </VokDevButton>
               <VokDevButton variant="secondary" size="lg">
-                Learn More
+                Learn more
               </VokDevButton>
             </div>
           </div>

@@ -1,6 +1,5 @@
 'use client'
 
-import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { VokDevButton } from '@/components/VokDevButton'
 import { VokDevCard, VokDevCardTitle, VokDevCardDescription } from '@/components/VokDevCard'
@@ -122,73 +121,83 @@ export default function BlogPage() {
   const featuredPosts = blogPosts.filter(p => p.featured)
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <Header />
-
+    <div className="pg">
       <main className="flex-1">
-        {/* Hero Section */}
-        <section className="relative px-4 py-16 md:py-24 border-b border-border/40">
-          <div className="max-w-7xl mx-auto">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">VokDev Blog</h1>
-            <p className="text-lg text-muted-foreground mb-8">
-              Insights, tutorials, and industry trends from our community experts
+        <header className="pg-hero">
+          <div className="pg-hero-inner">
+            <p className="pg-hero-chip">
+              <span className="chip-dot" aria-hidden />
+              Blog
+            </p>
+            <h1>
+              <span className="gradient-text">Insights</span>
+              {' '}& Tutorials
+            </h1>
+            <p className="hero-sub">
+              Practical guides, deep dives, and perspectives from builders shipping real products—so you can level up faster with patterns that actually hold up in production.
             </p>
           </div>
-        </section>
+        </header>
 
-        {/* Featured Posts Section */}
-        <section className="px-4 py-20 bg-muted/30">
-          <div className="max-w-7xl mx-auto">
-            <h2 className="text-2xl md:text-3xl font-bold mb-8">Featured Articles</h2>
-            
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {featuredPosts.map((post) => (
-                <VokDevCard
-                  key={post.id}
-                  variant="featured"
-                  className="hover-lift flex flex-col"
-                >
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="rounded-md bg-primary/10 p-2 text-primary">
-                      <post.avatar className="h-6 w-6" />
+        <section className="pg-sec" aria-labelledby="featured-heading">
+          <div className="pg-sec-inner">
+            <header className="pg-sec-hd">
+              <h2 id="featured-heading">Featured articles</h2>
+              <p>Hand-picked pieces worth reading first—longer reads with actionable takeaways.</p>
+            </header>
+
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+              {featuredPosts.map((post) => {
+                const AvatarIcon = post.avatar
+                return (
+                  <VokDevCard
+                    key={post.id}
+                    variant="minimal"
+                    isHoverable={false}
+                    hasGlow={false}
+                    className="pg-card pg-card-accent flex h-full flex-col border-border! bg-card! shadow-none"
+                  >
+                    <div className="mb-4 flex items-start justify-between gap-3">
+                      <div className="pg-icon" aria-hidden>
+                        <AvatarIcon className="h-6 w-6" />
+                      </div>
+                      <VokDevBadge variant="primary" size="sm">
+                        {post.category}
+                      </VokDevBadge>
                     </div>
-                    <VokDevBadge variant="primary" size="sm">
-                      {post.category}
-                    </VokDevBadge>
-                  </div>
 
-                  <VokDevCardTitle className="mb-3">{post.title}</VokDevCardTitle>
-                  <VokDevCardDescription className="mb-6 flex-grow">
-                    {post.excerpt}
-                  </VokDevCardDescription>
+                    <VokDevCardTitle className="mb-3">{post.title}</VokDevCardTitle>
+                    <VokDevCardDescription className="mb-6 grow">{post.excerpt}</VokDevCardDescription>
 
-                  <div className="border-t border-border/40 pt-4 flex items-center justify-between text-sm">
-                    <div>
-                      <p className="font-medium text-foreground">{post.author}</p>
-                      <p className="text-muted-foreground">{post.date}</p>
+                    <div className="mt-auto flex items-end justify-between gap-4 border-t border-border/40 pt-4 text-sm">
+                      <div>
+                        <p className="font-semibold text-foreground">{post.author}</p>
+                        <p className="text-muted-foreground">{post.date}</p>
+                      </div>
+                      <span className="shrink-0 text-muted-foreground">{post.readTime} min read</span>
                     </div>
-                    <span className="text-muted-foreground">{post.readTime} min read</span>
-                  </div>
-                </VokDevCard>
-              ))}
+                  </VokDevCard>
+                )
+              })}
             </div>
           </div>
         </section>
 
-        {/* Filter Section */}
-        <section className="px-4 py-12 bg-card/50 border-y border-border/40">
-          <div className="max-w-7xl mx-auto">
-            <h3 className="text-sm font-semibold text-muted-foreground mb-4">Filter by Category</h3>
-            <div className="flex flex-wrap gap-2">
+        <section className="pg-sec pg-sec-alt" aria-labelledby="filter-heading">
+          <div className="pg-sec-inner">
+            <header className="pg-sec-hd">
+              <h2 id="filter-heading" className="text-lg md:text-xl">
+                Browse by topic
+              </h2>
+              <p>Narrow the archive to the stack or discipline you care about.</p>
+            </header>
+            <div className="flex flex-wrap gap-2" role="group" aria-label="Category filters">
               {categories.map((category) => (
                 <button
                   key={category}
+                  type="button"
                   onClick={() => setSelectedCategory(category)}
-                  className={`px-4 py-2 rounded-lg font-medium text-sm transition-all ${
-                    selectedCategory === category
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-muted text-muted-foreground hover:bg-muted/80'
-                  }`}
+                  className={selectedCategory === category ? 'pg-pill pg-pill-active' : 'pg-pill'}
                 >
                   {category}
                 </button>
@@ -197,81 +206,101 @@ export default function BlogPage() {
           </div>
         </section>
 
-        {/* All Posts Section */}
-        <section className="px-4 py-20">
-          <div className="max-w-4xl mx-auto">
-            <div className="mb-8">
-              <p className="text-muted-foreground">
+        <section className="pg-sec" aria-labelledby="archive-heading">
+          <div className="pg-sec-inner max-w-4xl">
+            <header className="pg-sec-hd">
+              <h2 id="archive-heading">All posts</h2>
+              <p>
                 Showing {filteredPosts.length} of {blogPosts.length} articles
+                {selectedCategory !== 'All' ? ` in ${selectedCategory}` : ''}.
               </p>
-            </div>
+            </header>
 
-            <div className="space-y-6">
-              {filteredPosts.map((post) => (
-                <VokDevCard
-                  key={post.id}
-                  variant="interactive"
-                  className="hover:border-secondary/50 transition-colors"
-                >
-                  <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0 rounded-md bg-primary/10 p-2 text-primary">
-                      <post.avatar className="h-5 w-5" />
-                    </div>
-                    
-                    <div className="flex-grow">
-                      <div className="flex items-start justify-between gap-4 mb-2">
-                        <div>
-                          <h3 className="text-xl font-bold hover:text-primary transition-colors">
-                            {post.title}
-                          </h3>
-                          <p className="text-sm text-muted-foreground mt-1">{post.excerpt}</p>
-                        </div>
-                        <VokDevBadge variant="secondary" size="sm" className="flex-shrink-0">
-                          {post.category}
-                        </VokDevBadge>
-                      </div>
-
-                      <div className="flex items-center gap-4 text-sm text-muted-foreground border-t border-border/40 pt-4 mt-4">
-                        <span className="font-medium">{post.author}</span>
-                        <span>•</span>
-                        <span>{post.date}</span>
-                        <span>•</span>
-                        <span>{post.readTime} min read</span>
-                      </div>
-                    </div>
-                  </div>
-                </VokDevCard>
-              ))}
-            </div>
-
-            {filteredPosts.length === 0 && (
-              <div className="text-center py-12">
-                <p className="text-muted-foreground text-lg mb-4">
-                  No articles found in this category.
+            {filteredPosts.length === 0 ? (
+              <div className="pg-card pg-card-glass text-center">
+                <div className="pg-icon mx-auto mb-4" aria-hidden>
+                  <FileCode2 className="h-6 w-6" />
+                </div>
+                <h3 className="text-lg font-semibold text-foreground">Nothing here yet</h3>
+                <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
+                  No articles match this category. Try another topic or reset the filter to see the full archive.
                 </p>
-                <VokDevButton variant="ghost" onClick={() => setSelectedCategory('All')}>
-                  View All Articles
-                </VokDevButton>
+                <div className="mt-6">
+                  <VokDevButton variant="primary" size="md" onClick={() => setSelectedCategory('All')}>
+                    Show all articles
+                  </VokDevButton>
+                </div>
               </div>
+            ) : (
+              <ul className="m-0 list-none space-y-5 p-0">
+                {filteredPosts.map((post) => {
+                  const AvatarIcon = post.avatar
+                  return (
+                    <li key={post.id}>
+                      <VokDevCard
+                        variant="minimal"
+                        isHoverable={false}
+                        hasGlow={false}
+                        className="pg-card border-border! bg-card! shadow-none"
+                      >
+                        <article className="pg-post">
+                          <div className="pg-icon" aria-hidden>
+                            <AvatarIcon className="h-5 w-5" />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+                              <div className="min-w-0">
+                                <h3 className="text-xl font-bold text-foreground">{post.title}</h3>
+                                <p className="mt-1 text-sm text-muted-foreground">{post.excerpt}</p>
+                              </div>
+                              <span className="pg-tag shrink-0 self-start">{post.category}</span>
+                            </div>
+                            <div className="pg-post-meta flex-wrap border-t border-border/40 pt-3">
+                              <span className="font-medium text-foreground">{post.author}</span>
+                              <span className="dot" aria-hidden />
+                              <time dateTime={post.date}>{post.date}</time>
+                              <span className="dot" aria-hidden />
+                              <span>{post.readTime} min read</span>
+                            </div>
+                          </div>
+                        </article>
+                      </VokDevCard>
+                    </li>
+                  )
+                })}
+              </ul>
             )}
           </div>
         </section>
 
-        {/* Newsletter CTA */}
-        <section className="px-4 py-20 bg-card/60 border-y border-border/40">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Subscribe to Our Newsletter</h2>
-            <p className="text-muted-foreground text-lg mb-8">
-              Get the latest articles and insights delivered to your inbox every week.
+        <hr className="pg-divider" />
+
+        <section className="pg-cta" aria-labelledby="newsletter-heading">
+          <div className="pg-cta-inner">
+            <h2 id="newsletter-heading">Subscribe to the newsletter</h2>
+            <p>
+              One email with new posts and community highlights—no spam, unsubscribe anytime.
             </p>
-            <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+            <form
+              className="pg-input-group"
+              onSubmit={(e) => e.preventDefault()}
+              aria-label="Newsletter signup"
+            >
+              <label htmlFor="blog-newsletter-email" className="sr-only">
+                Email address
+              </label>
               <input
+                id="blog-newsletter-email"
                 type="email"
-                placeholder="Enter your email"
-                className="flex-1 px-4 py-3 rounded-lg bg-background border border-border text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                name="email"
+                autoComplete="email"
+                placeholder="you@example.com"
+                required
               />
-              <VokDevButton variant="primary">Subscribe</VokDevButton>
-            </div>
+              <VokDevButton type="submit" variant="primary" size="md" withGlow>
+                Subscribe
+              </VokDevButton>
+            </form>
           </div>
         </section>
       </main>

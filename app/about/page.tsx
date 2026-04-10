@@ -1,6 +1,5 @@
 'use client'
 
-import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { VokDevCard } from '@/components/VokDevCard'
 import { VokDevBadge } from '@/components/VokDevBadge'
@@ -60,68 +59,107 @@ const teamMembers: { name: string; role: string; avatar: LucideIcon; bio: string
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <Header />
-
+    <div className="pg">
       <main className="flex-1">
-        {/* Hero Section */}
-        <section className="relative px-4 py-16 md:py-24 border-b border-border/40 bg-muted/30">
-          <div className="max-w-7xl mx-auto">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">About VokDev</h1>
-            <p className="text-lg text-muted-foreground mb-8 max-w-2xl">
-              VokDev is a thriving community where tech professionals collaborate, create, and grow together. We&apos;re building the future of work for developers, designers, and innovators.
+        <section className="pg-hero" aria-labelledby="about-hero-heading">
+          <div className="pg-hero-inner">
+            <div className="pg-hero-chip">
+              <span className="chip-dot" aria-hidden />
+              About Us
+            </div>
+            <h1 id="about-hero-heading">
+              About <span className="gradient-text">VokDev</span>
+            </h1>
+            <p className="hero-sub">
+              A global home for developers, designers, and builders who want to ship real work, learn
+              faster, and grow alongside peers—not in isolation. Collaboration, craft, and community
+              drive everything we do.
             </p>
           </div>
         </section>
 
-        {/* Mission Section */}
-        <section className="px-4 py-20">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <section className="pg-sec" aria-labelledby="mission-heading">
+          <div className="pg-sec-inner">
+            <div className="grid grid-cols-1 gap-14 lg:grid-cols-2 lg:items-center">
               <div>
-                <h2 className="text-3xl md:text-4xl font-bold mb-6">Our Mission</h2>
-                <p className="text-lg text-muted-foreground mb-4">
-                  We believe that great things happen when talented people come together with a shared vision. Our mission is to create a platform where tech professionals from around the world can collaborate on innovative projects, share knowledge, and help each other grow.
-                </p>
-                <p className="text-lg text-muted-foreground mb-6">
-                  By fostering a culture of creativity, continuous learning, and mutual support, we&apos;re building a community that pushes the boundaries of what&apos;s possible in technology.
+                <div className="pg-sec-hd">
+                  <h2 id="mission-heading">Our Mission</h2>
+                  <p>
+                    We believe the best outcomes come when talented people share a clear vision. Our
+                    mission is to give tech professionals everywhere a place to collaborate on ambitious
+                    projects, trade hard-won knowledge, and lift each other up.
+                  </p>
+                </div>
+                <p className="mb-6 text-lg text-muted-foreground">
+                  Through creativity, curiosity, and mutual support, we are building a community that
+                  stretches what is possible in technology—without losing the human side of the craft.
                 </p>
                 <VokDevButton variant="primary">Learn More</VokDevButton>
               </div>
-              <div className="flex justify-center">
-                <div className="rounded-full border border-border bg-card p-6 text-primary">
-                  <Rocket className="h-12 w-12" />
+              <div className="relative flex min-h-[280px] items-center justify-center">
+                <VokDevBadge
+                  variant="primary"
+                  size="sm"
+                  className="absolute left-0 top-4 z-2 shadow-sm md:left-4"
+                >
+                  Ship together
+                </VokDevBadge>
+                <VokDevBadge
+                  variant="secondary"
+                  size="sm"
+                  className="absolute right-0 top-1/4 z-2 -translate-y-1/2 shadow-sm md:right-6"
+                >
+                  Open culture
+                </VokDevBadge>
+                <VokDevBadge
+                  variant="tertiary"
+                  size="sm"
+                  className="absolute bottom-8 left-1/4 z-2 -translate-x-1/2 shadow-sm md:bottom-10"
+                >
+                  Always learning
+                </VokDevBadge>
+                <div className="pg-avatar-ring scale-125 md:scale-150">
+                  <div className="pg-avatar pg-avatar-lg">
+                    <Rocket className="h-9 w-9 md:h-10 md:w-10" aria-hidden />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Values Section */}
-        <section className="px-4 py-20 bg-card/50 border-y border-border/40">
-          <div className="max-w-7xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">Our Values</h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <section className="pg-sec pg-sec-alt" aria-labelledby="values-heading">
+          <div className="pg-sec-inner">
+            <div className="pg-sec-hd pg-sec-hd-center">
+              <h2 id="values-heading">Our Values</h2>
+              <p>Principles that shape how we build products, run programs, and show up for members.</p>
+            </div>
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
               {values.map((value, index) => (
-                <VokDevCard key={index} variant="default">
-                  <div className="mb-4 text-primary">
-                    <value.icon className="h-8 w-8" />
+                <VokDevCard
+                  key={index}
+                  variant="default"
+                  isHoverable={false}
+                  className="pg-card pg-card-accent p-7 shadow-none dark:shadow-none"
+                >
+                  <div className="pg-icon pg-icon-lg mb-5">
+                    <value.icon className="h-6 w-6" aria-hidden />
                   </div>
-                  <h3 className="text-lg font-semibold mb-2">{value.title}</h3>
-                  <p className="text-muted-foreground">{value.description}</p>
+                  <h3 className="mb-2 text-lg font-semibold">{value.title}</h3>
+                  <p className="text-sm leading-relaxed text-muted-foreground">{value.description}</p>
                 </VokDevCard>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Stats Section */}
-        <section className="px-4 py-20">
-          <div className="max-w-7xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">Our Impact</h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <section className="pg-sec" aria-labelledby="impact-heading">
+          <div className="pg-sec-inner">
+            <div className="pg-sec-hd pg-sec-hd-center">
+              <h2 id="impact-heading">Our Impact</h2>
+              <p>Numbers that reflect momentum across projects, events, and the people who power VokDev.</p>
+            </div>
+            <div className="grid grid-cols-2 gap-10 lg:grid-cols-4">
               {[
                 { number: '2,450+', label: 'Active Members' },
                 { number: '180+', label: 'Projects' },
@@ -129,68 +167,94 @@ export default function AboutPage() {
                 { number: '50+', label: 'Countries' },
               ].map((stat, index) => (
                 <div key={index} className="text-center">
-                  <div className="text-4xl font-bold text-primary mb-2">
-                    {stat.number}
-                  </div>
-                  <p className="text-muted-foreground">{stat.label}</p>
+                  <div className="pg-stat-num gradient-text">{stat.number}</div>
+                  <div className="pg-stat-label">{stat.label}</div>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Story Section */}
-        <section className="px-4 py-20 bg-muted/30 border-y border-border/40">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold mb-8">Our Story</h2>
-            
-            <div className="space-y-6 text-lg text-muted-foreground">
-              <p>
-                VokDev was born from a simple observation: the best work happens when talented people collaborate. In 2020, our founders noticed that many talented developers and designers were working in isolation, missing out on opportunities to learn from and build with others.
-              </p>
-              <p>
-                What started as a small Discord server with just 50 members has grown into a thriving community of over 2,450 professionals. Today, we&apos;re proud to host a platform where innovation happens every single day.
-              </p>
-              <p>
-                Our journey has been incredible. We&apos;ve seen members start as beginners and grow into industry leaders. We&apos;ve witnessed small side projects become successful startups. Most importantly, we&apos;ve built a community where everyone feels welcome and supported.
-              </p>
-              <p>
-                As we look to the future, our commitment remains the same: to create a platform where tech professionals can collaborate, learn, and make their impact on the world.
-              </p>
+        <section className="pg-sec pg-sec-alt" aria-labelledby="story-heading">
+          <div className="pg-sec-inner max-w-3xl">
+            <div className="pg-sec-hd">
+              <h2 id="story-heading">Our Story</h2>
+              <p>From a small gathering of builders to a worldwide network—here is how we got here.</p>
+            </div>
+            <div className="pg-timeline">
+              <div className="pg-timeline-item">
+                <h3 className="mb-2 text-base font-semibold">2020 — The spark</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  VokDev started with a simple observation: the best work happens when talented people
+                  collaborate. Our founders saw developers and designers working in isolation, missing
+                  chances to learn from and build with others.
+                </p>
+              </div>
+              <div className="pg-timeline-item">
+                <h3 className="mb-2 text-base font-semibold">Growth that compounds</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  What began as a Discord server with fifty members grew into a community of over
+                  2,450 professionals. Today we host a space where experimentation and shipping happen
+                  every day.
+                </p>
+              </div>
+              <div className="pg-timeline-item">
+                <h3 className="mb-2 text-base font-semibold">Milestones along the way</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  We have watched members go from beginners to industry leaders, and side projects become
+                  real ventures. Above all, we have nurtured a culture where people feel welcome and
+                  backed by peers.
+                </p>
+              </div>
+              <div className="pg-timeline-item">
+                <h3 className="mb-2 text-base font-semibold">What is next</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  Our commitment is unchanged: build a platform where tech professionals collaborate,
+                  learn continuously, and make a lasting impact on the world.
+                </p>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Team Section */}
-        <section className="px-4 py-20">
-          <div className="max-w-7xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">Meet the Team</h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <section className="pg-sec" aria-labelledby="team-heading">
+          <div className="pg-sec-inner">
+            <div className="pg-sec-hd pg-sec-hd-center">
+              <h2 id="team-heading">Meet the Team</h2>
+              <p>Leaders who keep the community ambitious, inclusive, and focused on real outcomes.</p>
+            </div>
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
               {teamMembers.map((member, index) => (
-                <VokDevCard key={index} variant="interactive" className="text-center">
-                  <div className="mb-4 inline-flex rounded-full border border-border bg-card p-3 text-primary">
-                    <member.avatar className="h-7 w-7" />
+                <VokDevCard
+                  key={index}
+                  variant="default"
+                  isHoverable={false}
+                  className="pg-card flex flex-col items-center p-7 text-center shadow-none dark:shadow-none"
+                >
+                  <div className="pg-avatar-ring mb-5">
+                    <div className="pg-avatar">
+                      <member.avatar className="h-7 w-7" aria-hidden />
+                    </div>
                   </div>
-                  <h3 className="text-lg font-semibold mb-1">{member.name}</h3>
-                  <VokDevBadge variant="secondary" size="sm" className="inline-block mb-4">
+                  <h3 className="mb-2 text-lg font-semibold">{member.name}</h3>
+                  <VokDevBadge variant="secondary" size="sm" className="mb-4">
                     {member.role}
                   </VokDevBadge>
-                  <p className="text-muted-foreground text-sm">{member.bio}</p>
+                  <p className="text-sm leading-relaxed text-muted-foreground">{member.bio}</p>
                 </VokDevCard>
               ))}
             </div>
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="px-4 py-20 bg-card/60 border-y border-border/40">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Join Our Community</h2>
-            <p className="text-muted-foreground text-lg mb-8">
-              Whether you&apos;re just starting your tech journey or you&apos;re an industry expert, there&apos;s a place for you in VokDev.
+        <section className="pg-cta" aria-labelledby="cta-heading">
+          <div className="pg-cta-inner">
+            <h2 id="cta-heading">Join Our Community</h2>
+            <p>
+              Whether you are early in your journey or deep in your craft, there is room to contribute,
+              learn, and lead at VokDev.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col justify-center gap-4 sm:flex-row sm:flex-wrap">
               <VokDevButton variant="primary" size="lg">
                 Create Account
               </VokDevButton>

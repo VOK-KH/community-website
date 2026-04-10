@@ -353,17 +353,20 @@ export default function Home() {
               <span className="v">Vok</span>Dev
             </span>
             <div className="island-links">
-              <Link href="#about" className="island-link active">
+              <Link href="/about" className="island-link">
                 About
               </Link>
-              <Link href="#projects" className="island-link">
+              <Link href="/projects" className="island-link">
                 Projects
               </Link>
-              <Link href="#community" className="island-link">
+              <Link href="/community" className="island-link">
                 Community
               </Link>
               <Link href="/blog" className="island-link">
                 Blog
+              </Link>
+              <Link href="/contact" className="island-link">
+                Contact
               </Link>
               <a
                 href="https://discord.com"
@@ -420,7 +423,9 @@ export default function Home() {
         <nav className="f-links" aria-label="Footer">
           <Link href="/about">About</Link>
           <Link href="/projects">Projects</Link>
+          <Link href="/community">Community</Link>
           <Link href="/blog">Blog</Link>
+          <Link href="/contact">Contact</Link>
           <a href="https://discord.com" target="_blank" rel="noopener noreferrer">
             Discord
           </a>

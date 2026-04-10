@@ -2,7 +2,9 @@ import type { Metadata } from 'next'
 import { DM_Sans, Space_Mono, Syne } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { ThemeProvider } from '@/components/theme-provider'
+import Navbar from '@/components/Navbar'
 import './globals.css'
+import './inner-pages.css'
 
 const fontSyne = Syne({
   subsets: ['latin'],
@@ -62,6 +64,7 @@ export default function RootLayout({
     >
       <body className="font-sans antialiased">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <Navbar />
           {children}
         </ThemeProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}

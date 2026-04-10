@@ -1,6 +1,6 @@
 'use client'
 
-import { useLayoutEffect, useRef } from 'react'
+import { useEffect, useLayoutEffect, useRef } from 'react'
 import Link from 'next/link'
 import { gsap, registerGsap, prefersReducedMotion } from '@/lib/motion'
 
@@ -8,6 +8,7 @@ registerGsap()
 
 export function CTASection() {
   const secRef = useRef<HTMLElement>(null)
+  const cursorGlowRef = useRef<HTMLDivElement>(null)
 
   useLayoutEffect(() => {
     const sec = secRef.current
@@ -17,7 +18,6 @@ export function CTASection() {
 
     if (prefersReducedMotion()) return
 
-    /* ── Initial hidden states ── */
     gsap.set(qs('.cta-tag'),       { opacity: 0, y: -10, filter: 'blur(6px)' })
     gsap.set(qsa('.split-inner'),  { y: '110%' })
     gsap.set(qs('.cta-body'),      { opacity: 0, y: 20, filter: 'blur(8px)' })
@@ -25,7 +25,6 @@ export function CTASection() {
     gsap.set(qsa('.sp-av'),        { opacity: 0, x: -10, scale: 0.82, filter: 'blur(4px)' })
     gsap.set(qs('.sp-txt'),        { opacity: 0, x: 6, filter: 'blur(5px)' })
 
-    /* ── Glow: gentle infinite pulse that starts immediately ── */
     const glow = qs('.cta-glow')
     if (glow) {
       gsap.to(glow, {
@@ -34,41 +33,29 @@ export function CTASection() {
       })
     }
 
-    /* ── Coordinated entrance timeline ── */
     const tl = gsap.timeline({
       scrollTrigger: { trigger: sec, start: 'top 78%', once: true },
       defaults: { ease: 'expo.out' },
     })
 
     tl
-      /* 1. Tag drops in from above */
       .to(qs('.cta-tag'), {
         opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.6,
       }, 0)
-
-      /* 2. Headline: line-by-line clip-reveal */
       .to(qsa('.split-inner'), {
         y: '0%', duration: 1.08, stagger: 0.18,
       }, 0.14)
-
-      /* 3. Body text blur-focus */
       .to(qs('.cta-body'), {
         opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.85,
       }, 0.72)
-
-      /* 4. Buttons: scale + blur-focus with back.out bounce */
       .to(qsa('.btn-l'), {
         opacity: 1, y: 0, scale: 1, filter: 'blur(0px)',
         duration: 0.6, stagger: 0.1, ease: 'back.out(1.6)',
       }, 0.92)
-
-      /* 5. Social proof: avatars stagger in from the left */
       .to(qsa('.sp-av'), {
         opacity: 1, x: 0, scale: 1, filter: 'blur(0px)',
         duration: 0.42, stagger: 0.07, ease: 'back.out(1.5)',
       }, 1.12)
-
-      /* 6. Social proof text slides in */
       .to(qs('.sp-txt'), {
         opacity: 1, x: 0, filter: 'blur(0px)', duration: 0.55,
       }, 1.38)
@@ -79,9 +66,80 @@ export function CTASection() {
     }
   }, [])
 
+  /* ── Cursor glow that follows the mouse ── */
+  useEffect(() => {
+    const sec = secRef.current
+    const cg = cursorGlowRef.current
+    if (!sec || !cg || prefersReducedMotion()) return
+
+    let active = false
+
+    const onMove = (e: MouseEvent) => {
+      const rect = sec.getBoundingClientRect()
+      const x = e.clientX - rect.left
+      const y = e.clientY - rect.top
+
+      gsap.to(cg, {
+        x, y,
+        duration: 0.6,
+        ease: 'power3.out',
+        overwrite: 'auto',
+      })
+
+      if (!active) {
+        active = true
+        gsap.to(cg, { opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(1.4)' })
+      }
+    }
+
+    const onEnter = () => {
+      gsap.to(cg, { opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(1.4)' })
+      active = true
+    }
+
+    const onLeave = () => {
+      gsap.to(cg, { opacity: 0, scale: 0.6, duration: 0.5, ease: 'power2.inOut' })
+      active = false
+    }
+
+    const btns = Array.from(sec.querySelectorAll<HTMLElement>('.btn-l'))
+    const onBtnEnter = () => {
+      gsap.to(cg, { scale: 1.8, duration: 0.4, ease: 'back.out(2)' })
+      cg.classList.add('cta-cursor-hot')
+    }
+    const onBtnLeave = () => {
+      gsap.to(cg, { scale: 1, duration: 0.35, ease: 'power2.out' })
+      cg.classList.remove('cta-cursor-hot')
+    }
+
+    sec.addEventListener('mousemove', onMove)
+    sec.addEventListener('mouseenter', onEnter)
+    sec.addEventListener('mouseleave', onLeave)
+    btns.forEach((b) => {
+      b.addEventListener('mouseenter', onBtnEnter)
+      b.addEventListener('mouseleave', onBtnLeave)
+    })
+
+    return () => {
+      sec.removeEventListener('mousemove', onMove)
+      sec.removeEventListener('mouseenter', onEnter)
+      sec.removeEventListener('mouseleave', onLeave)
+      btns.forEach((b) => {
+        b.removeEventListener('mouseenter', onBtnEnter)
+        b.removeEventListener('mouseleave', onBtnLeave)
+      })
+    }
+  }, [])
+
   return (
     <section ref={secRef} className="cta-sec" id="community" data-sec="cta">
       <div className="cta-glow" />
+      <div
+        ref={cursorGlowRef}
+        className="cta-cursor-glow"
+        aria-hidden
+        style={{ opacity: 0, transform: 'translate(-50%, -50%) scale(0.6)' }}
+      />
       <div className="cta-wrap">
         <div className="cta-tag">✦ Join the community</div>
 
