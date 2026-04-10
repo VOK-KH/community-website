@@ -9,6 +9,7 @@ import { MarqueeStrip } from './MarqueeStrip'
 import { AboutSection } from './AboutSection'
 import { FeaturedProjectsSection } from './FeaturedProjectsSection'
 import { CTASection } from './CTASection'
+import { HorizontalScrollSection } from './HorizontalScrollSection'
 
 export default function LandingPage() {
   const rootRef = useRef<HTMLDivElement>(null)
@@ -69,6 +70,8 @@ export default function LandingPage() {
         <HeroSection />
         <MarqueeStrip />
         <AboutSection />
+        <div className="divider gsap-divider" />
+        <HorizontalScrollSection />
         <div className="divider gsap-divider" />
         <FeaturedProjectsSection />
         <div className="divider gsap-divider" />

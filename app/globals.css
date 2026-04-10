@@ -196,6 +196,31 @@
   }
 }
 
+/* ── Header dynamic styles ── */
+.header-vok {
+  border-bottom: 1px solid hsl(var(--border) / 0.4);
+  background: hsl(var(--background) / 0.72);
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  box-shadow: none;
+  transition:
+    background 0.3s,
+    border-color 0.3s,
+    box-shadow 0.3s,
+    backdrop-filter 0.3s;
+}
+.header-vok[data-scrolled='1'] {
+  background: hsl(var(--background) / 0.92);
+  border-color: hsl(var(--border) / 0.7);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  box-shadow: 0 1px 0 hsl(var(--border) / 0.3), 0 4px 24px hsl(var(--foreground) / 0.04);
+}
+.header-inner {
+  position: relative;
+  z-index: 1;
+}
+
 /* VokDev Design System: Animations & Effects */
 @layer utilities {
   /* Glow Effects */
