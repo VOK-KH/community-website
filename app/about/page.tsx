@@ -2,56 +2,58 @@
 
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
-import { VokDevCard, VokDevCardHeader, VokDevCardTitle, VokDevCardDescription, VokDevCardContent } from '@/components/VokDevCard'
+import { VokDevCard } from '@/components/VokDevCard'
 import { VokDevBadge } from '@/components/VokDevBadge'
 import { VokDevButton } from '@/components/VokDevButton'
+import type { LucideIcon } from 'lucide-react'
+import { Target, Handshake, BookOpen, Globe2, Rocket, CircleUserRound, Wrench, Briefcase } from 'lucide-react'
 
-const values = [
+const values: { icon: LucideIcon; title: string; description: string }[] = [
   {
-    icon: '🎯',
+    icon: Target,
     title: 'Innovation First',
     description: 'We embrace cutting-edge technologies and creative solutions to solve real problems.',
   },
   {
-    icon: '🤝',
+    icon: Handshake,
     title: 'Community Driven',
     description: 'Our strength lies in our diverse community of passionate developers and designers.',
   },
   {
-    icon: '📚',
+    icon: BookOpen,
     title: 'Learning Culture',
     description: 'We believe in continuous growth, sharing knowledge, and mentoring the next generation.',
   },
   {
-    icon: '🌍',
+    icon: Globe2,
     title: 'Global Impact',
     description: 'We strive to create technology that makes a positive difference worldwide.',
   },
 ]
 
-const teamMembers = [
+const teamMembers: { name: string; role: string; avatar: LucideIcon; bio: string }[] = [
   {
     name: 'Sarah Chen',
     role: 'Founder & CEO',
-    avatar: '👩‍💼',
+    avatar: Briefcase,
     bio: 'Product designer with 10 years of experience building digital products.',
   },
   {
     name: 'Alex Rodriguez',
     role: 'CTO',
-    avatar: '👨‍💻',
+    avatar: CircleUserRound,
     bio: 'Full-stack developer passionate about scalable architecture and open source.',
   },
   {
     name: 'Jordan Lee',
     role: 'Community Lead',
-    avatar: '👨‍🔧',
+    avatar: Wrench,
     bio: 'DevOps expert focused on building strong, inclusive communities.',
   },
   {
     name: 'Emily Watson',
     role: 'Head of Growth',
-    avatar: '👩‍🔬',
+    avatar: CircleUserRound,
     bio: 'Data-driven marketer passionate about helping creators succeed.',
   },
 ]
@@ -63,7 +65,7 @@ export default function AboutPage() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative px-4 py-16 md:py-24 border-b border-border/40 bg-gradient-to-b from-primary/5 to-transparent">
+        <section className="relative px-4 py-16 md:py-24 border-b border-border/40 bg-muted/30">
           <div className="max-w-7xl mx-auto">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">About VokDev</h1>
             <p className="text-lg text-muted-foreground mb-8 max-w-2xl">
@@ -86,7 +88,11 @@ export default function AboutPage() {
                 </p>
                 <VokDevButton variant="primary">Learn More</VokDevButton>
               </div>
-              <div className="text-6xl text-center">🚀</div>
+              <div className="flex justify-center">
+                <div className="rounded-full border border-border bg-card p-6 text-primary">
+                  <Rocket className="h-12 w-12" />
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -99,7 +105,9 @@ export default function AboutPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {values.map((value, index) => (
                 <VokDevCard key={index} variant="default">
-                  <div className="text-4xl mb-4">{value.icon}</div>
+                  <div className="mb-4 text-primary">
+                    <value.icon className="h-8 w-8" />
+                  </div>
                   <h3 className="text-lg font-semibold mb-2">{value.title}</h3>
                   <p className="text-muted-foreground">{value.description}</p>
                 </VokDevCard>
@@ -121,7 +129,7 @@ export default function AboutPage() {
                 { number: '50+', label: 'Countries' },
               ].map((stat, index) => (
                 <div key={index} className="text-center">
-                  <div className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary mb-2">
+                  <div className="text-4xl font-bold text-primary mb-2">
                     {stat.number}
                   </div>
                   <p className="text-muted-foreground">{stat.label}</p>
@@ -132,7 +140,7 @@ export default function AboutPage() {
         </section>
 
         {/* Story Section */}
-        <section className="px-4 py-20 bg-gradient-to-b from-primary/5 to-transparent border-y border-border/40">
+        <section className="px-4 py-20 bg-muted/30 border-y border-border/40">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold mb-8">Our Story</h2>
             
@@ -161,7 +169,9 @@ export default function AboutPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {teamMembers.map((member, index) => (
                 <VokDevCard key={index} variant="interactive" className="text-center">
-                  <div className="text-5xl mb-4">{member.avatar}</div>
+                  <div className="mb-4 inline-flex rounded-full border border-border bg-card p-3 text-primary">
+                    <member.avatar className="h-7 w-7" />
+                  </div>
                   <h3 className="text-lg font-semibold mb-1">{member.name}</h3>
                   <VokDevBadge variant="secondary" size="sm" className="inline-block mb-4">
                     {member.role}
@@ -174,7 +184,7 @@ export default function AboutPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="px-4 py-20 bg-gradient-to-r from-primary/10 via-secondary/10 to-tertiary/10 border-y border-border/40">
+        <section className="px-4 py-20 bg-card/60 border-y border-border/40">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Join Our Community</h2>
             <p className="text-muted-foreground text-lg mb-8">

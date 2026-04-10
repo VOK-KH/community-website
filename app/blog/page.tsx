@@ -3,18 +3,30 @@
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { VokDevButton } from '@/components/VokDevButton'
-import { VokDevCard, VokDevCardHeader, VokDevCardTitle, VokDevCardDescription, VokDevCardContent, VokDevCardFooter } from '@/components/VokDevCard'
+import { VokDevCard, VokDevCardTitle, VokDevCardDescription } from '@/components/VokDevCard'
 import { VokDevBadge } from '@/components/VokDevBadge'
 import { useState } from 'react'
+import type { LucideIcon } from 'lucide-react'
+import { Code2, Palette, Server, Brain, FileCode2, Accessibility, Cloud, Shield } from 'lucide-react'
 
-const blogPosts = [
+const blogPosts: {
+  id: number
+  title: string
+  excerpt: string
+  date: string
+  author: string
+  avatar: LucideIcon
+  category: string
+  readTime: number
+  featured: boolean
+}[] = [
   {
     id: 1,
     title: 'Building Scalable React Applications',
     excerpt: 'Learn the best practices and patterns for scaling your React applications to production. Discover performance optimization techniques and state management strategies.',
     date: 'March 15, 2024',
     author: 'Sarah Chen',
-    avatar: '👩‍💼',
+    avatar: Code2,
     category: 'React',
     readTime: 8,
     featured: true,
@@ -25,7 +37,7 @@ const blogPosts = [
     excerpt: 'Exploring emerging trends and technologies that will shape web design in 2024. From AI-assisted design to immersive experiences, discover what\'s next.',
     date: 'March 10, 2024',
     author: 'Alex Rodriguez',
-    avatar: '👨‍💻',
+    avatar: Palette,
     category: 'Design',
     readTime: 6,
     featured: true,
@@ -36,7 +48,7 @@ const blogPosts = [
     excerpt: 'A comprehensive guide to modern DevOps practices and tools for your team. Master CI/CD pipelines, containerization, and infrastructure as code.',
     date: 'March 5, 2024',
     author: 'Jordan Lee',
-    avatar: '👨‍🔧',
+    avatar: Server,
     category: 'DevOps',
     readTime: 10,
     featured: false,
@@ -47,7 +59,7 @@ const blogPosts = [
     excerpt: 'An introduction to ML concepts for developers. Build intelligent applications without being a data scientist with modern ML libraries.',
     date: 'February 28, 2024',
     author: 'Emily Watson',
-    avatar: '👩‍🔬',
+    avatar: Brain,
     category: 'AI/ML',
     readTime: 12,
     featured: false,
@@ -58,7 +70,7 @@ const blogPosts = [
     excerpt: 'Deep dive into advanced TypeScript patterns and techniques. Improve your type safety and code quality with generics, conditional types, and more.',
     date: 'February 22, 2024',
     author: 'Michael Park',
-    avatar: '👨‍💻',
+    avatar: FileCode2,
     category: 'TypeScript',
     readTime: 9,
     featured: false,
@@ -69,7 +81,7 @@ const blogPosts = [
     excerpt: 'Building inclusive web applications that work for everyone. Learn WCAG guidelines, semantic HTML, and accessibility testing best practices.',
     date: 'February 15, 2024',
     author: 'Lisa Zhang',
-    avatar: '👩‍🎓',
+    avatar: Accessibility,
     category: 'Accessibility',
     readTime: 7,
     featured: false,
@@ -80,7 +92,7 @@ const blogPosts = [
     excerpt: 'Making smart cloud architecture decisions for your next project. Compare different cloud providers and architectural patterns.',
     date: 'February 10, 2024',
     author: 'David Morrison',
-    avatar: '👨‍💼',
+    avatar: Cloud,
     category: 'Cloud',
     readTime: 11,
     featured: false,
@@ -91,7 +103,7 @@ const blogPosts = [
     excerpt: 'Essential security practices every web developer should know. Protect your applications from common vulnerabilities and attacks.',
     date: 'February 5, 2024',
     author: 'Priya Patel',
-    avatar: '👩‍💻',
+    avatar: Shield,
     category: 'Security',
     readTime: 8,
     featured: false,
@@ -125,7 +137,7 @@ export default function BlogPage() {
         </section>
 
         {/* Featured Posts Section */}
-        <section className="px-4 py-20 bg-gradient-to-b from-primary/5 to-transparent">
+        <section className="px-4 py-20 bg-muted/30">
           <div className="max-w-7xl mx-auto">
             <h2 className="text-2xl md:text-3xl font-bold mb-8">Featured Articles</h2>
             
@@ -137,16 +149,18 @@ export default function BlogPage() {
                   className="hover-lift flex flex-col"
                 >
                   <div className="flex items-start justify-between mb-4">
-                    <div className="text-4xl">{post.avatar}</div>
+                    <div className="rounded-md bg-primary/10 p-2 text-primary">
+                      <post.avatar className="h-6 w-6" />
+                    </div>
                     <VokDevBadge variant="primary" size="sm">
                       {post.category}
                     </VokDevBadge>
                   </div>
 
-                  <VokDevCard.Title className="mb-3">{post.title}</VokDevCard.Title>
-                  <VokDevCard.Description className="mb-6 flex-grow">
+                  <VokDevCardTitle className="mb-3">{post.title}</VokDevCardTitle>
+                  <VokDevCardDescription className="mb-6 flex-grow">
                     {post.excerpt}
-                  </VokDevCard.Description>
+                  </VokDevCardDescription>
 
                   <div className="border-t border-border/40 pt-4 flex items-center justify-between text-sm">
                     <div>
@@ -200,7 +214,9 @@ export default function BlogPage() {
                   className="hover:border-secondary/50 transition-colors"
                 >
                   <div className="flex items-start gap-4">
-                    <div className="text-3xl flex-shrink-0">{post.avatar}</div>
+                    <div className="flex-shrink-0 rounded-md bg-primary/10 p-2 text-primary">
+                      <post.avatar className="h-5 w-5" />
+                    </div>
                     
                     <div className="flex-grow">
                       <div className="flex items-start justify-between gap-4 mb-2">
@@ -242,7 +258,7 @@ export default function BlogPage() {
         </section>
 
         {/* Newsletter CTA */}
-        <section className="px-4 py-20 bg-gradient-to-r from-primary/10 via-secondary/10 to-tertiary/10 border-y border-border/40">
+        <section className="px-4 py-20 bg-card/60 border-y border-border/40">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Subscribe to Our Newsletter</h2>
             <p className="text-muted-foreground text-lg mb-8">

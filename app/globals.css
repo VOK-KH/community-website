@@ -12,16 +12,16 @@
   --popover: 0 0% 100%;
   --popover-foreground: 220 13% 13%;
   
-  /* Primary: Tech Purple - Innovation & Creativity */
-  --primary: 280 85% 55%;
+  /* Primary: Deep Blue */
+  --primary: 214 82% 44%;
   --primary-foreground: 0 0% 100%;
   
-  /* Secondary: Electric Cyan - Accent & Highlight */
-  --secondary: 190 95% 50%;
+  /* Secondary: Teal */
+  --secondary: 172 66% 38%;
   --secondary-foreground: 220 13% 13%;
   
-  /* Tertiary: Neon Pink - Energy & Vitality */
-  --tertiary: 320 100% 60%;
+  /* Tertiary: Amber */
+  --tertiary: 34 93% 50%;
   --tertiary-foreground: 0 0% 100%;
   
   /* Muted: Soft gray */
@@ -39,7 +39,7 @@
   /* Border & Input */
   --border: 220 13% 91%;
   --input: 220 13% 96%;
-  --ring: 280 85% 55%;
+  --ring: 214 82% 44%;
   
   /* Success, Warning, Info */
   --success: 142 71% 45%;
@@ -47,13 +47,13 @@
   --info: 190 95% 50%;
   
   /* Shadows & Glow */
-  --shadow-glow: 280 85% 55%;
-  --shadow-cyan: 190 95% 50%;
+  --shadow-glow: 214 82% 44%;
+  --shadow-cyan: 172 66% 38%;
   
   /* Chart colors */
-  --chart-1: 280 85% 55%;
-  --chart-2: 190 95% 50%;
-  --chart-3: 320 100% 60%;
+  --chart-1: 214 82% 44%;
+  --chart-2: 172 66% 38%;
+  --chart-3: 34 93% 50%;
   --chart-4: 142 71% 45%;
   --chart-5: 38 92% 50%;
   
@@ -63,12 +63,12 @@
   /* Sidebar */
   --sidebar: 0 0% 100%;
   --sidebar-foreground: 220 13% 13%;
-  --sidebar-primary: 280 85% 55%;
+  --sidebar-primary: 214 82% 44%;
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 190 95% 50%;
+  --sidebar-accent: 172 66% 38%;
   --sidebar-accent-foreground: 220 13% 13%;
   --sidebar-border: 220 13% 91%;
-  --sidebar-ring: 280 85% 55%;
+  --sidebar-ring: 214 82% 44%;
 }
 
 .dark {
@@ -80,17 +80,17 @@
   --popover: 220 17% 15%;
   --popover-foreground: 0 0% 98%;
   
-  /* Primary: Tech Purple */
-  --primary: 280 85% 65%;
-  --primary-foreground: 220 20% 8%;
+  /* Primary: Deep Blue */
+  --primary: 214 88% 63%;
+  --primary-foreground: 220 30% 10%;
   
-  /* Secondary: Electric Cyan */
-  --secondary: 190 95% 55%;
-  --secondary-foreground: 220 20% 8%;
+  /* Secondary: Teal */
+  --secondary: 172 68% 50%;
+  --secondary-foreground: 220 30% 10%;
   
-  /* Tertiary: Neon Pink */
-  --tertiary: 320 100% 65%;
-  --tertiary-foreground: 220 20% 8%;
+  /* Tertiary: Amber */
+  --tertiary: 34 95% 57%;
+  --tertiary-foreground: 220 30% 10%;
   
   /* Muted: Dark gray */
   --muted: 220 13% 25%;
@@ -107,7 +107,7 @@
   /* Border & Input */
   --border: 220 17% 25%;
   --input: 220 17% 25%;
-  --ring: 280 85% 65%;
+  --ring: 214 88% 63%;
   
   /* Success, Warning, Info */
   --success: 142 71% 55%;
@@ -115,13 +115,13 @@
   --info: 190 95% 55%;
   
   /* Shadows & Glow */
-  --shadow-glow: 280 85% 65%;
-  --shadow-cyan: 190 95% 55%;
+  --shadow-glow: 214 88% 63%;
+  --shadow-cyan: 172 68% 50%;
   
   /* Chart colors */
-  --chart-1: 280 85% 65%;
-  --chart-2: 190 95% 55%;
-  --chart-3: 320 100% 65%;
+  --chart-1: 214 88% 63%;
+  --chart-2: 172 68% 50%;
+  --chart-3: 34 95% 57%;
   --chart-4: 142 71% 55%;
   --chart-5: 38 92% 55%;
   
@@ -131,12 +131,12 @@
   /* Sidebar */
   --sidebar: 220 15% 12%;
   --sidebar-foreground: 0 0% 98%;
-  --sidebar-primary: 280 85% 65%;
-  --sidebar-primary-foreground: 220 20% 8%;
-  --sidebar-accent: 190 95% 55%;
-  --sidebar-accent-foreground: 220 20% 8%;
+  --sidebar-primary: 214 88% 63%;
+  --sidebar-primary-foreground: 220 30% 10%;
+  --sidebar-accent: 172 68% 50%;
+  --sidebar-accent-foreground: 220 30% 10%;
   --sidebar-border: 220 17% 25%;
-  --sidebar-ring: 280 85% 65%;
+  --sidebar-ring: 214 88% 63%;
 }
 
 @theme inline {
@@ -200,23 +200,23 @@
 @layer utilities {
   /* Glow Effects */
   .glow-primary {
-    box-shadow: 0 0 20px rgba(139, 51, 255, 0.3);
+    box-shadow: 0 0 20px rgba(33, 110, 229, 0.28);
   }
   
   .glow-secondary {
-    box-shadow: 0 0 20px rgba(0, 230, 255, 0.3);
+    box-shadow: 0 0 20px rgba(32, 160, 143, 0.28);
   }
   
   .glow-tertiary {
-    box-shadow: 0 0 20px rgba(255, 51, 204, 0.3);
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.28);
   }
   
   .text-glow-primary {
-    text-shadow: 0 0 10px rgba(139, 51, 255, 0.5);
+    text-shadow: 0 0 10px rgba(33, 110, 229, 0.45);
   }
   
   .text-glow-secondary {
-    text-shadow: 0 0 10px rgba(0, 230, 255, 0.5);
+    text-shadow: 0 0 10px rgba(32, 160, 143, 0.45);
   }
   
   /* Glassmorphism */
@@ -242,16 +242,16 @@
     @apply transition-all duration-300 hover:shadow-lg hover:shadow-primary/30;
   }
   
-  /* Border gradient effect */
+  /* Feature border effect */
   .border-gradient {
-    background: linear-gradient(white, white) padding-box,
-                linear-gradient(135deg, rgb(139, 51, 255), rgb(0, 230, 255)) border-box;
-    border: 1px solid transparent;
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--primary) / 0.35);
+    box-shadow: inset 0 0 0 1px hsl(var(--border));
   }
   
   .dark .border-gradient {
-    background: linear-gradient(#1a1a2e, #1a1a2e) padding-box,
-                linear-gradient(135deg, rgb(139, 51, 255), rgb(0, 230, 255)) border-box;
+    background: hsl(var(--card));
+    border-color: hsl(var(--primary) / 0.45);
   }
 }
 
@@ -268,10 +268,10 @@
   
   @keyframes pulse-glow {
     0%, 100% {
-      box-shadow: 0 0 20px rgba(139, 51, 255, 0.3);
+      box-shadow: 0 0 20px rgba(33, 110, 229, 0.25);
     }
     50% {
-      box-shadow: 0 0 40px rgba(139, 51, 255, 0.6);
+      box-shadow: 0 0 40px rgba(33, 110, 229, 0.45);
     }
   }
   
@@ -294,6 +294,15 @@
       opacity: 1;
     }
   }
+
+  @keyframes marquee {
+    0% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
   
   .animate-float {
     animation: float 3s ease-in-out infinite;
@@ -309,6 +318,10 @@
   
   .animate-fade-in {
     animation: fade-in 0.5s ease-out;
+  }
+
+  .animate-marquee {
+    animation: marquee 22s linear infinite;
   }
 }
 
@@ -349,7 +362,7 @@
   
   /* Prevent layout shift */
   .prevent-shift {
-    @apply scrollbar-gutter-stable;
+    scrollbar-gutter: stable;
   }
   
   /* Text rendering optimization */

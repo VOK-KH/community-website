@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { Github, Twitter, Linkedin, MessageCircle } from 'lucide-react'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
@@ -41,10 +42,10 @@ export default function Footer() {
   ]
 
   const socialLinks = [
-    { icon: 'Github', href: 'https://github.com' },
-    { icon: 'Twitter', href: 'https://twitter.com' },
-    { icon: 'LinkedIn', href: 'https://linkedin.com' },
-    { icon: 'Discord', href: 'https://discord.com' },
+    { label: 'Github', href: 'https://github.com', Icon: Github },
+    { label: 'Twitter', href: 'https://twitter.com', Icon: Twitter },
+    { label: 'LinkedIn', href: 'https://linkedin.com', Icon: Linkedin },
+    { label: 'Discord', href: 'https://discord.com', Icon: MessageCircle },
   ]
 
   return (
@@ -56,9 +57,11 @@ export default function Footer() {
           <div className="md:col-span-1">
             <Link 
               href="/" 
-              className="flex items-center gap-2 font-bold text-lg text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-tertiary mb-4"
+              className="mb-4 flex items-center gap-2 text-lg font-bold text-foreground"
             >
-              <span className="text-xl">⚡</span>
+              <span className="inline-flex h-6 w-6 items-center justify-center rounded-md bg-primary/15 text-primary">
+                <MessageCircle className="h-4 w-4" />
+              </span>
               VokDev
             </Link>
             <p className="text-sm text-muted-foreground">
@@ -67,14 +70,14 @@ export default function Footer() {
             <div className="flex gap-3 mt-4">
               {socialLinks.map((social) => (
                 <a
-                  key={social.icon}
+                  key={social.label}
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-8 h-8 rounded-full bg-primary/10 hover:bg-primary/20 flex items-center justify-center text-primary transition-colors"
-                  aria-label={social.icon}
+                  aria-label={social.label}
                 >
-                  <span className="text-sm font-bold">{social.icon.charAt(0)}</span>
+                  <social.Icon className="h-4 w-4" />
                 </a>
               ))}
             </div>

@@ -3,28 +3,35 @@
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { VokDevButton } from '@/components/VokDevButton'
-import { VokDevCard, VokDevCardHeader, VokDevCardTitle, VokDevCardDescription, VokDevCardContent, VokDevCardFooter } from '@/components/VokDevCard'
+import { VokDevCard } from '@/components/VokDevCard'
 import { VokDevInput } from '@/components/VokDevInput'
-import { VokDevBadge } from '@/components/VokDevBadge'
 import { useState } from 'react'
+import type { LucideIcon } from 'lucide-react'
+import { Mail, MessageSquare, Megaphone, Check, CheckCircle2 } from 'lucide-react'
 
-const contactMethods = [
+const contactMethods: {
+  icon: LucideIcon
+  title: string
+  description: string
+  contact: string
+  time: string
+}[] = [
   {
-    icon: '📧',
+    icon: Mail,
     title: 'Email',
     description: 'Send us your questions and feedback',
     contact: 'hello@vokdev.com',
     time: 'Response within 24 hours',
   },
   {
-    icon: '💬',
+    icon: MessageSquare,
     title: 'Discord',
     description: 'Join our community discord server',
     contact: 'discord.gg/vokdev',
     time: 'Live chat support',
   },
   {
-    icon: '🐦',
+    icon: Megaphone,
     title: 'Social Media',
     description: 'Follow us on social platforms',
     contact: '@vokdev',
@@ -93,7 +100,9 @@ export default function ContactPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {contactMethods.map((method, index) => (
                 <VokDevCard key={index} variant="interactive">
-                  <div className="text-4xl mb-4">{method.icon}</div>
+                  <div className="mb-4 text-primary">
+                    <method.icon className="h-8 w-8" />
+                  </div>
                   <h3 className="text-xl font-semibold mb-2">{method.title}</h3>
                   <p className="text-muted-foreground mb-4">{method.description}</p>
                   <div className="border-t border-border/40 pt-4">
@@ -117,7 +126,9 @@ export default function ContactPage() {
             <VokDevCard variant="featured">
               {submitted ? (
                 <div className="text-center py-8">
-                  <div className="text-5xl mb-4">✅</div>
+                  <div className="mb-4 flex justify-center text-primary">
+                    <CheckCircle2 className="h-12 w-12" />
+                  </div>
                   <h3 className="text-2xl font-bold mb-2">Thank you!</h3>
                   <p className="text-muted-foreground">
                     Your message has been sent successfully. We&apos;ll be in touch soon.
@@ -177,7 +188,7 @@ export default function ContactPage() {
         </section>
 
         {/* Join Section */}
-        <section className="px-4 py-20 bg-gradient-to-b from-primary/5 to-transparent border-y border-border/40">
+        <section className="px-4 py-20 bg-muted/30 border-y border-border/40">
           <div className="max-w-7xl mx-auto">
             <div className="mb-12">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">Join VokDev Today</h2>
@@ -193,7 +204,9 @@ export default function ContactPage() {
                 <ul className="space-y-4">
                   {joinBenefits.map((benefit, index) => (
                     <li key={index} className="flex items-start gap-3">
-                      <div className="text-primary text-xl mt-1 flex-shrink-0">✓</div>
+                      <div className="mt-1 flex-shrink-0 text-primary">
+                        <Check className="h-5 w-5" />
+                      </div>
                       <span className="text-lg text-foreground">{benefit}</span>
                     </li>
                   ))}

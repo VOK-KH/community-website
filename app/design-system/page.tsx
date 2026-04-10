@@ -17,7 +17,7 @@ export default function DesignSystemPage() {
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+              <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
                 <span className="text-white font-bold text-lg">V</span>
               </div>
               <h1 className="text-xl md:text-2xl font-bold text-glow-primary">

@@ -20,24 +20,24 @@ export function VokDevButton({
   ...props
 }: VokDevButtonProps) {
   const baseClasses =
-    'font-semibold rounded-lg transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary';
+    'font-semibold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary';
 
   const variantClasses = {
     primary: cn(
-      'bg-primary text-primary-foreground hover:scale-105 hover:-translate-y-0.5',
+      'bg-primary text-primary-foreground shadow-[0_10px_30px_-18px_hsl(var(--primary))] hover:brightness-110',
       withGlow && 'hover:glow-primary'
     ),
     secondary: cn(
-      'bg-transparent border-2 border-secondary text-secondary hover:bg-secondary/10',
+      'bg-transparent border border-secondary/60 text-secondary hover:bg-secondary/10',
       withGlow && 'hover:glow-secondary'
     ),
     tertiary: cn(
-      'bg-tertiary text-tertiary-foreground hover:scale-105 hover:-translate-y-0.5',
+      'bg-tertiary text-tertiary-foreground hover:brightness-110',
       withGlow && 'hover:glow-tertiary'
     ),
-    ghost: 'bg-transparent text-foreground hover:bg-muted',
+    ghost: 'bg-transparent text-foreground hover:bg-muted/70',
     destructive:
-      'bg-destructive text-destructive-foreground hover:scale-105 hover:-translate-y-0.5 hover:glow-destructive',
+      'bg-destructive text-destructive-foreground hover:brightness-110',
   };
 
   const sizeClasses = {
@@ -61,9 +61,7 @@ export function VokDevButton({
     >
       {isLoading ? (
         <>
-          <span className="inline-block animate-spin">
-            ⚙️
-          </span>
+          <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-current border-r-transparent" />
           <span>Loading...</span>
         </>
       ) : (

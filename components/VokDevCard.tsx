@@ -28,7 +28,7 @@ export function VokDevCard({
     ),
     featured: cn(
       'border-gradient p-6 relative overflow-hidden',
-      'bg-gradient-to-br from-primary/10 to-secondary/10',
+      'bg-primary/5',
       isHoverable && 'hover:glow-primary hover:-translate-y-2'
     ),
     minimal: cn(
@@ -55,7 +55,7 @@ export function VokDevCard({
   )
 }
 
-interface VokDevCardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
+type VokDevCardHeaderProps = React.HTMLAttributes<HTMLDivElement>
 
 export function VokDevCardHeader({
   className,
@@ -64,8 +64,7 @@ export function VokDevCardHeader({
   return <div className={cn('mb-4', className)} {...props} />;
 }
 
-interface VokDevCardTitleProps
-  extends React.HTMLAttributes<HTMLHeadingElement> {}
+type VokDevCardTitleProps = React.HTMLAttributes<HTMLHeadingElement>
 
 export function VokDevCardTitle({
   className,
@@ -82,8 +81,7 @@ export function VokDevCardTitle({
   );
 }
 
-interface VokDevCardDescriptionProps
-  extends React.HTMLAttributes<HTMLParagraphElement> {}
+type VokDevCardDescriptionProps = React.HTMLAttributes<HTMLParagraphElement>
 
 export function VokDevCardDescription({
   className,
@@ -97,7 +95,7 @@ export function VokDevCardDescription({
   );
 }
 
-interface VokDevCardContentProps extends React.HTMLAttributes<HTMLDivElement> {}
+type VokDevCardContentProps = React.HTMLAttributes<HTMLDivElement>
 
 export function VokDevCardContent({
   className,
@@ -106,7 +104,7 @@ export function VokDevCardContent({
   return <div className={cn('space-y-4', className)} {...props} />;
 }
 
-interface VokDevCardFooterProps extends React.HTMLAttributes<HTMLDivElement> {}
+type VokDevCardFooterProps = React.HTMLAttributes<HTMLDivElement>
 
 export function VokDevCardFooter({
   className,

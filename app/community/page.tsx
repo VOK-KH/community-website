@@ -3,16 +3,41 @@
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { VokDevButton } from '@/components/VokDevButton'
-import { VokDevCard, VokDevCardHeader, VokDevCardTitle, VokDevCardDescription, VokDevCardContent } from '@/components/VokDevCard'
+import { VokDevCard } from '@/components/VokDevCard'
 import { VokDevBadge } from '@/components/VokDevBadge'
 import { useState } from 'react'
+import type { LucideIcon } from 'lucide-react'
+import {
+  CircleUserRound,
+  Palette,
+  Code2,
+  Wrench,
+  Brain,
+  Search,
+  Briefcase,
+  Shield,
+  MessageSquare,
+  GraduationCap,
+  Handshake,
+  CalendarDays,
+  Trophy,
+  Globe2,
+} from 'lucide-react'
 
-const communityMembers = [
+const communityMembers: {
+  id: number
+  name: string
+  role: string
+  avatar: LucideIcon
+  specialties: string[]
+  projects: number
+  followers: number
+}[] = [
   {
     id: 1,
     name: 'Sarah Chen',
     role: 'Product Designer',
-    avatar: '👩‍💼',
+    avatar: Palette,
     specialties: ['UI Design', 'User Research', 'Design Systems'],
     projects: 4,
     followers: 245,
@@ -21,7 +46,7 @@ const communityMembers = [
     id: 2,
     name: 'Alex Rodriguez',
     role: 'Full Stack Developer',
-    avatar: '👨‍💻',
+    avatar: Code2,
     specialties: ['React', 'Node.js', 'AWS'],
     projects: 8,
     followers: 512,
@@ -30,7 +55,7 @@ const communityMembers = [
     id: 3,
     name: 'Jordan Lee',
     role: 'DevOps Engineer',
-    avatar: '👨‍🔧',
+    avatar: Wrench,
     specialties: ['Kubernetes', 'CI/CD', 'Infrastructure'],
     projects: 5,
     followers: 189,
@@ -39,7 +64,7 @@ const communityMembers = [
     id: 4,
     name: 'Emily Watson',
     role: 'AI/ML Engineer',
-    avatar: '👩‍🔬',
+    avatar: Brain,
     specialties: ['Machine Learning', 'Python', 'Data Science'],
     projects: 6,
     followers: 378,
@@ -48,7 +73,7 @@ const communityMembers = [
     id: 5,
     name: 'Michael Park',
     role: 'Frontend Developer',
-    avatar: '👨‍💻',
+    avatar: Code2,
     specialties: ['Vue.js', 'TypeScript', 'Performance'],
     projects: 7,
     followers: 423,
@@ -57,7 +82,7 @@ const communityMembers = [
     id: 6,
     name: 'Lisa Zhang',
     role: 'UX Researcher',
-    avatar: '👩‍🎓',
+    avatar: Search,
     specialties: ['User Research', 'Accessibility', 'Analytics'],
     projects: 3,
     followers: 156,
@@ -66,7 +91,7 @@ const communityMembers = [
     id: 7,
     name: 'David Morrison',
     role: 'Tech Lead',
-    avatar: '👨‍💼',
+    avatar: Briefcase,
     specialties: ['Architecture', 'Mentoring', 'Best Practices'],
     projects: 9,
     followers: 678,
@@ -75,41 +100,41 @@ const communityMembers = [
     id: 8,
     name: 'Priya Patel',
     role: 'Security Engineer',
-    avatar: '👩‍💻',
+    avatar: Shield,
     specialties: ['Security', 'Cryptography', 'Compliance'],
     projects: 4,
     followers: 234,
   },
 ]
 
-const communityFeatures = [
+const communityFeatures: { icon: LucideIcon; title: string; description: string }[] = [
   {
-    icon: '💬',
+    icon: MessageSquare,
     title: 'Discussion Forums',
     description: 'Ask questions, share ideas, and get answers from experienced members',
   },
   {
-    icon: '🎓',
+    icon: GraduationCap,
     title: 'Learning Paths',
     description: 'Structured learning materials curated by community experts',
   },
   {
-    icon: '🤝',
+    icon: Handshake,
     title: 'Mentorship',
     description: 'Connect with mentors and guide the next generation of developers',
   },
   {
-    icon: '🎪',
+    icon: CalendarDays,
     title: 'Community Events',
     description: 'Attend webinars, workshops, and meetups throughout the year',
   },
   {
-    icon: '🏆',
+    icon: Trophy,
     title: 'Recognition',
     description: 'Earn badges and recognition for your contributions',
   },
   {
-    icon: '🌍',
+    icon: Globe2,
     title: 'Global Network',
     description: 'Connect with tech professionals from around the world',
   },
@@ -130,7 +155,7 @@ export default function CommunityPage() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative px-4 py-16 md:py-24 border-b border-border/40 bg-gradient-to-b from-primary/5 to-transparent">
+        <section className="relative px-4 py-16 md:py-24 border-b border-border/40 bg-muted/30">
           <div className="max-w-7xl mx-auto">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">Meet Our Community</h1>
             <p className="text-lg text-muted-foreground mb-8 max-w-2xl">
@@ -152,7 +177,9 @@ export default function CommunityPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {communityFeatures.map((feature, index) => (
                 <VokDevCard key={index} variant="default">
-                  <div className="text-4xl mb-4">{feature.icon}</div>
+                  <div className="mb-4 text-primary">
+                    <feature.icon className="h-8 w-8" />
+                  </div>
                   <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
                   <p className="text-muted-foreground">{feature.description}</p>
                 </VokDevCard>
@@ -195,7 +222,11 @@ export default function CommunityPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {filteredMembers.map((member) => (
                 <VokDevCard key={member.id} variant="interactive" className="hover-lift flex flex-col">
-                  <div className="text-5xl mb-4 text-center">{member.avatar}</div>
+                  <div className="mb-4 flex justify-center">
+                    <span className="inline-flex rounded-full border border-border bg-card p-3 text-primary">
+                      <member.avatar className="h-7 w-7" />
+                    </span>
+                  </div>
                   
                   <h3 className="text-lg font-semibold text-center mb-1">{member.name}</h3>
                   <p className="text-sm text-primary text-center font-medium mb-4">{member.role}</p>
@@ -231,7 +262,7 @@ export default function CommunityPage() {
         </section>
 
         {/* Community Stats Section */}
-        <section className="px-4 py-20 bg-gradient-to-r from-primary/10 via-secondary/10 to-tertiary/10 border-y border-border/40">
+        <section className="px-4 py-20 bg-card/60 border-y border-border/40">
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
               <div>

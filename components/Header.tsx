@@ -1,11 +1,23 @@
 'use client'
 
 import Link from 'next/link'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { usePathname } from 'next/navigation'
+import { Menu } from 'lucide-react'
 import { VokDevButton } from './VokDevButton'
+import ThemeToggle from './ThemeToggle'
 
 export default function Header() {
+  const pathname = usePathname()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setIsScrolled(window.scrollY > 8)
+    onScroll()
+    window.addEventListener('scroll', onScroll)
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   const navLinks = [
     { href: '/', label: 'Home' },
@@ -16,73 +28,83 @@ export default function Header() {
   ]
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="flex h-16 max-w-7xl mx-auto px-4 items-center justify-between">
-        {/* Logo */}
-        <Link 
-          href="/" 
-          className="flex items-center gap-2 font-bold text-xl text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-tertiary hover:scale-105 transition-transform"
+    <header
+      className={`sticky top-0 z-50 w-full border-b transition-all duration-300 ${
+        isScrolled
+          ? 'border-border/80 bg-background/90 shadow-sm backdrop-blur-xl'
+          : 'border-border/40 bg-background/70 backdrop-blur'
+      }`}
+    >
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
+        <Link
+          href="/"
+          className="group flex items-center gap-2"
         >
-          <span className="text-2xl inline-block hover:scale-110 hover:rotate-12 transition-transform">
-            ⚡
+          <span className="h-2.5 w-2.5 rounded-full bg-primary transition-transform group-hover:scale-125" />
+          <span className="text-xl font-bold text-foreground">
+            VokDev
           </span>
-          <span>VokDev</span>
         </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex gap-1">
+        <nav className="hidden items-center gap-1 md:flex">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="px-3 py-2 text-sm font-medium text-foreground/70 hover:text-primary transition-colors rounded-md hover:bg-accent/10"
+              className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                pathname === link.href
+                  ? 'bg-primary/12 text-primary'
+                  : 'text-foreground/70 hover:bg-accent/10 hover:text-foreground'
+              }`}
             >
               {link.label}
             </Link>
           ))}
         </nav>
 
-        {/* Desktop CTA */}
-        <div className="hidden md:flex gap-2">
-          <VokDevButton variant="ghost" size="sm">
+        <div className="hidden gap-2 md:flex">
+          <ThemeToggle />
+          <VokDevButton variant="ghost" size="sm" withGlow={false}>
             Sign In
           </VokDevButton>
-          <VokDevButton variant="primary" size="sm">
+          <VokDevButton variant="primary" size="sm" withGlow={false}>
             Join Community
           </VokDevButton>
         </div>
 
-        {/* Mobile Menu Button */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden p-2 hover:bg-muted rounded-md transition-colors"
+          className="rounded-md p-2 transition-colors hover:bg-muted md:hidden"
           aria-label="Toggle menu"
+          aria-expanded={mobileMenuOpen}
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
+          <Menu className="h-6 w-6" />
         </button>
       </div>
 
-      {/* Mobile Navigation */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-border bg-card animate-slide-in">
+        <div className="animate-slide-in border-t border-border bg-card md:hidden">
           <nav className="flex flex-col p-4 gap-2">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="px-3 py-2 text-sm font-medium text-foreground/70 hover:text-primary hover:bg-accent/10 rounded-md transition-colors block"
+                className={`block rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+                  pathname === link.href
+                    ? 'bg-primary/12 text-primary'
+                    : 'text-foreground/70 hover:bg-accent/10 hover:text-foreground'
+                }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {link.label}
               </Link>
             ))}
             <div className="flex flex-col gap-2 pt-2 border-t border-border">
-              <VokDevButton variant="ghost" size="sm" className="w-full justify-center">
+              <ThemeToggle />
+              <VokDevButton variant="ghost" size="sm" withGlow={false} className="w-full justify-center">
                 Sign In
               </VokDevButton>
-              <VokDevButton variant="primary" size="sm" className="w-full justify-center">
+              <VokDevButton variant="primary" size="sm" withGlow={false} className="w-full justify-center">
                 Join Community
               </VokDevButton>
             </div>

@@ -3,11 +3,22 @@
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { VokDevButton } from '@/components/VokDevButton'
-import { VokDevCard, VokDevCardHeader, VokDevCardTitle, VokDevCardDescription, VokDevCardContent, VokDevCardFooter } from '@/components/VokDevCard'
+import { VokDevCard, VokDevCardTitle, VokDevCardDescription } from '@/components/VokDevCard'
 import { VokDevBadge } from '@/components/VokDevBadge'
 import { useState } from 'react'
+import type { LucideIcon } from 'lucide-react'
+import { Bot, Paintbrush, BarChart3, Blocks, Smartphone, LineChart, FlaskConical, Cloud } from 'lucide-react'
 
-const allProjects = [
+const allProjects: {
+  id: number
+  title: string
+  description: string
+  category: string
+  tags: string[]
+  members: number
+  stars: number
+  icon: LucideIcon
+}[] = [
   {
     id: 1,
     title: 'AI Chat Platform',
@@ -16,7 +27,7 @@ const allProjects = [
     tags: ['AI', 'Chat', 'Real-time'],
     members: 5,
     stars: 234,
-    image: '🤖',
+    icon: Bot,
   },
   {
     id: 2,
@@ -26,7 +37,7 @@ const allProjects = [
     tags: ['UI', 'Components', 'Design'],
     members: 3,
     stars: 512,
-    image: '🎨',
+    icon: Paintbrush,
   },
   {
     id: 3,
@@ -36,7 +47,7 @@ const allProjects = [
     tags: ['Analytics', 'Dashboard', 'Performance'],
     members: 4,
     stars: 189,
-    image: '📊',
+    icon: BarChart3,
   },
   {
     id: 4,
@@ -46,7 +57,7 @@ const allProjects = [
     tags: ['Framework', 'Full-stack', 'Backend'],
     members: 8,
     stars: 678,
-    image: '⚙️',
+    icon: Blocks,
   },
   {
     id: 5,
@@ -56,7 +67,7 @@ const allProjects = [
     tags: ['Mobile', 'App', 'Cross-platform'],
     members: 6,
     stars: 445,
-    image: '📱',
+    icon: Smartphone,
   },
   {
     id: 6,
@@ -66,7 +77,7 @@ const allProjects = [
     tags: ['Charts', 'Data', 'Visualization'],
     members: 4,
     stars: 367,
-    image: '📈',
+    icon: LineChart,
   },
   {
     id: 7,
@@ -76,7 +87,7 @@ const allProjects = [
     tags: ['Testing', 'API', 'QA'],
     members: 5,
     stars: 278,
-    image: '🧪',
+    icon: FlaskConical,
   },
   {
     id: 8,
@@ -86,7 +97,7 @@ const allProjects = [
     tags: ['Cloud', 'DevOps', 'Infrastructure'],
     members: 7,
     stars: 521,
-    image: '☁️',
+    icon: Cloud,
   },
 ]
 
@@ -153,15 +164,17 @@ export default function ProjectsPage() {
                   className="hover-lift flex flex-col"
                 >
                   <div className="flex items-start justify-between mb-4">
-                    <div className="text-4xl">{project.image}</div>
+                    <div className="rounded-md bg-primary/10 p-2 text-primary">
+                      <project.icon className="h-6 w-6" />
+                    </div>
                     <VokDevBadge variant="secondary" size="sm">
                       {project.category}
                     </VokDevBadge>
                   </div>
-                  <VokDevCard.Title className="mb-2">{project.title}</VokDevCard.Title>
-                  <VokDevCard.Description className="mb-4 flex-grow">
+                  <VokDevCardTitle className="mb-2">{project.title}</VokDevCardTitle>
+                  <VokDevCardDescription className="mb-4 flex-grow">
                     {project.description}
-                  </VokDevCard.Description>
+                  </VokDevCardDescription>
 
                   {/* Tags */}
                   <div className="flex flex-wrap gap-2 mb-4">
@@ -198,7 +211,7 @@ export default function ProjectsPage() {
         </section>
 
         {/* Submit Project CTA */}
-        <section className="px-4 py-20 bg-gradient-to-r from-primary/10 via-secondary/10 to-tertiary/10 border-y border-border/40">
+        <section className="px-4 py-20 bg-card/60 border-y border-border/40">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Have a Project to Share?</h2>
             <p className="text-muted-foreground text-lg mb-8">

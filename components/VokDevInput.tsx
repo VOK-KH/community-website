@@ -19,7 +19,8 @@ export function VokDevInput({
   id,
   ...props
 }: VokDevInputProps) {
-  const inputId = id || `input-${Math.random().toString(36).slice(2, 9)}`;
+  const generatedId = React.useId();
+  const inputId = id ?? generatedId;
 
   const baseClasses =
     'w-full px-4 py-2.5 rounded-lg transition-all duration-300 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed';
@@ -90,7 +91,8 @@ export function VokDevTextarea({
   id,
   ...props
 }: VokDevTextareaProps) {
-  const textareaId = id || `textarea-${Math.random().toString(36).slice(2, 9)}`;
+  const generatedId = React.useId();
+  const textareaId = id ?? generatedId;
 
   const baseClasses =
     'w-full px-4 py-2.5 rounded-lg transition-all duration-300 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed resize-vertical min-h-32';
