@@ -9,19 +9,22 @@ import './inner-pages.css'
 const fontSyne = Syne({
   subsets: ['latin'],
   variable: '--font-landing-syne',
-  weight: ['400', '600', '700', '800'],
+  weight: ['400', '500', '600', '700', '800'],
+  display: 'swap',
 })
 
 const fontDmSans = DM_Sans({
   subsets: ['latin'],
   variable: '--font-landing-dm',
-  weight: ['300', '400', '500', '600'],
+  weight: ['300', '400', '500', '600', '700'],
+  display: 'swap',
 })
 
 const fontSpaceMono = Space_Mono({
   subsets: ['latin'],
   variable: '--font-landing-mono',
   weight: ['400', '700'],
+  display: 'swap',
 })
 
 export const metadata: Metadata = {

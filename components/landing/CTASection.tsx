@@ -2,6 +2,7 @@
 
 import { useEffect, useLayoutEffect, useRef } from 'react'
 import Link from 'next/link'
+import { ArrowRight, Zap } from 'lucide-react'
 import { gsap, registerGsap, prefersReducedMotion } from '@/lib/motion'
 
 registerGsap()
@@ -24,12 +25,23 @@ export function CTASection() {
     gsap.set(qsa('.btn-l'),        { opacity: 0, y: 16, scale: 0.94, filter: 'blur(5px)' })
     gsap.set(qsa('.sp-av'),        { opacity: 0, x: -10, scale: 0.82, filter: 'blur(4px)' })
     gsap.set(qs('.sp-txt'),        { opacity: 0, x: 6, filter: 'blur(5px)' })
+    gsap.set(qsa('.cta-feature'),  { opacity: 0, y: 14, filter: 'blur(6px)' })
 
     const glow = qs('.cta-glow')
     if (glow) {
       gsap.to(glow, {
         scale: 1.18, opacity: 0.85,
         duration: 3.2, ease: 'sine.inOut', yoyo: true, repeat: -1,
+      })
+    }
+
+    const ring = qs('.cta-ring')
+    if (ring) {
+      gsap.to(ring, {
+        rotation: 360,
+        duration: 45,
+        ease: 'none',
+        repeat: -1,
       })
     }
 
@@ -48,17 +60,21 @@ export function CTASection() {
       .to(qs('.cta-body'), {
         opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.85,
       }, 0.72)
+      .to(qsa('.cta-feature'), {
+        opacity: 1, y: 0, filter: 'blur(0px)',
+        duration: 0.6, stagger: 0.08,
+      }, 0.88)
       .to(qsa('.btn-l'), {
         opacity: 1, y: 0, scale: 1, filter: 'blur(0px)',
         duration: 0.6, stagger: 0.1, ease: 'back.out(1.6)',
-      }, 0.92)
+      }, 1.08)
       .to(qsa('.sp-av'), {
         opacity: 1, x: 0, scale: 1, filter: 'blur(0px)',
         duration: 0.42, stagger: 0.07, ease: 'back.out(1.5)',
-      }, 1.12)
+      }, 1.28)
       .to(qs('.sp-txt'), {
         opacity: 1, x: 0, filter: 'blur(0px)', duration: 0.55,
-      }, 1.38)
+      }, 1.48)
 
     return () => {
       tl.scrollTrigger?.kill()
@@ -66,7 +82,6 @@ export function CTASection() {
     }
   }, [])
 
-  /* ── Cursor glow that follows the mouse ── */
   useEffect(() => {
     const sec = secRef.current
     const cg = cursorGlowRef.current
@@ -134,6 +149,7 @@ export function CTASection() {
   return (
     <section ref={secRef} className="cta-sec" id="community" data-sec="cta">
       <div className="cta-glow" />
+      <div className="cta-ring" aria-hidden />
       <div
         ref={cursorGlowRef}
         className="cta-cursor-glow"
@@ -141,28 +157,44 @@ export function CTASection() {
         style={{ opacity: 0, transform: 'translate(-50%, -50%) scale(0.6)' }}
       />
       <div className="cta-wrap">
-        <div className="cta-tag">✦ Join the community</div>
+        <div className="cta-tag">
+          <Zap size={12} /> Ready to ship?
+        </div>
 
-        {/* Heading: each line is a .split-line clip container */}
         <h2 className="cta-h">
           <span className="split-line">
-            <span className="split-inner">Ready to build</span>
+            <span className="split-inner">Stop watching.</span>
           </span>
           <span className="split-line">
             <span className="split-inner">
-              <span className="gr">something real?</span>
+              <span className="gr">Start building.</span>
             </span>
           </span>
         </h2>
 
         <p className="cta-body">
-          Join thousands of developers sharing what they build, learning in public, and making
-          things worth making — under the banner of Vision Of Knowledge.
+          Join thousands of developers who chose to build in the open. Ship projects, get real
+          feedback, and grow your skills — all under the banner of Vision Of Knowledge.
         </p>
+
+        <div className="cta-features">
+          <div className="cta-feature">
+            <span className="cta-feat-icon" style={{ color: 'var(--vok-accent)' }}>✦</span>
+            <span>Free forever</span>
+          </div>
+          <div className="cta-feature">
+            <span className="cta-feat-icon" style={{ color: 'var(--vok-violet)' }}>✦</span>
+            <span>No gatekeeping</span>
+          </div>
+          <div className="cta-feature">
+            <span className="cta-feat-icon" style={{ color: 'var(--vok-emerald)' }}>✦</span>
+            <span>Ship from day one</span>
+          </div>
+        </div>
 
         <div className="cta-btns">
           <Link href="/community" className="btn-l p">
-            Join VokDev Free →
+            Join VokDev Free <ArrowRight size={16} className="btn-icon" />
           </Link>
           <Link href="/projects" className="btn-l o">
             Browse Projects
@@ -178,7 +210,7 @@ export function CTASection() {
             <div className="sp-av av-p">LC</div>
           </div>
           <span className="sp-txt">
-            Joined by <strong>4,200+ developers</strong> this year
+            <strong>4,200+</strong> developers building together
           </span>
         </div>
       </div>

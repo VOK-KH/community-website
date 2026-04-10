@@ -335,27 +335,27 @@ export default function DesignSystemPage() {
             </div>
             <div className="pg-card space-y-6">
               <div className="space-y-2">
-                <h3 className="text-5xl font-bold">Heading 1 (H1)</h3>
-                <p className="text-sm text-muted-foreground">48px, Bold — Hero titles and page headers</p>
+                <h3 className="text-5xl font-extrabold tracking-tight">Heading 1 (H1)</h3>
+                <p className="text-sm text-muted-foreground">Syne 800, 48px — Hero titles and page headers</p>
               </div>
               <div className="space-y-2">
-                <h3 className="text-4xl font-bold">Heading 2 (H2)</h3>
-                <p className="text-sm text-muted-foreground">36px, Bold — Section headers</p>
+                <h3 className="text-4xl font-bold tracking-tight">Heading 2 (H2)</h3>
+                <p className="text-sm text-muted-foreground">Syne 700, 36px — Section headers</p>
               </div>
               <div className="space-y-2">
-                <h3 className="text-3xl font-bold">Heading 3 (H3)</h3>
-                <p className="text-sm text-muted-foreground">28px, Bold — Subsection headers</p>
+                <h3 className="text-3xl font-bold tracking-tight">Heading 3 (H3)</h3>
+                <p className="text-sm text-muted-foreground">Syne 700, 28px — Subsection headers</p>
               </div>
               <div className="space-y-2">
-                <p className="text-lg font-regular">Body Large (18px)</p>
-                <p className="text-sm text-muted-foreground">Introductions and emphasized body copy</p>
+                <p className="text-lg">Body Large (18px)</p>
+                <p className="text-sm text-muted-foreground">DM Sans 400 — Introductions and emphasized body copy</p>
               </div>
               <div className="space-y-2">
-                <p className="text-base font-regular">
-                  Body Base (16px) — Standard body text with excellent readability. This is the most common
-                  font size for body content throughout the design system.
+                <p className="text-base leading-relaxed">
+                  Body Base (16px) — Standard body text with excellent readability. DM Sans provides
+                  clean legibility at all sizes throughout the design system.
                 </p>
-                <p className="text-sm text-muted-foreground">Secondary text, labels, and descriptions</p>
+                <p className="font-mono text-sm text-muted-foreground">Space Mono 400 — Code, labels, and metadata</p>
               </div>
             </div>
           </div>
@@ -515,7 +515,7 @@ export default function DesignSystemPage() {
             </div>
           </div>
           <div className="pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-muted-foreground">© 2024 VokDev. Crafted by the community.</p>
+            <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} VokDev. Crafted by the community.</p>
             <div className="flex gap-4">
               <a href="#" className="text-primary hover:text-secondary transition">
                 Twitter

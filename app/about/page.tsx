@@ -71,9 +71,9 @@ export default function AboutPage() {
               About <span className="gradient-text">VokDev</span>
             </h1>
             <p className="hero-sub">
-              A global home for developers, designers, and builders who want to ship real work, learn
-              faster, and grow alongside peers—not in isolation. Collaboration, craft, and community
-              drive everything we do.
+              A global home for developers, designers, and builders who ship real work, learn
+              faster, and grow alongside peers — not in isolation. Collaboration, craft, and
+              community drive everything we do.
             </p>
           </div>
         </section>
@@ -90,9 +90,9 @@ export default function AboutPage() {
                     projects, trade hard-won knowledge, and lift each other up.
                   </p>
                 </div>
-                <p className="mb-6 text-lg text-muted-foreground">
+                <p className="mb-6 text-base leading-relaxed text-muted-foreground">
                   Through creativity, curiosity, and mutual support, we are building a community that
-                  stretches what is possible in technology—without losing the human side of the craft.
+                  stretches what is possible in technology — without losing the human side of the craft.
                 </p>
                 <VokDevButton variant="primary">Learn More</VokDevButton>
               </div>

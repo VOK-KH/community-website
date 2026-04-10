@@ -2,8 +2,9 @@
 
 import { useLayoutEffect, useRef } from 'react'
 import Link from 'next/link'
-import { Users, FolderKanban, GitCommitHorizontal } from 'lucide-react'
+import { Users, FolderKanban, GitCommitHorizontal, ArrowRight, Github } from 'lucide-react'
 import { gsap, registerGsap, prefersReducedMotion } from '@/lib/motion'
+import { ParticlesBackground } from './ParticlesBackground'
 
 registerGsap()
 
@@ -14,7 +15,6 @@ export function HeroSection() {
     const sec = secRef.current
     if (!sec) return
 
-    // Scoped helpers — never leak outside this section
     const qs  = (sel: string) => sec.querySelector<HTMLElement>(sel)
     const qsa = (sel: string) => Array.from(sec.querySelectorAll<HTMLElement>(sel))
 
@@ -33,68 +33,60 @@ export function HeroSection() {
     const ctas   = qs('#hctas')
     const stats  = qsa('.stat-item')
     const scind  = qs('#scind')
+    const trusted = qs('#htrusted')
 
-    gsap.set(badge,  { opacity: 0, scale: 0.88, filter: 'blur(10px)', y: -8 })
-    gsap.set(words,  { y: '108%' })
-    gsap.set(subt,   { opacity: 0, filter: 'blur(12px)', y: 12 })
-    gsap.set(vok,    { opacity: 0, filter: 'blur(9px)',  y: 9 })
-    gsap.set(desc,   { opacity: 0, filter: 'blur(8px)',  y: 9 })
-    gsap.set(ctas,   { opacity: 0, filter: 'blur(7px)',  scale: 0.96, y: 7 })
-    gsap.set(stats,  { opacity: 0, filter: 'blur(6px)',  y: 7 })
-    gsap.set(scind,  { opacity: 0, filter: 'blur(4px)' })
+    gsap.set(badge,   { opacity: 0, scale: 0.88, filter: 'blur(10px)', y: -8 })
+    gsap.set(words,   { y: '108%' })
+    gsap.set(subt,    { opacity: 0, filter: 'blur(12px)', y: 12 })
+    gsap.set(vok,     { opacity: 0, filter: 'blur(9px)',  y: 9 })
+    gsap.set(desc,    { opacity: 0, filter: 'blur(8px)',  y: 9 })
+    gsap.set(ctas,    { opacity: 0, filter: 'blur(7px)',  scale: 0.96, y: 7 })
+    gsap.set(stats,   { opacity: 0, filter: 'blur(6px)',  y: 7 })
+    gsap.set(scind,   { opacity: 0, filter: 'blur(4px)' })
+    gsap.set(trusted, { opacity: 0, filter: 'blur(5px)',  y: 6 })
 
     const tl = gsap.timeline({ defaults: { ease: 'expo.out' } })
 
     tl
-      /* ── badge: scale + blur → sharp ── */
       .to(badge, {
         opacity: 1, scale: 1, filter: 'blur(0px)', y: 0,
         duration: 0.95,
       }, 0.2)
-
-      /* ── headline words: clip-reveal one by one ── */
       .to(words, {
         y: '0%',
         duration: 1.05,
         stagger: 0.15,
         ease: 'expo.out',
       }, 0.45)
-
-      /* ── subtitle: blur-focus slide up ── */
       .to(subt, {
         opacity: 1, filter: 'blur(0px)', y: 0,
         duration: 0.85,
       }, 0.9)
-
-      /* ── VOK definition line ── */
       .to(vok, {
         opacity: 1, filter: 'blur(0px)', y: 0,
         duration: 0.78,
       }, 1.12)
-
-      /* ── body description ── */
       .to(desc, {
         opacity: 1, filter: 'blur(0px)', y: 0,
         duration: 0.78,
       }, 1.28)
-
-      /* ── CTAs: scale + blur-focus ── */
       .to(ctas, {
         opacity: 1, filter: 'blur(0px)', scale: 1, y: 0,
         duration: 0.72,
       }, 1.44)
-
-      /* ── stat items: staggered blur-focus ── */
       .to(stats, {
         opacity: 1, filter: 'blur(0px)', y: 0,
         duration: 0.65, stagger: 0.1,
       }, 1.58)
-
-      /* ── scroll indicator fades last ── */
+      .to(trusted, {
+        opacity: 1, filter: 'blur(0px)', y: 0,
+        duration: 0.55,
+      }, 1.88)
       .to(scind, {
         opacity: 1, filter: 'blur(0px)',
         duration: 0.6,
       }, 1.98)
+
     sec.querySelectorAll<HTMLElement>('[data-count]').forEach((node) => {
       const target = parseInt(node.dataset.count ?? '0', 10)
       const obj = { v: 0 }
@@ -112,13 +104,13 @@ export function HeroSection() {
 
   return (
     <section ref={secRef} className="hero" id="hero" data-sec="hero">
-      {/* badge */}
+      <ParticlesBackground />
       <div className="hero-badge" id="hbadge">
         <span className="badge-live" aria-hidden />
         <span className="badge-text">Open Developer Community</span>
+        <span className="badge-version">v3.0</span>
       </div>
 
-      {/* headline — each word sits inside a clip-masked line */}
       <h1 className="hero-h1">
         <span className="h1-line">
           <span className="h1-word">Build.</span>
@@ -129,7 +121,6 @@ export function HeroSection() {
         </span>
       </h1>
 
-      {/* subtitle */}
       <div className="hero-subtitle" id="hsubt">
         <span className="st-word">Vision</span>
         <span className="st-dot" aria-hidden>•</span>
@@ -138,25 +129,30 @@ export function HeroSection() {
         <span className="st-word">Knowledge</span>
       </div>
 
-      {/* VOK definition */}
       <p className="vok-def" id="hvok">
         <span className="vc">V</span>ision&nbsp;&nbsp;<span className="vo">O</span>f&nbsp;&nbsp;
-        <span className="vk">K</span>nowledge — where developers build what matters
+        <span className="vk">K</span>nowledge — where developers turn ideas into impact
       </p>
 
-      {/* body copy */}
       <p className="hero-desc" id="hdesc">
-        VokDev is the open community for developers who ship real projects, learn in public, and
-        grow alongside people who genuinely get it.
+        VokDev is the open-source community where developers ship real projects, learn in public,
+        and level up alongside builders who genuinely get it. No gatekeeping. Just code.
       </p>
 
-      {/* CTAs */}
       <div className="hero-ctas" id="hctas">
-        <Link href="/projects" className="btn-p">Start Building →</Link>
-        <Link href="/projects" className="btn-g">Explore Projects</Link>
+        <Link href="/community" className="btn-p">
+          Join the Community <ArrowRight size={16} className="btn-icon" />
+        </Link>
+        <a
+          href="https://github.com"
+          className="btn-g"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Github size={16} /> Star on GitHub
+        </a>
       </div>
 
-      {/* stats */}
       <div className="hero-stats" id="hstats">
         <div className="stat-item">
           <span className="s-num" style={{ color: 'var(--vok-accent)' }}>
@@ -178,11 +174,20 @@ export function HeroSection() {
         </div>
       </div>
 
-      {/* scroll indicator */}
-      {/* <div className="scroll-ind" id="scind">
-        <span>Scroll</span>
-        <div className="s-line" />
-      </div> */}
+      <div className="hero-trusted" id="htrusted">
+        <span className="trusted-label">Trusted by developers from</span>
+        <div className="trusted-logos">
+          <span className="trusted-co">Google</span>
+          <span className="trusted-dot" aria-hidden />
+          <span className="trusted-co">Meta</span>
+          <span className="trusted-dot" aria-hidden />
+          <span className="trusted-co">Vercel</span>
+          <span className="trusted-dot" aria-hidden />
+          <span className="trusted-co">Stripe</span>
+          <span className="trusted-dot" aria-hidden />
+          <span className="trusted-co">Indie Hackers</span>
+        </div>
+      </div>
     </section>
   )
 }
