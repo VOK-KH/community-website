@@ -1,6 +1,5 @@
 'use client'
 
-import { motion } from 'framer-motion'
 import { ReactNode } from 'react'
 
 interface HeroAnimationProps {
@@ -8,77 +7,56 @@ interface HeroAnimationProps {
   delay?: number
 }
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.2,
-    },
-  },
-}
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.8,
-      ease: [0.25, 0.46, 0.45, 0.94],
-    },
-  },
-}
-
 export function HeroAnimation({ children, delay = 0 }: HeroAnimationProps) {
   return (
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-      className="space-y-6"
+    <div
+      className="space-y-6 animate-fade-in"
+      style={{
+        animationDelay: `${delay * 1000}ms`,
+      }}
     >
-      <motion.div variants={itemVariants}>
+      <div>
         {typeof children === 'string' ? <h1>{children}</h1> : children}
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   )
 }
 
 export function HeroTitle({ children }: { children: ReactNode }) {
   return (
-    <motion.h1
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
-      className="text-balance"
+    <h1
+      className="text-balance animate-slide-in"
+      style={{
+        animationDelay: '100ms',
+      }}
     >
       {children}
-    </motion.h1>
+    </h1>
   )
 }
 
 export function HeroSubtitle({ children }: { children: ReactNode }) {
   return (
-    <motion.p
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+    <p
+      className="animate-slide-in"
+      style={{
+        animationDelay: '200ms',
+      }}
     >
       {children}
-    </motion.p>
+    </p>
   )
 }
 
 export function HeroButton({ children }: { children: ReactNode }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, delay: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+    <div
+      className="animate-slide-in"
+      style={{
+        animationDelay: '300ms',
+      }}
     >
       {children}
-    </motion.div>
+    </div>
   )
 }

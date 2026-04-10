@@ -1,7 +1,4 @@
-'use client'
-
 import React from 'react'
-import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
 interface VokDevCardProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -49,17 +46,12 @@ export function VokDevCard({
     : '';
 
   return (
-    <motion.div
-      className={cn(baseClasses, variantClasses[variant], glowClass, className)}
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      whileHover={isHoverable ? { y: -4, boxShadow: '0 20px 40px rgba(139, 51, 255, 0.2)' } : {}}
-      transition={{ duration: 0.5, ease: 'easeOut' }}
-      viewport={{ once: true, margin: '-100px' }}
+    <div
+      className={cn(baseClasses, variantClasses[variant], glowClass, className, 'animate-slide-in')}
       {...props}
     >
       {children}
-    </motion.div>
+    </div>
   )
 }
 

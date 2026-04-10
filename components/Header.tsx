@@ -2,7 +2,6 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { VokDevButton } from './VokDevButton'
 
 export default function Header() {
@@ -22,23 +21,12 @@ export default function Header() {
         {/* Logo */}
         <Link 
           href="/" 
-          className="flex items-center gap-2 font-bold text-xl text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-tertiary"
+          className="flex items-center gap-2 font-bold text-xl text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-tertiary hover:scale-105 transition-transform"
         >
-          <motion.span 
-            className="text-2xl inline-block"
-            whileHover={{ scale: 1.2, rotate: 10 }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 10 }}
-          >
+          <span className="text-2xl inline-block hover:scale-110 hover:rotate-12 transition-transform">
             ⚡
-          </motion.span>
-          <motion.span
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            VokDev
-          </motion.span>
+          </span>
+          <span>VokDev</span>
         </Link>
 
         {/* Desktop Navigation */}

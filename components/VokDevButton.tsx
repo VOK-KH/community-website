@@ -1,7 +1,4 @@
-'use client'
-
 import React from 'react'
-import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
 interface VokDevButtonProps
@@ -51,33 +48,27 @@ export function VokDevButton({
   };
 
   return (
-    <motion.button
+    <button
       className={cn(
         baseClasses,
         variantClasses[variant],
         sizeClasses[size],
-        className
+        className,
+        'hover:scale-105 hover:-translate-y-0.5 active:scale-95 transition-transform'
       )}
       disabled={disabled || isLoading}
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-      transition={{ type: 'spring', stiffness: 400, damping: 17 }}
       {...props}
     >
       {isLoading ? (
         <>
-          <motion.span
-            className="inline-block"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-          >
+          <span className="inline-block animate-spin">
             ⚙️
-          </motion.span>
+          </span>
           <span>Loading...</span>
         </>
       ) : (
         children
       )}
-    </motion.button>
+    </button>
   )
 }
