@@ -61,7 +61,11 @@ export default function Navbar() {
     setExpanded(true)
     gsap.killTweensOf(el)
     el.classList.add('nb-exp')
-    const w = Math.min(window.innerWidth - 32, 380)
+    const w = window.innerWidth < 520
+      ? window.innerWidth - 32
+      : window.innerWidth < 768
+        ? Math.min(window.innerWidth - 48, 340)
+        : Math.min(window.innerWidth - 32, 380)
     gsap.to(el, {
       width: w,
       height: 'auto',
@@ -78,7 +82,32 @@ export default function Navbar() {
 
   useEffect(() => {
     if (!expanded) return
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') collapse() }
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') collapse()
+      if (!expanded) return
+      const menuItems = navRef.current?.querySelectorAll('[role="menuitem"]')
+      if (!menuItems?.length) return
+      const first = menuItems[0] as HTMLElement
+      const last = menuItems[menuItems.length - 1] as HTMLElement
+
+      if (e.key === 'ArrowDown') {
+        e.preventDefault()
+        if (document.activeElement === last) {
+          first.focus()
+        } else {
+          const idx = Array.from(menuItems).indexOf(document.activeElement as Element)
+          if (idx >= 0) (menuItems[idx + 1] as HTMLElement)?.focus()
+        }
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault()
+        if (document.activeElement === first) {
+          last.focus()
+        } else {
+          const idx = Array.from(menuItems).indexOf(document.activeElement as Element)
+          if (idx >= 0) (menuItems[idx - 1] as HTMLElement)?.focus()
+        }
+      }
+    }
     const onClick = (e: MouseEvent) => {
       if (navRef.current && !navRef.current.contains(e.target as Node)) collapse()
     }
@@ -106,9 +135,12 @@ export default function Navbar() {
     const el = navRef.current
     if (!el) return
 
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
     let lastScrollY = 0
     let hidden = false
     let ticking = false
+    const SCROLL_HIDE_THRESHOLD = window.innerWidth < 768 ? 80 : 140
 
     const onScroll = () => {
       if (ticking) return
@@ -118,7 +150,7 @@ export default function Navbar() {
         const goingDown = scrollY > lastScrollY + 4
         const goingUp = scrollY < lastScrollY - 4
 
-        if (goingDown && scrollY > 140 && !hidden) {
+        if (goingDown && scrollY > SCROLL_HIDE_THRESHOLD && !hidden) {
           hidden = true
           if (expanded) collapse()
           gsap.to(el, { y: -90, duration: 0.4, ease: 'power3.in' })
@@ -191,13 +223,14 @@ export default function Navbar() {
             className="nb-burger"
             aria-label={expanded ? 'Close menu' : 'Open menu'}
             aria-expanded={expanded}
+            aria-controls="nb-expanded"
           >
             {expanded ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </button>
         </div>
 
         {/* ── Expanded island content ── */}
-        <div className="nb-expanded">
+        <div id="nb-expanded" className="nb-expanded" role="menu" aria-label="Navigation menu">
           <div className="nb-exp-top">
             <Link href="/" className="nb-logo" onClick={collapse}>
               <span className="nb-v">Vok</span>Dev
@@ -214,6 +247,8 @@ export default function Navbar() {
                 href={link.href}
                 className={`nb-exp-link${isActive(link.href) ? ' nb-active' : ''}`}
                 onClick={collapse}
+                role="menuitem"
+                tabIndex={expanded ? 0 : -1}
               >
                 {link.label}
               </Link>
@@ -228,14 +263,14 @@ export default function Navbar() {
               const cls = `nb-exp-icon-link${isActive(link.href) ? ' nb-active' : ''}`
               if (link.external) {
                 return (
-                  <a key={link.href} href={link.href} className={cls} target="_blank" rel="noopener noreferrer" onClick={collapse}>
+                  <a key={link.href} href={link.href} className={cls} target="_blank" rel="noopener noreferrer" onClick={collapse} role="menuitem" tabIndex={expanded ? 0 : -1}>
                     <Icon className="h-4 w-4" />
                     {link.label}
                   </a>
                 )
               }
               return (
-                <Link key={link.href} href={link.href} className={cls} onClick={collapse}>
+                <Link key={link.href} href={link.href} className={cls} onClick={collapse} role="menuitem" tabIndex={expanded ? 0 : -1}>
                   <Icon className="h-4 w-4" />
                   {link.label}
                 </Link>
@@ -243,7 +278,7 @@ export default function Navbar() {
             })}
           </div>
 
-          <Link href="/community" className="nb-exp-cta" onClick={collapse}>
+          <Link href="/community" className="nb-exp-cta" onClick={collapse} role="menuitem" tabIndex={expanded ? 0 : -1}>
             Join Free
           </Link>
         </div>

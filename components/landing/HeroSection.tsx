@@ -3,10 +3,74 @@
 import { useLayoutEffect, useRef } from 'react'
 import Link from 'next/link'
 import { Users, FolderKanban, GitCommitHorizontal, ArrowRight, Github } from 'lucide-react'
-import { gsap, registerGsap, prefersReducedMotion } from '@/lib/motion'
+import { gsap, registerGsap, prefersReducedMotion, hasFinePointer } from '@/lib/motion'
 import { ParticlesBackground } from './ParticlesBackground'
 
 registerGsap()
+
+function setupMagneticButtons(container: HTMLElement) {
+  if (!hasFinePointer()) return () => {}
+
+  const btns = Array.from(
+    container.querySelectorAll<HTMLElement>('.btn-p, .btn-g')
+  )
+  const cleanups: (() => void)[] = []
+  const strength = 0.35
+  const glowDuration = 0.25
+
+  for (const btn of btns) {
+    const onMove = (e: MouseEvent) => {
+      const r = btn.getBoundingClientRect()
+      const cx = r.left + r.width / 2
+      const cy = r.top + r.height / 2
+      const dx = e.clientX - cx
+      const dy = e.clientY - cy
+      const pxInBtn = ((e.clientX - r.left) / r.width) * 100
+      const pyInBtn = ((e.clientY - r.top) / r.height) * 100
+
+      gsap.to(btn, {
+        x: dx * strength,
+        y: dy * strength,
+        duration: 0.4,
+        ease: 'power3.out',
+      })
+
+      btn.style.setProperty('--btn-gx', `${pxInBtn}%`)
+      btn.style.setProperty('--btn-gy', `${pyInBtn}%`)
+    }
+
+    const onLeave = () => {
+      gsap.to(btn, {
+        x: 0,
+        y: 0,
+        duration: 0.7,
+        ease: 'elastic.out(1, 0.4)',
+      })
+    }
+
+    const onEnter = () => {
+      gsap.to(btn, { scale: 1.04, duration: glowDuration, ease: 'power2.out' })
+    }
+
+    const onLeaveScale = () => {
+      gsap.to(btn, { scale: 1, duration: 0.5, ease: 'expo.out' })
+    }
+
+    btn.addEventListener('mousemove', onMove)
+    btn.addEventListener('mouseleave', onLeave)
+    btn.addEventListener('mouseenter', onEnter)
+    btn.addEventListener('mouseleave', onLeaveScale)
+
+    cleanups.push(() => {
+      btn.removeEventListener('mousemove', onMove)
+      btn.removeEventListener('mouseleave', onLeave)
+      btn.removeEventListener('mouseenter', onEnter)
+      btn.removeEventListener('mouseleave', onLeaveScale)
+    })
+  }
+
+  return () => cleanups.forEach((fn) => fn())
+}
 
 export function HeroSection() {
   const secRef = useRef<HTMLElement>(null)
@@ -99,7 +163,12 @@ export function HeroSection() {
       })
     })
 
-    return () => { tl.kill() }
+    const teardownMagnetic = setupMagneticButtons(sec)
+
+    return () => {
+      tl.kill()
+      teardownMagnetic()
+    }
   }, [])
 
   return (

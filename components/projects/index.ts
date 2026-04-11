@@ -1,0 +1,6 @@
+export { ProjectsHero } from './ProjectsHero'
+export { FeaturedProjects } from './FeaturedProjects'
+export { ProjectGrid } from './ProjectGrid'
+export { ProjectCard } from './ProjectCard'
+export { ProjectsCTA } from './ProjectsCTA'
+export { ProjectPreviewDialog } from './ProjectPreviewDialog'

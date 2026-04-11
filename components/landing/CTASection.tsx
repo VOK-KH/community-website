@@ -3,7 +3,7 @@
 import { useEffect, useLayoutEffect, useRef } from 'react'
 import Link from 'next/link'
 import { ArrowRight, Zap } from 'lucide-react'
-import { gsap, registerGsap, prefersReducedMotion } from '@/lib/motion'
+import { gsap, registerGsap, prefersReducedMotion, hasFinePointer } from '@/lib/motion'
 
 registerGsap()
 
@@ -127,6 +127,46 @@ export function CTASection() {
       cg.classList.remove('cta-cursor-hot')
     }
 
+    const finePtr = hasFinePointer()
+    const magStrength = 0.3
+    const btnMoveHandlers: Array<[HTMLElement, string, EventListener]> = []
+
+    if (finePtr) {
+      btns.forEach((btn) => {
+        const onBtnMove = (e: Event) => {
+          const me = e as MouseEvent
+          const r = btn.getBoundingClientRect()
+          const cx = r.left + r.width / 2
+          const cy = r.top + r.height / 2
+          const pxInBtn = ((me.clientX - r.left) / r.width) * 100
+          const pyInBtn = ((me.clientY - r.top) / r.height) * 100
+
+          gsap.to(btn, {
+            x: (me.clientX - cx) * magStrength,
+            y: (me.clientY - cy) * magStrength,
+            scale: 1.04,
+            duration: 0.4,
+            ease: 'power3.out',
+          })
+          btn.style.setProperty('--btn-gx', `${pxInBtn}%`)
+          btn.style.setProperty('--btn-gy', `${pyInBtn}%`)
+        }
+        const onBtnMagLeave = () => {
+          gsap.to(btn, {
+            x: 0, y: 0, scale: 1,
+            duration: 0.7,
+            ease: 'elastic.out(1, 0.4)',
+          })
+        }
+        btn.addEventListener('mousemove', onBtnMove)
+        btn.addEventListener('mouseleave', onBtnMagLeave)
+        btnMoveHandlers.push(
+          [btn, 'mousemove', onBtnMove],
+          [btn, 'mouseleave', onBtnMagLeave],
+        )
+      })
+    }
+
     sec.addEventListener('mousemove', onMove)
     sec.addEventListener('mouseenter', onEnter)
     sec.addEventListener('mouseleave', onLeave)
@@ -143,6 +183,7 @@ export function CTASection() {
         b.removeEventListener('mouseenter', onBtnEnter)
         b.removeEventListener('mouseleave', onBtnLeave)
       })
+      btnMoveHandlers.forEach(([el, ev, fn]) => el.removeEventListener(ev, fn))
     }
   }, [])
 

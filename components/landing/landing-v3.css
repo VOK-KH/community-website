@@ -496,64 +496,128 @@
 }
 .landing-v3 .hero-ctas {
   display: flex;
-  gap: 0.9rem;
+  gap: 1rem;
   justify-content: center;
   flex-wrap: wrap;
   margin-bottom: 4.5rem;
 }
-.landing-v3 .btn-p {
+
+/* ── Shared button base (magnetic cursor target) ── */
+.landing-v3 .btn-p,
+.landing-v3 .btn-g {
+  --btn-gx: 50%;
+  --btn-gy: 50%;
+  position: relative;
   font-family: var(--font-landing-dm), ui-sans-serif, sans-serif;
-  font-weight: 600;
   font-size: 0.88rem;
-  background: var(--vok-accent);
+  letter-spacing: 0.02em;
+  padding: 0.92rem 2.2rem;
+  border-radius: 100px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  overflow: hidden;
+  isolation: isolate;
+  will-change: transform;
+  transition: box-shadow 0.35s, border-color 0.3s;
+  cursor: pointer;
+}
+
+/* Cursor-following glow layer inside buttons */
+.landing-v3 .btn-p::before,
+.landing-v3 .btn-g::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.4s;
+  pointer-events: none;
+  z-index: 0;
+}
+.landing-v3 .btn-p:hover::before,
+.landing-v3 .btn-g:hover::before {
+  opacity: 1;
+}
+
+/* ── Primary button ── */
+.landing-v3 .btn-p {
+  font-weight: 650;
+  background: linear-gradient(135deg, var(--vok-accent), #00b8d4);
   color: var(--vok-bg);
   border: none;
-  padding: 0.9rem 2rem;
-  border-radius: 6px;
-  letter-spacing: 0.02em;
-  transition: all 0.25s;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  box-shadow:
+    0 0 0 1px rgba(0, 229, 255, 0.15),
+    0 1px 2px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
-.landing-v3 .btn-g {
-  font-family: var(--font-landing-dm), ui-sans-serif, sans-serif;
-  font-weight: 500;
-  font-size: 0.88rem;
-  background: transparent;
-  color: var(--vok-text);
-  border: 1px solid var(--vok-border2);
-  padding: 0.9rem 2rem;
-  border-radius: 6px;
-  letter-spacing: 0.02em;
-  transition: all 0.25s;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+.landing-v3 .btn-p::before {
+  background: radial-gradient(
+    200px circle at var(--btn-gx) var(--btn-gy),
+    rgba(255, 255, 255, 0.2),
+    transparent 60%
+  );
 }
 .landing-v3 .btn-p:hover {
-  box-shadow: 0 0 36px rgba(0, 229, 255, 0.4);
-  transform: translateY(-2px);
+  box-shadow:
+    0 0 0 1px rgba(0, 229, 255, 0.25),
+    0 4px 20px rgba(0, 229, 255, 0.35),
+    0 0 60px -8px rgba(0, 229, 255, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+/* ── Ghost / outline button ── */
+.landing-v3 .btn-g {
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--vok-text);
+  border: 1px solid var(--vok-border2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+.landing-v3 .btn-g::before {
+  background: radial-gradient(
+    200px circle at var(--btn-gx) var(--btn-gy),
+    rgba(255, 255, 255, 0.08),
+    transparent 60%
+  );
 }
 .landing-v3 .btn-g:hover {
-  border-color: rgba(255, 255, 255, 0.22);
-  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.2),
+    0 4px 24px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
+
+/* ── Button children stay above glow ── */
+.landing-v3 .btn-p > *,
+.landing-v3 .btn-g > * {
+  position: relative;
+  z-index: 1;
+}
+
 .landing-v3 .btn-p .btn-icon,
 .landing-v3 .btn-l .btn-icon {
-  margin-left: 0.35rem;
-  transition: transform 0.25s;
+  margin-left: 0.15rem;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .landing-v3 .btn-p:hover .btn-icon,
 .landing-v3 .btn-l.p:hover .btn-icon {
-  transform: translateX(3px);
+  transform: translateX(4px);
 }
 .landing-v3 .btn-g svg,
 .landing-v3 .btn-l.o svg {
-  margin-right: 0.4rem;
+  margin-right: 0.3rem;
   flex-shrink: 0;
+  position: relative;
+  z-index: 1;
 }
 
 .landing-v3 .hero-stats {
@@ -1634,34 +1698,91 @@
   margin-bottom: 3.5rem;
 }
 .landing-v3 .btn-l {
+  --btn-gx: 50%;
+  --btn-gy: 50%;
+  position: relative;
   font-family: var(--font-landing-dm), ui-sans-serif, sans-serif;
   font-weight: 600;
   font-size: 0.92rem;
-  padding: 1rem 2.4rem;
-  border-radius: 6px;
+  padding: 1.05rem 2.6rem;
+  border-radius: 100px;
   letter-spacing: 0.02em;
-  transition: all 0.25s;
+  transition: box-shadow 0.35s, border-color 0.3s;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 0.4rem;
+  overflow: hidden;
+  isolation: isolate;
+  will-change: transform;
+  cursor: pointer;
+}
+.landing-v3 .btn-l::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.4s;
+  pointer-events: none;
+  z-index: 0;
+}
+.landing-v3 .btn-l:hover::before {
+  opacity: 1;
+}
+.landing-v3 .btn-l > * {
+  position: relative;
+  z-index: 1;
 }
 .landing-v3 .btn-l.p {
-  background: var(--vok-accent);
+  font-weight: 650;
+  background: linear-gradient(135deg, var(--vok-accent), #00b8d4);
   color: var(--vok-bg);
   border: none;
+  box-shadow:
+    0 0 0 1px rgba(0, 229, 255, 0.15),
+    0 1px 2px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+.landing-v3 .btn-l.p::before {
+  background: radial-gradient(
+    220px circle at var(--btn-gx) var(--btn-gy),
+    rgba(255, 255, 255, 0.2),
+    transparent 60%
+  );
 }
 .landing-v3 .btn-l.p:hover {
-  box-shadow: 0 0 44px rgba(0, 229, 255, 0.4);
-  transform: translateY(-2px);
+  box-shadow:
+    0 0 0 1px rgba(0, 229, 255, 0.25),
+    0 4px 24px rgba(0, 229, 255, 0.35),
+    0 0 60px -8px rgba(0, 229, 255, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 .landing-v3 .btn-l.o {
-  background: transparent;
+  background: rgba(255, 255, 255, 0.03);
   color: var(--vok-text);
   border: 1px solid var(--vok-border2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+.landing-v3 .btn-l.o::before {
+  background: radial-gradient(
+    220px circle at var(--btn-gx) var(--btn-gy),
+    rgba(255, 255, 255, 0.08),
+    transparent 60%
+  );
 }
 .landing-v3 .btn-l.o:hover {
-  border-color: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.2),
+    0 4px 24px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 .landing-v3 .sp {
   display: flex;
@@ -1741,6 +1862,119 @@
 }
 
 /* ─── RESPONSIVE ─── */
+
+/* ── Hero responsive ── */
+@media (max-width: 1024px) {
+  .landing-v3 .hero {
+    padding: clamp(6rem, 14vh, 9rem) 1.25rem 4rem;
+  }
+  .landing-v3 .hero-stats {
+    gap: 2.5rem;
+  }
+  .landing-v3 .hero-ctas {
+    margin-bottom: 3.5rem;
+  }
+  .landing-v3 .hero-trusted {
+    margin-top: 3rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .landing-v3 .hero {
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: clamp(5.5rem, 12vh, 7rem) 1rem 3rem;
+  }
+  .landing-v3 .hero-h1 {
+    font-size: clamp(2.75rem, 12vw, 5rem);
+  }
+  .landing-v3 .hero-subtitle {
+    font-size: clamp(0.95rem, 2.5vw, 1.4rem);
+  }
+  .landing-v3 .hero-desc {
+    font-size: 0.9rem;
+    margin: 0 auto 2rem;
+  }
+  .landing-v3 .hero-ctas {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.65rem;
+    margin-bottom: 3rem;
+    width: 100%;
+  }
+  .landing-v3 .btn-p,
+  .landing-v3 .btn-g {
+    width: 100%;
+    max-width: 320px;
+    justify-content: center;
+    padding: 0.85rem 1.5rem;
+  }
+  .landing-v3 .hero-stats {
+    gap: 1.75rem;
+  }
+  .landing-v3 .s-num {
+    font-size: 1.35rem;
+  }
+  .landing-v3 .hero-trusted {
+    margin-top: 2.5rem;
+    gap: 0.45rem;
+  }
+  .landing-v3 .trusted-logos {
+    gap: 0.5rem;
+  }
+  .landing-v3 .trusted-co {
+    font-size: 0.72rem;
+  }
+  .landing-v3 .scroll-ind {
+    display: none;
+  }
+  .landing-v3 .vok-def {
+    font-size: clamp(0.48rem, 0.95vw, 0.58rem);
+    padding: 0 0.25rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .landing-v3 .hero {
+    padding: 5rem 0.75rem 2.5rem;
+  }
+  .landing-v3 .hero-badge {
+    font-size: 0.52rem;
+    padding: 0.35rem 0.75rem;
+    gap: 0.35rem;
+  }
+  .landing-v3 .hero-h1 {
+    font-size: clamp(2.5rem, 11vw, 3.5rem);
+    gap: 0;
+  }
+  .landing-v3 .hero-stats {
+    gap: 1.25rem;
+  }
+  .landing-v3 .s-num {
+    font-size: 1.15rem;
+  }
+  .landing-v3 .s-lbl {
+    font-size: 0.52rem;
+  }
+  .landing-v3 .btn-p,
+  .landing-v3 .btn-g {
+    font-size: 0.82rem;
+    padding: 0.8rem 1.25rem;
+  }
+  .landing-v3 .hero-trusted {
+    margin-top: 2rem;
+  }
+  .landing-v3 .trusted-co {
+    font-size: 0.65rem;
+  }
+}
+
+@supports (min-height: 100svh) {
+  .landing-v3 .hero {
+    min-height: 100svh;
+  }
+}
+
 @media (max-width: 1024px) {
   .landing-v3 .about-grid {
     grid-template-columns: 1fr;
