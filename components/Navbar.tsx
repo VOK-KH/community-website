@@ -18,7 +18,6 @@ const NAV_LINKS = [
   { href: '/about', label: 'About' },
   { href: '/projects', label: 'Projects' },
   { href: '/community', label: 'Community' },
-  { href: '/blog', label: 'Blog' },
 ]
 
 const ICON_LINKS = [
@@ -215,7 +214,8 @@ export default function Navbar() {
           </div>
 
           <Link href="/community" className="nb-cta">
-            Join Free
+            <span className="nb-cta-shine" aria-hidden />
+            <span className="nb-cta-label">Join Free</span>
           </Link>
 
           <button
@@ -279,7 +279,8 @@ export default function Navbar() {
           </div>
 
           <Link href="/community" className="nb-exp-cta" onClick={collapse} role="menuitem" tabIndex={expanded ? 0 : -1}>
-            Join Free
+            <span className="nb-exp-cta-shine" aria-hidden />
+            <span className="nb-exp-cta-label">Join Free</span>
           </Link>
         </div>
       </nav>

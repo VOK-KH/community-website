@@ -1,9 +1,9 @@
 import Footer from '@/components/Footer'
 import {
   CommunityHero,
+  CommunityStats,
   CommunityFeatures,
   CommunityMemberSpotlights,
-  CommunityStats,
   CommunityCta,
 } from '@/components/community'
 
@@ -12,9 +12,9 @@ export default function CommunityPage() {
     <div className="pg">
       <main className="flex-1">
         <CommunityHero />
+        <CommunityStats />
         <CommunityFeatures />
         <CommunityMemberSpotlights />
-        <CommunityStats />
         <CommunityCta />
       </main>
       <Footer />
