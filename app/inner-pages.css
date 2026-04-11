@@ -1287,6 +1287,54 @@
   padding-bottom: 0;
 }
 
+/* About page — timeline track + scroll-driven gradient fill */
+.about-story-timeline.pg-timeline::before {
+  background: hsl(var(--border) / 0.55);
+}
+
+.about-story-timeline .pg-timeline-line-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  transform-origin: top center;
+  transform: scaleY(0);
+  background: linear-gradient(
+    180deg,
+    hsl(var(--primary)),
+    hsl(var(--secondary)),
+    hsl(var(--primary) / 0.22)
+  );
+  border-radius: 2px;
+  z-index: 0;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.about-story-timeline .pg-timeline-item {
+  z-index: 1;
+}
+
+/* About — clip-reveal words (GSAP y: 115% → 0) */
+.about-clip {
+  display: inline-block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+  vertical-align: top;
+}
+
+.about-word {
+  display: inline-block;
+  will-change: transform;
+}
+
+/* .pg * assigns DM Sans to every node; clip-reveal spans must use the display font */
+.pg h1 .h1-word,
+.pg h2 .about-word {
+  font-family: var(--font-landing-syne), ui-sans-serif, system-ui, sans-serif;
+}
+
 /* ── Blog post card ── */
 .pg-post {
   display: flex;
