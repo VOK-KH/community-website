@@ -348,7 +348,7 @@
 }
 
 .nb-cta:active {
-  transform: translateY(0) scale(0.98);
+  transform: scale(0.98);
 }
 
 /* Burger — pill style with three dot lines */
@@ -731,7 +731,7 @@
 }
 
 .nb-exp-cta:hover {
-  transform: translateY(-2px) scale(1.02);
+  transform: scale(1.02);
   box-shadow:
     0 1px 0 color-mix(in srgb, white 30%, transparent) inset,
     0 -1px 0 color-mix(in srgb, black 16%, transparent) inset,
@@ -741,7 +741,7 @@
 }
 
 .nb-exp-cta:active {
-  transform: translateY(0) scale(0.98);
+  transform: scale(0.98);
 }
 
 /* Swap visibility when expanded */
@@ -1310,25 +1310,25 @@
 .proj-card-wrap[data-proj-accent='design'] .proj-card-gh__tag.is-hover {
   color: #2fffca;
   border-color: #1a4a40;
-  transform: scale(1.08) translateY(-2px);
+  transform: scale(1.08);
 }
 
 .proj-card-wrap[data-proj-accent='ai'] .proj-card-gh__tag.is-hover {
   color: #d2a8ff;
   border-color: #3a1f5a;
-  transform: scale(1.08) translateY(-2px);
+  transform: scale(1.08);
 }
 
 .proj-card-wrap[data-proj-accent='devops'] .proj-card-gh__tag.is-hover {
   color: #79c0ff;
   border-color: #1a3a5a;
-  transform: scale(1.08) translateY(-2px);
+  transform: scale(1.08);
 }
 
 .proj-card-wrap[data-proj-accent='default'] .proj-card-gh__tag.is-hover {
   color: #3b82f6;
   border-color: rgba(59, 130, 246, 0.5);
-  transform: scale(1.08) translateY(-2px);
+  transform: scale(1.08);
 }
 
 .proj-card-gh__divider {
