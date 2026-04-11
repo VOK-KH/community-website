@@ -12,6 +12,7 @@ import {
   lineReveal,
   stOnce,
 } from '@/lib/motion'
+import { IslandNav } from '@/components/landing/IslandNav'
 import { HeroSection } from '@/components/landing/HeroSection'
 import { MarqueeStrip } from '@/components/landing/MarqueeStrip'
 import { AboutSection } from '@/components/landing/AboutSection'
@@ -27,143 +28,6 @@ function HomeGsapEffects({ rootRef }: { rootRef: RefObject<HTMLElement | null> }
     if (!root) return
     const L = root
     const { qs, qsa } = scopedQuery(L)
-
-    const island = qs('#island-nav')
-    const islandZone = qs('#island-zone')
-    const trigger = qs('#island-trigger')
-    const SCROLL_TOP_EPS = 2
-    let hot = false
-    let collapseTimer: ReturnType<typeof setTimeout> | null = null
-    let islandBreathe: gsap.core.Tween | null = null
-
-    const atScrollTop = () => window.scrollY <= SCROLL_TOP_EPS
-    const shouldBeWide = () => atScrollTop() || hot
-
-    function refreshIslandBreathe() {
-      if (!islandBreathe) return
-      if (shouldBeWide()) islandBreathe.pause()
-      else islandBreathe.resume()
-    }
-
-    function killIslandTweens() {
-      if (island) gsap.killTweensOf(island)
-    }
-
-    function expandIsland() {
-      if (!island) return
-      if (collapseTimer) { clearTimeout(collapseTimer); collapseTimer = null }
-      killIslandTweens()
-      island.classList.add('expanded')
-      gsap.to(island, {
-        width: window.innerWidth < 720 ? '92vw' : 680,
-        height: 54,
-        borderRadius: 100,
-        duration: 0.5,
-        ease: 'back.out(1.8)',
-      })
-      refreshIslandBreathe()
-    }
-
-    function collapseIsland(immediate: boolean) {
-      if (!island) return
-      const run = () => {
-        if (shouldBeWide()) return
-        if (collapseTimer) { clearTimeout(collapseTimer); collapseTimer = null }
-        killIslandTweens()
-        island.classList.remove('expanded')
-        gsap.to(island, {
-          width: 212,
-          height: 36,
-          borderRadius: 100,
-          duration: immediate ? 0.45 : 0.55,
-          ease: 'expo.inOut',
-        })
-        refreshIslandBreathe()
-      }
-      if (immediate) {
-        if (collapseTimer) { clearTimeout(collapseTimer); collapseTimer = null }
-        run()
-      } else {
-        if (collapseTimer) clearTimeout(collapseTimer)
-        collapseTimer = setTimeout(run, 200)
-      }
-    }
-
-    function applyIslandFromScroll() {
-      if (!island) return
-      if (hot) return
-      if (atScrollTop()) {
-        if (!island.classList.contains('expanded')) expandIsland()
-        else refreshIslandBreathe()
-      } else {
-        collapseIsland(true)
-      }
-    }
-
-    if (island && islandZone) {
-      const onScrollIsland = () => applyIslandFromScroll()
-      window.addEventListener('scroll', onScrollIsland, { passive: true })
-      applyIslandFromScroll()
-
-      const isInsideZone = (node: EventTarget | null) =>
-        node instanceof Node && islandZone.contains(node)
-
-      /* Listen on trigger, nav, AND zone for maximum reliability */
-      const hoverTargets = [trigger, island, islandZone].filter(Boolean) as HTMLElement[]
-
-      const onPointerEnter = () => {
-        hot = true
-        expandIsland()
-      }
-      const onPointerLeave = (e: MouseEvent) => {
-        if (isInsideZone(e.relatedTarget)) return
-        hot = false
-        if (atScrollTop()) expandIsland()
-        else collapseIsland(false)
-      }
-
-      hoverTargets.forEach((el) => {
-        el.addEventListener('mouseenter', onPointerEnter)
-        el.addEventListener('mouseleave', onPointerLeave)
-      })
-
-      addCleanup(() => {
-        window.removeEventListener('scroll', onScrollIsland)
-        if (collapseTimer) clearTimeout(collapseTimer)
-        hoverTargets.forEach((el) => {
-          el.removeEventListener('mouseenter', onPointerEnter)
-          el.removeEventListener('mouseleave', onPointerLeave)
-        })
-      })
-    }
-
-    if (island && !reducedMotion) {
-      islandBreathe = gsap.to(island, {
-        scale: 1.018, duration: 2.4, ease: 'sine.inOut', yoyo: true, repeat: -1,
-      })
-      refreshIslandBreathe()
-    }
-
-    /* Match link href to section id — links use /about style routes */
-    const sectionToHref: Record<string, string> = {
-      about: '/about',
-      projects: '/projects',
-      community: '/community',
-    }
-    function setActive(id: string) {
-      const target = sectionToHref[id]
-      qsa('.island-link').forEach((a) => {
-        a.classList.toggle('active', a.getAttribute('href') === target)
-      })
-    }
-    ;(['about', 'projects', 'community'] as const).forEach((id) => {
-      const el = document.getElementById(id)
-      if (!el) return
-      ScrollTrigger.create({
-        trigger: el, start: 'top 55%', end: 'bottom 55%',
-        onEnter: () => setActive(id), onEnterBack: () => setActive(id),
-      })
-    })
 
     if (!reducedMotion) {
       gsap.to('.hero-h1', {
@@ -336,69 +200,7 @@ export default function Home() {
         <div className="orb o3" id="o3" />
       </div>
 
-      <div id="island-zone" className="island-zone">
-        <div id="island-trigger" aria-hidden />
-        <nav id="island-nav" aria-label="Primary">
-          <div className="island-pill">
-            <span className="pill-logo">
-              <span className="v">Vok</span>Dev
-            </span>
-            <span className="pill-live" aria-hidden />
-            <span className="pill-divider" aria-hidden />
-            <div className="pill-metrics">
-              <div className="pill-stat" aria-label="4.2 thousand members">
-                <span className="pill-stat-num">4.2k</span>
-                <span className="pill-stat-label">members</span>
-              </div>
-              <div className="pill-stat" aria-label="247 members online">
-                <span className="pill-stat-num">247</span>
-                <span className="pill-stat-label">online</span>
-              </div>
-            </div>
-          </div>
-          <div className="island-expanded">
-            <span className="island-logo">
-              <span className="v">Vok</span>Dev
-            </span>
-            <div className="island-links">
-              <Link href="/about" className="island-link">
-                About
-              </Link>
-              <Link href="/projects" className="island-link">
-                Projects
-              </Link>
-              <Link href="/community" className="island-link">
-                Community
-              </Link>
-              <Link href="/blog" className="island-link">
-                Blog
-              </Link>
-              <Link href="/contact" className="island-link">
-                Contact
-              </Link>
-              <a
-                href="https://discord.com"
-                className="island-link"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Discord
-              </a>
-              <a
-                href="https://github.com"
-                className="island-link"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                GitHub
-              </a>
-            </div>
-            <Link href="/community" className="island-cta">
-              Join Free
-            </Link>
-          </div>
-        </nav>
-      </div>
+      <IslandNav />
 
       <main>
         <HeroSection />

@@ -146,14 +146,46 @@
     0 20px 60px rgba(0, 0, 0, 0.5),
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
   overflow: hidden;
-  will-change: width, height;
+  will-change: width, height, transform;
   width: 212px;
   height: 36px;
+  transform-style: preserve-3d;
+}
+
+.landing-v3 .island-cursor-layer {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.landing-v3 .island-cursor-blob {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 160px;
+  height: 160px;
+  margin: 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    rgba(0, 229, 255, 0.32) 0%,
+    rgba(0, 229, 255, 0.08) 38%,
+    transparent 68%
+  );
+  opacity: 0.9;
+  filter: blur(0.5px);
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  pointer-events: none;
 }
 
 .landing-v3 .island-pill {
   position: absolute;
   inset: 0;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -233,22 +265,39 @@
   }
 }
 
-.landing-v3 .island-expanded {
-  position: absolute;
-  inset: 0;
+/* Wide nav row: direct children of #island-nav (no island-expanded wrapper) */
+.landing-v3 #island-nav > .island-logo,
+.landing-v3 #island-nav > .island-cta {
+  display: none;
+}
+
+.landing-v3 #island-nav.expanded {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 0.5rem;
   padding: 0 1.5rem;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s;
 }
-.landing-v3 #island-nav.expanded .island-expanded {
+
+.landing-v3 #island-nav.expanded > .island-logo,
+.landing-v3 #island-nav.expanded > .island-cta {
+  position: relative;
+  z-index: 2;
   opacity: 1;
-  pointer-events: all;
+  pointer-events: auto;
   transition: opacity 0.25s 0.15s;
 }
+
+.landing-v3 #island-nav.expanded > .island-logo {
+  display: block;
+  flex-shrink: 0;
+}
+
+.landing-v3 #island-nav.expanded > .island-cta {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
 .landing-v3 .island-logo {
   font-family: var(--font-landing-syne), ui-sans-serif, sans-serif;
   font-weight: 800;
@@ -259,31 +308,6 @@
   flex-shrink: 0;
 }
 .landing-v3 .island-logo .v {
-  color: var(--vok-accent);
-}
-.landing-v3 .island-links {
-  display: flex;
-  gap: 0.25rem;
-  flex: 1;
-  justify-content: center;
-}
-.landing-v3 .island-link {
-  font-family: var(--font-landing-dm), ui-sans-serif, sans-serif;
-  font-size: 0.78rem;
-  font-weight: 500;
-  color: var(--vok-text3);
-  text-decoration: none;
-  padding: 0.35rem 0.75rem;
-  border-radius: 100px;
-  transition: all 0.2s;
-  letter-spacing: 0.01em;
-}
-.landing-v3 .island-link:hover,
-.landing-v3 .island-link.active {
-  background: rgba(255, 255, 255, 0.07);
-  color: var(--vok-text);
-}
-.landing-v3 .island-link.active {
   color: var(--vok-accent);
 }
 .landing-v3 .island-cta {
@@ -2023,9 +2047,6 @@
   }
   .landing-v3 #island-nav.expanded {
     width: 95vw;
-  }
-  .landing-v3 .island-links {
-    display: none;
   }
 }
 
