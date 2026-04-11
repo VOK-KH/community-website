@@ -1,7 +1,19 @@
 "use client"
 
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react"
 import { cn } from "@/lib/utils"
+import { gsap, registerGsap, prefersReducedMotion } from "@/lib/motion"
+
+export interface InteractiveGridPatternScrollParallax {
+  /** Section (or element) whose scroll range drives the parallax */
+  triggerRef: React.RefObject<HTMLElement | null>
+  /** GSAP scrub smoothing; higher = more inertia */
+  scrub?: number
+  /** Half-range of vertical motion in % of pattern height (scroll maps across full range) */
+  yPercent?: number
+  /** Starts slightly zoomed; settles to 1 as the section crosses the viewport */
+  scaleExtra?: number
+}
 
 export interface InteractiveGridPatternProps {
   className?: string
@@ -21,12 +33,20 @@ export interface InteractiveGridPatternProps {
   pointerMode?: "local" | "global" | "none"
   /** Subtle drifting motion of the whole mesh */
   drift?: boolean
+  /** Extra classes on the drifting grid layer (e.g. animation duration overrides) */
+  driftClassName?: string
   /** Pulsing center glow */
   ambientPulse?: boolean
+  /** Extra classes on the ambient pulse layer */
+  ambientPulseClassName?: string
   /** Edge fade into section background */
   vignette?: boolean
   /** Dark base behind cells (fullscreen demos) */
   darkBase?: boolean
+  /**
+   * Scroll-linked parallax on the pattern container (does not fight CSS drift on the inner layer).
+   */
+  scrollParallax?: InteractiveGridPatternScrollParallax
 }
 
 export function InteractiveGridPattern({
@@ -37,9 +57,12 @@ export function InteractiveGridPattern({
   variant = "absolute",
   pointerMode = "local",
   drift = true,
+  driftClassName,
   ambientPulse = true,
+  ambientPulseClassName,
   vignette = true,
   darkBase = false,
+  scrollParallax,
 }: InteractiveGridPatternProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [grid, setGrid] = useState({ rows: 0, cols: 0, scale: 1 })
@@ -94,6 +117,48 @@ export function InteractiveGridPattern({
     return () => window.removeEventListener("mousemove", onMove)
   }, [pointerMode])
 
+  useLayoutEffect(() => {
+    if (!scrollParallax) return
+    registerGsap()
+    const el = containerRef.current
+    const trigger = scrollParallax.triggerRef.current
+    if (!el || !trigger || prefersReducedMotion()) return
+
+    const {
+      scrub = 1.2,
+      yPercent = 10,
+      scaleExtra = 0.03,
+    } = scrollParallax
+    const half = yPercent / 2
+
+    const tween = gsap.fromTo(
+      el,
+      { yPercent: half, scale: 1 + scaleExtra },
+      {
+        yPercent: -half,
+        scale: 1,
+        ease: "none",
+        scrollTrigger: {
+          trigger,
+          start: "top bottom",
+          end: "bottom top",
+          scrub,
+        },
+      },
+    )
+
+    return () => {
+      tween.scrollTrigger?.kill()
+      tween.kill()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- granular deps; avoid unstable `scrollParallax` object identity
+  }, [
+    scrollParallax?.triggerRef,
+    scrollParallax?.scrub,
+    scrollParallax?.yPercent,
+    scrollParallax?.scaleExtra,
+  ])
+
   const handleLocalMove = useCallback((e: React.MouseEvent) => {
     if (pointerMode !== "local") return
     const container = containerRef.current
@@ -120,7 +185,7 @@ export function InteractiveGridPattern({
     <div
       ref={containerRef}
       className={cn(
-        "overflow-hidden",
+        "overflow-hidden will-change-transform",
         variantClass,
         darkBase && "bg-neutral-950",
         pointerMode === "global" && "pointer-events-none",
@@ -133,6 +198,7 @@ export function InteractiveGridPattern({
         className={cn(
           "absolute inset-0 will-change-transform",
           drift && "animate-igp-drift",
+          driftClassName,
         )}
       >
         {Array.from({ length: grid.rows }).map((_, rowIndex) => (
@@ -189,7 +255,10 @@ export function InteractiveGridPattern({
       {ambientPulse && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
           <div
-            className="animate-igp-ambient rounded-full"
+            className={cn(
+              "animate-igp-ambient rounded-full",
+              ambientPulseClassName,
+            )}
             style={{
               width: "min(70vmin, 900px)",
               height: "min(70vmin, 900px)",
