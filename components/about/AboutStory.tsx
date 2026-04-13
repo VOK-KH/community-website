@@ -4,7 +4,7 @@ import { useLayoutEffect, useRef } from 'react'
 import { AboutSectionTitle } from '@/components/about/AboutSectionTitle'
 import { clearAboutTextMotion, setAboutDescsHidden, setAboutWordsHidden } from '@/components/about/sectionText'
 import { aboutStoryMilestones } from './data'
-import { gsap, registerGsap, prefersReducedMotion } from '@/lib/motion'
+import { gsap, ScrollTrigger, registerGsap, prefersReducedMotion } from '@/lib/motion'
 
 registerGsap()
 
@@ -14,6 +14,8 @@ export function AboutStory() {
   const lineFillRef = useRef<HTMLDivElement>(null)
 
   useLayoutEffect(() => {
+    registerGsap()
+
     const sec = secRef.current
     const timeline = timelineRef.current
     const lineFill = lineFillRef.current
@@ -60,20 +62,23 @@ export function AboutStory() {
         0.22,
       )
 
-    const lineTween = gsap.fromTo(
-      lineFill,
-      { scaleY: 0 },
-      {
-        scaleY: 1,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: timeline,
-          start: 'top 82%',
-          end: 'bottom 35%',
-          scrub: 0.65,
-        },
+    // Use gsap.to (not fromTo + scrollTrigger) — fromTo can throw when ScrollTrigger
+    // merges vars in some GSAP builds; initial state is already set via gsap.set above.
+    const lineTween = gsap.to(lineFill, {
+      scaleY: 1,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: timeline,
+        start: 'top 82%',
+        end: 'bottom 35%',
+        scrub: 0.65,
+        invalidateOnRefresh: true,
       },
-    )
+    })
+
+    queueMicrotask(() => {
+      ScrollTrigger.refresh()
+    })
 
     return () => {
       introTl.scrollTrigger?.kill()

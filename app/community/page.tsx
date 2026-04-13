@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import Footer from '@/components/Footer'
 import {
   CommunityHero,
@@ -6,6 +7,25 @@ import {
   CommunityMemberSpotlights,
   CommunityCta,
 } from '@/components/community'
+
+const title = 'Community'
+const description =
+  'Join developers who ship real projects, learn in public, and grow together—events, spotlights, and ways to get involved.'
+
+export const metadata: Metadata = {
+  title,
+  description,
+  alternates: { canonical: '/community' },
+  openGraph: {
+    title: `${title} | VokDev`,
+    description,
+    url: '/community',
+  },
+  twitter: {
+    title: `${title} | VokDev`,
+    description,
+  },
+}
 
 export default function CommunityPage() {
   return (

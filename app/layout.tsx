@@ -6,6 +6,12 @@ import Navbar from '@/components/Navbar'
 import './globals.css'
 import './inner-pages.css'
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://vokdev.com'
+const siteName = 'VokDev'
+const defaultTitle = 'VokDev — Vision Of Knowledge'
+const defaultDescription =
+  'VokDev is the open community for developers who ship real projects, learn in public, and grow alongside people who genuinely get it.'
+
 const fontSyne = Syne({
   subsets: ['latin'],
   variable: '--font-landing-syne',
@@ -28,12 +34,53 @@ const fontSpaceMono = Space_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'VokDev — Vision Of Knowledge',
-  description:
-    'VokDev is the open community for developers who ship real projects, learn in public, and grow alongside people who genuinely get it.',
-  keywords: ['developer community', 'open source', 'Vision Of Knowledge', 'VokDev', 'Next.js'],
-  authors: [{ name: 'VokDev' }],
-  creator: 'VokDev',
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: defaultTitle,
+    template: `%s | ${siteName}`,
+  },
+  description: defaultDescription,
+  keywords: [
+    'developer community',
+    'open source',
+    'learn in public',
+    'Vision Of Knowledge',
+    'VokDev',
+    'Next.js',
+    'software developers',
+  ],
+  authors: [{ name: siteName, url: siteUrl }],
+  creator: siteName,
+  publisher: siteName,
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: '/',
+    siteName,
+    title: defaultTitle,
+    description: defaultDescription,
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: defaultTitle,
+    description: defaultDescription,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
+  alternates: {
+    canonical: '/',
+  },
   icons: {
     icon: [
       {
