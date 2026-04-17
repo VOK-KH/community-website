@@ -213,7 +213,7 @@ export function HeroSection() {
           Join the Community <ArrowRight size={16} className="btn-icon" />
         </Link>
         <a
-          href="https://github.com"
+          href="https://github.com/VOK-KH"
           className="btn-g"
           target="_blank"
           rel="noopener noreferrer"

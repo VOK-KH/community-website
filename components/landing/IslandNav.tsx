@@ -4,6 +4,15 @@ import Link from 'next/link'
 import { useRef } from 'react'
 import { gsap, useGsapSetup, scopedQuery } from '@/lib/motion'
 
+const LOGO_CHARS = [
+  { ch: 'V', accent: true },
+  { ch: 'o', accent: false },
+  { ch: 'k', accent: false },
+  { ch: 'D', accent: false },
+  { ch: 'e', accent: false },
+  { ch: 'v', accent: false },
+] as const
+
 export function IslandNav() {
   const zoneRef = useRef<HTMLDivElement>(null)
 
@@ -19,6 +28,7 @@ export function IslandNav() {
     let hot = false
     let collapseTimer: ReturnType<typeof setTimeout> | null = null
     let islandBreathe: gsap.core.Tween | null = null
+    let layoutTl: gsap.core.Timeline | null = null
 
     const atScrollTop = () => window.scrollY <= SCROLL_TOP_EPS
     const shouldBeWide = () => atScrollTop() || hot
@@ -31,7 +41,12 @@ export function IslandNav() {
 
     function killIslandTweens() {
       if (!island) return
+      layoutTl?.kill()
+      layoutTl = null
       gsap.killTweensOf(island, 'width,height,borderRadius')
+      island.querySelectorAll<HTMLElement>('.island-logo-char').forEach((ch) => {
+        gsap.killTweensOf(ch)
+      })
     }
 
     function expandIsland() {
@@ -42,13 +57,41 @@ export function IslandNav() {
       }
       killIslandTweens()
       island.classList.add('expanded')
-      gsap.to(island, {
-        width: window.innerWidth < 720 ? '92vw' : 680,
-        height: 54,
+
+      const chars = island.querySelectorAll<HTMLElement>('.island-logo-char')
+      /* Kill mid-tween can leave inline styles — reset before replay */
+      if (chars.length) {
+        gsap.set(chars, { clearProps: 'all' })
+      }
+
+      const w = window.innerWidth < 720 ? '92vw' : 380
+      const expandedH = 54
+
+      layoutTl = gsap.timeline()
+      layoutTl.to(island, {
+        width: w,
+        height: expandedH,
         borderRadius: 100,
-        duration: 0.5,
-        ease: 'back.out(1.8)',
+        duration: 0.52,
+        ease: 'back.out(1.75)',
       })
+
+      if (!reducedMotion && chars.length) {
+        gsap.set(chars, { transformOrigin: '50% 100%' })
+        layoutTl.from(
+          chars,
+          {
+            yPercent: 118,
+            opacity: 0,
+            rotateX: -78,
+            stagger: 0.055,
+            duration: 0.58,
+            ease: 'back.out(1.45)',
+          },
+          '-=0.38',
+        )
+      }
+
       refreshIslandBreathe()
     }
 
@@ -62,6 +105,8 @@ export function IslandNav() {
         }
         killIslandTweens()
         island.classList.remove('expanded')
+        const chars = island.querySelectorAll<HTMLElement>('.island-logo-char')
+        if (chars.length) gsap.set(chars, { clearProps: 'all' })
         gsap.to(island, {
           width: 212,
           height: 36,
@@ -208,9 +253,17 @@ export function IslandNav() {
             </div>
           </div>
         </div>
-        <span className="island-logo">
-          <span className="v">Vok</span>Dev
-        </span>
+        <div className="island-brand">
+          <span className="island-logo">
+            {LOGO_CHARS.map(({ ch, accent }, i) => (
+              <span key={`${ch}-${i}`} className="island-logo-clip">
+                <span className={`island-logo-char${accent ? ' island-logo-char--accent' : ''}`}>
+                  {ch}
+                </span>
+              </span>
+            ))}
+          </span>
+        </div>
         <Link href="/community" className="island-cta">
           Join Free
         </Link>

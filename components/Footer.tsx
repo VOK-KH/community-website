@@ -20,7 +20,7 @@ export default function Footer() {
         <a href="https://discord.com" target="_blank" rel="noopener noreferrer">
           Discord
         </a>
-        <a href="https://github.com" target="_blank" rel="noopener noreferrer">
+        <a href="https://github.com/VOK-KH" target="_blank" rel="noopener noreferrer">
           GitHub
         </a>
         <Link href="/privacy">Privacy</Link>

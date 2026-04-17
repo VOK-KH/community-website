@@ -171,7 +171,7 @@ export function ProjectPreviewDialog({
   const license = project.license ?? 'MIT'
   const status = project.status ?? 'active'
   const lastUpdated = project.lastUpdated ?? 'Recently'
-  const repo = project.repositoryUrl ?? 'https://github.com'
+  const repo = project.repositoryUrl ?? 'https://github.com/VOK-KH'
   const team = project.teamLabel ?? 'Vokdev Community'
   const detail =
     project.previewDetails ??

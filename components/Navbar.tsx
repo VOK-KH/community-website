@@ -23,7 +23,7 @@ const NAV_LINKS = [
 const ICON_LINKS = [
   { href: '/contact', label: 'Contact', icon: Mail, external: false },
   { href: 'https://discord.com', label: 'Discord', icon: DiscordIcon, external: true },
-  { href: 'https://github.com', label: 'GitHub', icon: Github, external: true },
+  { href: 'https://github.com/VOK-KH', label: 'GitHub', icon: Github, external: true },
 ] as const
 
 export default function Navbar() {

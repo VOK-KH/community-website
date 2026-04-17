@@ -46,7 +46,7 @@ export const allProjects: Project[] = [
     teamLabel: 'Vokdev AI Guild',
     previewDetails:
       'We set out to make collaborative AI feel as natural as a shared doc—streaming tokens, shared context, and room-level permissions without the usual glue code.\n\nIncludes streaming responses, shared workspaces, and adapter hooks for custom models. The team ships weekly releases; RFCs live in the repo wiki.',
-    repositoryUrl: 'https://github.com',
+    repositoryUrl: 'https://github.com/VOK-KH',
   },
   {
     id: 2,
@@ -64,7 +64,7 @@ export const allProjects: Project[] = [
     teamLabel: 'Design Systems Lab',
     previewDetails:
       'A single source of truth for product teams: tokens, components, and documentation that stay aligned from Figma to production.\n\nTokens, themes, and Storybook stories stay in sync with the published npm package. Figma library updates ship on a quarterly cadence with migration notes.',
-    repositoryUrl: 'https://github.com',
+    repositoryUrl: 'https://github.com/VOK-KH',
   },
   {
     id: 3,
@@ -78,7 +78,7 @@ export const allProjects: Project[] = [
     teamLabel: 'Performance Guild',
     previewDetails:
       'The brief was simple: see performance regressions before users do. We unified RUM, lab data, and custom marks in one place.\n\nCollect Core Web Vitals, long tasks, and custom marks in one dashboard. Alerts integrate with Slack and email; exports to BigQuery are in beta.',
-    repositoryUrl: 'https://github.com',
+    repositoryUrl: 'https://github.com/VOK-KH',
   },
   {
     id: 4,
@@ -92,7 +92,7 @@ export const allProjects: Project[] = [
     teamLabel: 'Framework Collective',
     previewDetails:
       'We wanted one framework that feels great on day one and scales when the product gets serious—routing, data loading, and deploy targets without the usual yak shave.\n\nOpinionated defaults for routing, data loading, and deployment targets. Plugin API covers auth, ORMs, and edge runtimes without forking the core.',
-    repositoryUrl: 'https://github.com',
+    repositoryUrl: 'https://github.com/VOK-KH',
   },
   {
     id: 5,
@@ -106,7 +106,7 @@ export const allProjects: Project[] = [
     teamLabel: 'Mobile Craft Studio',
     previewDetails:
       'Low-code shouldn’t mean low quality—this project explores how far we can push visual editing while keeping real native output.\n\nDrag-and-drop screens, native builds, and a small runtime for custom logic. Paid templates fund maintenance; core editor remains MIT licensed.',
-    repositoryUrl: 'https://github.com',
+    repositoryUrl: 'https://github.com/VOK-KH',
   },
   {
     id: 6,
@@ -120,7 +120,7 @@ export const allProjects: Project[] = [
     teamLabel: 'Data Viz Open Lab',
     previewDetails:
       'Charts should feel intentional, not noisy. We focused on composable primitives and motion that respects the data.\n\nComposable primitives for cartesian and polar charts with sensible animation defaults. SSR-safe; tree-shake only the modules you import.',
-    repositoryUrl: 'https://github.com',
+    repositoryUrl: 'https://github.com/VOK-KH',
   },
   {
     id: 7,
@@ -138,7 +138,7 @@ export const allProjects: Project[] = [
     teamLabel: 'QA Tooling Guild',
     previewDetails:
       'APIs change fast; tests should catch drift before production. This work packages contract testing and great DX in one toolchain.\n\nContract tests, snapshot diffs, and CI reporters for REST and GraphQL. VS Code extension provides jump-to-schema and mock generators.',
-    repositoryUrl: 'https://github.com',
+    repositoryUrl: 'https://github.com/VOK-KH',
   },
   {
     id: 8,
@@ -152,7 +152,7 @@ export const allProjects: Project[] = [
     teamLabel: 'Infra Automation Lab',
     previewDetails:
       'Infrastructure should be boring to operate and honest about drift. We built declarative workflows with safe rollbacks in mind.\n\nDeclarative stacks for common cloud vendors with drift detection and safe rollbacks. Terraform-compatible modules are published under the same semver.',
-    repositoryUrl: 'https://github.com',
+    repositoryUrl: 'https://github.com/VOK-KH',
   },
 ]
 
