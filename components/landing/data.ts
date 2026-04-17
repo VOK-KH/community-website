@@ -111,18 +111,5 @@ export const featuredProjects: LandingProject[] = [
       'Headless component library with instant brand adaptation via design tokens. Zero runtime overhead.',
     tags: ['Vue', 'CSS'],
     author: { initials: 'LC', handle: 'l.chen', av: 'av-p' },
-  },
-  {
-    id: 'orbiter',
-    colClass: 'col4',
-    cardClass: 'c-bl',
-    iconClass: 'i-bl',
-    icon: 'Telescope',
-    stars: 76,
-    title: 'Orbiter',
-    description:
-      'Self-hosted analytics. 1MB bundle, no cookies, open source. Runs on a $5 VPS in minutes.',
-    tags: ['Svelte', 'SQLite'],
-    author: { initials: 'NP', handle: 'n.patel', av: 'av-b' },
-  },
+  }
 ]

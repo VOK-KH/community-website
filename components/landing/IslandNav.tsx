@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { useRef } from 'react'
 import { gsap, useGsapSetup, scopedQuery } from '@/lib/motion'
@@ -254,15 +255,25 @@ export function IslandNav() {
           </div>
         </div>
         <div className="island-brand">
-          <span className="island-logo">
-            {LOGO_CHARS.map(({ ch, accent }, i) => (
-              <span key={`${ch}-${i}`} className="island-logo-clip">
-                <span className={`island-logo-char${accent ? ' island-logo-char--accent' : ''}`}>
-                  {ch}
+          <Link href="/" className="island-home" aria-label="VokDev home">
+            <Image
+              src="/icon.svg"
+              alt=""
+              width={22}
+              height={22}
+              priority
+              className="island-home-icon"
+            />
+            <span className="island-logo" aria-hidden>
+              {LOGO_CHARS.map(({ ch, accent }, i) => (
+                <span key={`${ch}-${i}`} className="island-logo-clip">
+                  <span className={`island-logo-char${accent ? ' island-logo-char--accent' : ''}`}>
+                    {ch}
+                  </span>
                 </span>
-              </span>
-            ))}
-          </span>
+              ))}
+            </span>
+          </Link>
         </div>
         <Link href="/community" className="island-cta">
           Join Free
