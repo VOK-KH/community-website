@@ -16,7 +16,7 @@ function isAdminPath(pathname: string) {
   return pathname.startsWith('/cms/admin')
 }
 
-export function middleware(req: NextRequest) {
+export function proxy(req: NextRequest) {
   const { pathname, search } = req.nextUrl
 
   if (!isCmsPath(pathname) || isCmsPublicPath(pathname)) {
