@@ -1,6 +1,6 @@
-name = "YOUR PROJECT NAME"
+name = "vokdev-community-website"
 main = "src/index.ts"
-compatibility_date = "2022-11-07"
+compatibility_date = "2026-04-17"
 node_compat = true
 
 [[ d1_databases ]]
