@@ -1,8 +1,8 @@
-import { cookies } from 'next/headers'
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
+
+import { requireCmsSession } from '@/lib/auth/cms'
 
 type AuditRow = {
   id: string
@@ -36,8 +36,8 @@ function makeAudit(actor: string): AuditRow[] {
 }
 
 export default async function CmsAuditPage() {
-  const cookieStore = await cookies()
-  const actor = cookieStore.get('cms_email')?.value ?? 'unknown'
+  const session = await requireCmsSession()
+  const actor = session.user.email
   const rows = makeAudit(actor)
 
   return (

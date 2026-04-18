@@ -1,8 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { cookies } from 'next/headers'
 
-import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import {
   Sidebar,
@@ -23,6 +21,9 @@ import {
 } from '@/components/ui/sidebar'
 import { Cctv, CalendarDays, LayoutDashboard, Megaphone, Settings, Users, User } from 'lucide-react'
 
+import { CmsSignOutButton } from '@/app/cms/cms-sign-out-button'
+import { requireCmsSession, resolveCmsRole } from '@/lib/auth/cms'
+
 export const metadata: Metadata = {
   title: 'CMS',
 }
@@ -38,11 +39,7 @@ function CmsTopBar() {
             Manage members, announcements, and events
           </div>
         </div>
-        <form action="/cms/logout" method="post">
-          <Button variant="outline" size="sm" type="submit">
-            Sign out
-          </Button>
-        </form>
+        <CmsSignOutButton />
       </div>
     </div>
   )
@@ -152,19 +149,19 @@ function CmsSidebar({ role }: { role: string }) {
 export default async function CmsLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const cookieStore = await cookies()
-  const role = cookieStore.get('cms_role')?.value ?? 'member'
+  const session = await requireCmsSession()
+  const role = resolveCmsRole(session)
 
   return (
     <div className="min-h-svh bg-background text-foreground">
       <SidebarProvider defaultOpen>
-        <CmsSidebar role={role} />
+        <CmsSidebar role={role === 'admin' ? 'admin' : 'member'} />
         <SidebarInset>
           <CmsTopBar />
           <div className="mx-auto w-full max-w-6xl px-4 py-6">{children}</div>
           <Separator className="mt-10" />
           <div className="mx-auto w-full max-w-6xl px-4 py-6 text-xs text-muted-foreground">
-            CMS demo auth uses cookies. Wire this to your real auth provider later.
+            CMS access is protected by Better Auth (sessions, rate limits, and secure cookies).
           </div>
         </SidebarInset>
       </SidebarProvider>

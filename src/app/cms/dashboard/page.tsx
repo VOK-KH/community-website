@@ -1,18 +1,13 @@
-import { cookies } from 'next/headers'
-
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 
-async function getCmsIdentity() {
-  const cookieStore = await cookies()
-  const email = cookieStore.get('cms_email')?.value ?? 'unknown'
-  const role = cookieStore.get('cms_role')?.value ?? 'member'
-  return { email, role }
-}
+import { requireCmsSession, resolveCmsRole } from '@/lib/auth/cms'
 
 export default async function DashboardPage() {
-  const { email, role } = await getCmsIdentity()
+  const session = await requireCmsSession()
+  const email = session.user.email
+  const role = resolveCmsRole(session)
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">

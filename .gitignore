@@ -13,6 +13,9 @@ next.user-config.*
 .env.production
 .env*.local
 
+# Better Auth local SQLite (see AUTH_DATABASE_PATH / AUTH_DATABASE_URL)
+.data/
+
 # Common ignores
 node_modules
 .next/

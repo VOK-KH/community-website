@@ -1,38 +1,36 @@
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
-const CMS_SESSION_COOKIE = 'cms_session'
-const CMS_ROLE_COOKIE = 'cms_role'
+import { adminEmailAllowlist } from '@/lib/auth/admin-allowlist'
+import { auth } from '@/lib/auth/server'
 
 function isCmsPath(pathname: string) {
   return pathname === '/cms' || pathname.startsWith('/cms/')
-}
-
-function isCmsPublicPath(pathname: string) {
-  return pathname === '/cms/login'
 }
 
 function isAdminPath(pathname: string) {
   return pathname.startsWith('/cms/admin')
 }
 
-export function proxy(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const { pathname, search } = req.nextUrl
 
-  if (!isCmsPath(pathname) || isCmsPublicPath(pathname)) {
+  if (!isCmsPath(pathname)) {
     return NextResponse.next()
   }
 
-  const session = req.cookies.get(CMS_SESSION_COOKIE)?.value
+  const session = await auth.api.getSession({ headers: req.headers })
   if (!session) {
-    const loginUrl = new URL('/cms/login', req.url)
+    const loginUrl = new URL('/joint', req.url)
     loginUrl.searchParams.set('next', `${pathname}${search}`)
     return NextResponse.redirect(loginUrl)
   }
 
   if (isAdminPath(pathname)) {
-    const role = req.cookies.get(CMS_ROLE_COOKIE)?.value
-    if (role !== 'admin') {
+    const email = session.user.email.toLowerCase()
+    const allow = adminEmailAllowlist()
+    const isAdmin = session.user.role === 'admin' || allow.has(email)
+    if (!isAdmin) {
       return NextResponse.redirect(new URL('/cms/dashboard', req.url))
     }
   }
@@ -41,6 +39,5 @@ export function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/cms/:path*'],
+  matcher: ['/cms', '/cms/:path*'],
 }
-

@@ -3,17 +3,21 @@ import { redirect } from 'next/navigation'
 
 import { auth } from '@/lib/auth/server'
 
-import { LoginForm } from './login-form'
+import { RegisterForm } from './register-form'
 
 export const metadata = {
-  title: 'Sign in',
+  title: 'Create account',
 }
 
-export default async function CmsLoginPage({
+export default async function CmsRegisterPage({
   searchParams,
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>
 }) {
+  if (process.env.CMS_DISABLE_SIGNUP === 'true') {
+    redirect('/joint')
+  }
+
   const session = await auth.api.getSession({ headers: await headers() })
   const sp = await searchParams
   const nextRaw =
@@ -24,7 +28,5 @@ export default async function CmsLoginPage({
     redirect(nextPath)
   }
 
-  const signUpEnabled = process.env.CMS_DISABLE_SIGNUP !== 'true'
-
-  return <LoginForm nextPath={nextPath} signUpEnabled={signUpEnabled} />
+  return <RegisterForm nextPath={nextPath} />
 }
