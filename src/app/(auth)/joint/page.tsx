@@ -33,7 +33,7 @@ export default async function JointPage({
   const q = `?next=${encodeURIComponent(nextPath)}`
 
   return (
-    <Card className="border-0 shadow-xl ring-1 ring-border/60 sm:rounded-2xl">
+    <Card className="border border-white/10 bg-card/90 shadow-2xl shadow-black/30 backdrop-blur-xl sm:rounded-2xl">
       <CardHeader className="space-y-1 pb-2 text-center sm:text-left">
         <CardTitle className="text-2xl font-bold tracking-tight">Join {process.env.NEXT_PUBLIC_SITE_NAME ?? 'VokDev'}</CardTitle>
         <CardDescription className="text-base">

@@ -1,0 +1,111 @@
+/* Auth shell — matches landing hero: noise, grid, particle host (see landing-v3.css). */
+
+.auth-landing {
+  --vok-bg: #060a0f;
+  --vok-surface: #0f1923;
+  --vok-surface2: #162030;
+  --vok-accent: #00e5ff;
+  --vok-violet: #7c3aed;
+  --vok-emerald: #10b981;
+  --vok-text: #eef2f7;
+  --vok-text2: #8a9ab0;
+  --vok-border: rgba(255, 255, 255, 0.07);
+  --vok-border2: rgba(255, 255, 255, 0.12);
+
+  background: var(--vok-bg);
+  color: var(--vok-text);
+  position: relative;
+  overflow-x: clip;
+}
+
+.auth-landing .auth-noise {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px;
+  opacity: 0.022;
+}
+
+.auth-landing .auth-bg-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.auth-landing .auth-bg-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
+  background-size: 68px 68px;
+  mask-image: radial-gradient(ellipse 75% 75% at 50% 38%, black 28%, transparent 100%);
+}
+
+.auth-landing .auth-particles-host {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.auth-landing .auth-particles-host .particles-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 1.8s ease-out;
+  pointer-events: none;
+}
+
+.auth-landing .auth-particles-host .particles-bg.particles-visible {
+  opacity: 1;
+}
+
+.auth-landing .auth-particles-host .particles-bg canvas {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.auth-landing .auth-brand-panel {
+  background: linear-gradient(
+    165deg,
+    rgba(15, 25, 35, 0.92) 0%,
+    rgba(6, 10, 15, 0.88) 45%,
+    rgba(22, 32, 48, 0.9) 100%
+  );
+  border-color: var(--vok-border2);
+  box-shadow:
+    inset 0 1px 0 rgba(0, 229, 255, 0.06),
+    0 0 80px rgba(0, 229, 255, 0.04);
+}
+
+.auth-landing .auth-brand-panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 90% 60% at 20% 0%, rgba(0, 229, 255, 0.12), transparent 55%);
+  pointer-events: none;
+}
+
+.auth-landing .auth-main-panel {
+  background: linear-gradient(180deg, rgba(6, 10, 15, 0.55) 0%, rgba(6, 10, 15, 0.75) 100%);
+}
+
+.auth-landing .auth-link-muted {
+  color: var(--vok-text2);
+}
+
+.auth-landing .auth-link-muted:hover {
+  color: var(--vok-accent);
+}
+
+.auth-landing .auth-accent-ring {
+  box-shadow: 0 0 0 1px rgba(0, 229, 255, 0.25), 0 0 24px rgba(0, 229, 255, 0.12);
+}

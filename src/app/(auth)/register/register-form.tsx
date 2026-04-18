@@ -21,7 +21,7 @@ export function RegisterForm({ nextPath }: Props) {
   const site = process.env.NEXT_PUBLIC_SITE_NAME ?? 'VokDev'
 
   return (
-    <Card className="border-0 shadow-xl ring-1 ring-border/60 sm:rounded-2xl">
+    <Card className="border border-white/10 bg-card/90 shadow-2xl shadow-black/30 backdrop-blur-xl sm:rounded-2xl">
       <CardHeader className="space-y-1 pb-2">
         <CardTitle className="text-2xl font-bold tracking-tight">Create account</CardTitle>
         <CardDescription className="text-base">It&apos;s quick—we only need a name, email, and a strong password.</CardDescription>

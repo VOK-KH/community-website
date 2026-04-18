@@ -1,5 +1,10 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import type { Metadata } from 'next'
+
+import { AuthParticles } from './auth-particles'
+
+import './auth-layout.css'
 
 export const metadata: Metadata = {
   title: {
@@ -15,46 +20,53 @@ export default function AuthGroupLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <div className="min-h-svh bg-background">
-      <div className="flex min-h-svh flex-col lg:flex-row">
-        <aside className="relative flex flex-col justify-between overflow-hidden border-b border-white/10 bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 px-8 py-10 text-white lg:w-[min(42vw,480px)] lg:max-w-md lg:border-b-0 lg:border-r lg:py-14">
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(99,102,241,0.35),transparent_55%),radial-gradient(ellipse_at_bottom_left,rgba(14,165,233,0.2),transparent_50%)]" />
+    <div className="auth-landing min-h-svh">
+      <div className="auth-noise" aria-hidden />
+      <div className="auth-bg-layer" aria-hidden>
+        <div className="auth-bg-grid" />
+      </div>
+      <AuthParticles />
 
-          <div className="relative z-[1] space-y-6">
+      <div className="relative z-10 flex min-h-svh flex-col lg:flex-row">
+        <aside className="auth-brand-panel relative flex flex-col justify-between overflow-hidden border-b px-8 py-10 lg:w-[min(42vw,480px)] lg:max-w-md lg:border-b-0 lg:border-r lg:py-14">
+          <div className="relative z-[1] space-y-8">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 text-lg font-semibold tracking-tight text-white transition-opacity hover:opacity-90"
+              className="inline-flex items-center gap-3 text-lg font-semibold tracking-tight text-[var(--vok-text)] transition-opacity hover:opacity-90"
             >
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/10 text-sm font-bold ring-1 ring-white/15">
-                V
+              <span className="auth-accent-ring relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[var(--vok-surface2)] ring-1 ring-white/10">
+                <Image src="/icon.svg" alt="" width={44} height={44} className="h-9 w-9 object-contain" priority />
               </span>
-              {siteName}
+              <span className="font-semibold">{siteName}</span>
             </Link>
-            <div className="space-y-3">
-              <h1 className="text-balance text-2xl font-semibold tracking-tight sm:text-3xl">
-                Community tools, one secure sign-in.
+            <div className="space-y-4">
+              <h1 className="text-balance text-2xl font-semibold tracking-tight text-[var(--vok-text)] sm:text-3xl">
+                Community tools,{' '}
+                <span className="bg-gradient-to-r from-[var(--vok-accent)] to-[var(--vok-violet)] bg-clip-text text-transparent">
+                  one secure sign-in.
+                </span>
               </h1>
-              <p className="max-w-sm text-pretty text-sm leading-relaxed text-white/75">
-                Manage members, events, and announcements from the CMS—protected with Better Auth sessions and
-                rate limits.
+              <p className="max-w-sm text-pretty text-sm leading-relaxed text-[var(--vok-text2)]">
+                Same look as the landing hero: grid, noise, and particles—then Better Auth sessions and rate limits
+                behind the scenes.
               </p>
             </div>
           </div>
 
-          <div className="relative z-[1] mt-10 flex flex-wrap gap-x-6 gap-y-2 text-xs text-white/55 lg:mt-0">
-            <Link href="/" className="transition-colors hover:text-white">
+          <div className="relative z-[1] mt-10 flex flex-wrap gap-x-6 gap-y-2 text-xs lg:mt-0">
+            <Link href="/" className="auth-link-muted transition-colors">
               Home
             </Link>
-            <Link href="/community" className="transition-colors hover:text-white">
+            <Link href="/community" className="auth-link-muted transition-colors">
               Community
             </Link>
-            <Link href="/joint" className="transition-colors hover:text-white">
+            <Link href="/joint" className="auth-link-muted transition-colors">
               Join or sign in
             </Link>
           </div>
         </aside>
 
-        <main className="relative flex flex-1 flex-col justify-center bg-muted/25 px-4 py-10 sm:px-8 lg:py-14">
+        <main className="auth-main-panel relative flex flex-1 flex-col justify-center px-4 py-10 sm:px-8 lg:py-14">
           <div className="mx-auto w-full max-w-[420px]">{children}</div>
         </main>
       </div>
