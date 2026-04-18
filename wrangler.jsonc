@@ -1,0 +1,24 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "vokdev-community-website",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-04-17",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "5794d5d1-1ebb-4466-adc4-2642a18840af",
+      "database_id": "5794d5d1-1ebb-4466-adc4-2642a18840af",
+      "migrations_table": "__drizzle_migrations",
+      "migrations_dir": "drizzle"
+    }
+  ],
+  "keep_vars": true
+  // When you deploy Next on Workers (e.g. OpenNext), add:
+  // "assets": { "directory": ".open-next/assets", "binding": "ASSETS" },
+  // Optional: R2, KV, crons, AI — see https://developers.cloudflare.com/workers/wrangler/configuration/
+}
