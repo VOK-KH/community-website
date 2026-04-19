@@ -5,8 +5,6 @@ import { useRouter } from 'next/navigation'
 import { useTransition } from 'react'
 import toast from 'react-hot-toast'
 
-import { AuthEmailDivider } from '@/app/(auth)/_components/auth-email-divider'
-import { SocialOAuthRow } from '@/app/(auth)/_components/social-oauth-row'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -25,12 +23,9 @@ export function RegisterForm({ nextPath }: Props) {
     <Card className="border border-white/10 bg-card/90 shadow-2xl shadow-black/30 backdrop-blur-xl sm:rounded-2xl">
       <CardHeader className="space-y-1 pb-2">
         <CardTitle className="text-2xl font-bold tracking-tight">Create account</CardTitle>
-        <CardDescription className="text-base">It&apos;s quick—we only need a name, email, and a strong password.</CardDescription>
+        <CardDescription className="text-base">Create an account for {site}.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-1">
-        <SocialOAuthRow />
-        <AuthEmailDivider label="or sign up with email" />
-
         <form
           className="space-y-4 pt-1"
           noValidate

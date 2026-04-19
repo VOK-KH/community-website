@@ -28,12 +28,9 @@ export function LoginForm({ nextPath, signUpEnabled }: Props) {
     <Card className="border border-white/10 bg-card/90 shadow-2xl shadow-black/30 backdrop-blur-xl sm:rounded-2xl">
       <CardHeader className="space-y-1 pb-2">
         <CardTitle className="text-2xl font-bold tracking-tight">Log in</CardTitle>
-        <CardDescription className="text-base">Sign in to {site} CMS with your email.</CardDescription>
+        <CardDescription className="text-base">Sign in to {site} with your email.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-1">
-        <SocialOAuthRow />
-        <AuthEmailDivider />
-
         <form
           className="space-y-4 pt-1"
           noValidate
