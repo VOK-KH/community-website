@@ -20,3 +20,27 @@ export async function requireCmsSession(): Promise<CmsSession> {
   if (!session) redirect('/joint?next=/cms/dashboard')
   return session
 }
+
+/** Sidebar / account row: friendly name, email, and two-letter initials. */
+export function getCmsSessionDisplay(session: CmsSession): {
+  email: string
+  displayName: string
+  initials: string
+} {
+  const email = session.user.email
+  const name = session.user.name?.trim() ?? ''
+  const displayName = name || email.split('@')[0] || email
+
+  if (name.includes(' ')) {
+    const parts = name.split(/\s+/).filter(Boolean)
+    const a = parts[0]?.[0]
+    const b = parts[parts.length - 1]?.[0]
+    if (a && b) return { email, displayName, initials: (a + b).toUpperCase() }
+  }
+
+  const source = (name || email).replace(/\s+/g, '')
+  const initials =
+    source.length >= 2 ? source.slice(0, 2).toUpperCase() : source.toUpperCase() || '?'
+
+  return { email, displayName, initials }
+}
