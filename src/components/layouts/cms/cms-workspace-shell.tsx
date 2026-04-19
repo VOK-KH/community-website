@@ -51,7 +51,7 @@ export function CmsWorkspaceShell({
 
   return (
     <CmsLayoutProvider value={{ openMobileNav }}>
-      <div className="min-h-svh bg-background text-foreground">
+      <div className="min-h-svh bg-background text-foreground relative z-10">
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
           <SheetContent
             side="left"
@@ -78,7 +78,9 @@ export function CmsWorkspaceShell({
             <div className="flex h-full min-h-0 flex-1 flex-col">
               <CmsMobileSidebarTrigger className="shrink-0" />
               <ScrollArea className="h-full min-h-0 flex-1">
-                <div className="mx-auto w-full px-4 max-w-7xl py-6 md:px-6 md:py-8">{children}</div>
+                <div className="mx-auto w-full px-4 max-w-7xl py-6 md:px-6 md:py-8 relative z-10">
+                  {children}
+                </div>
                 <CmsFooter />
               </ScrollArea>
             </div>
