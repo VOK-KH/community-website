@@ -6,6 +6,17 @@ import {
   type ThemeProviderProps,
 } from 'next-themes'
 
-export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
-  return <NextThemesProvider {...props}>{children}</NextThemesProvider>
+export function ThemeProvider({ children, scriptProps, ...props }: ThemeProviderProps) {
+  const resolvedScriptProps =
+    typeof window === 'undefined'
+      ? scriptProps
+      : ({ ...scriptProps, type: 'application/json' as const } satisfies NonNullable<
+          ThemeProviderProps['scriptProps']
+        >)
+
+  return (
+    <NextThemesProvider {...props} scriptProps={resolvedScriptProps}>
+      {children}
+    </NextThemesProvider>
+  )
 }

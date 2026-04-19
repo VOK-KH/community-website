@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useTransition } from 'react'
 import { LogOut, MoreVertical, Settings, User } from 'lucide-react'
 
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,11 +25,13 @@ export function CmsSidebarAccountFooter({
   displayName,
   email,
   initials,
+  image,
   collapsed,
 }: Readonly<{
   displayName: string
   email: string
   initials: string
+  image: string | null
   collapsed?: boolean
 }>) {
   const [pending, startTransition] = useTransition()
@@ -80,6 +82,7 @@ export function CmsSidebarAccountFooter({
               aria-label="Account menu"
             >
               <Avatar className="size-9 border border-zinc-600/80">
+                {image ? <AvatarImage src={image} alt="" className="object-cover" /> : null}
                 <AvatarFallback className="bg-linear-to-br from-violet-500 to-fuchsia-600 text-[11px] font-semibold text-white">
                   {initials}
                 </AvatarFallback>
@@ -96,6 +99,7 @@ export function CmsSidebarAccountFooter({
     <div className="mx-2 mb-3 rounded-2xl border border-zinc-800/90 bg-zinc-900/50 p-2 shadow-inner shadow-black/20">
       <div className="flex items-center gap-2">
         <Avatar className="size-9 shrink-0 border border-zinc-600/80">
+          {image ? <AvatarImage src={image} alt="" className="object-cover" /> : null}
           <AvatarFallback className="bg-linear-to-br from-violet-500 to-fuchsia-600 text-[11px] font-semibold text-white">
             {initials}
           </AvatarFallback>

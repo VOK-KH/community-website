@@ -272,6 +272,13 @@
   flex-shrink: 0;
 }
 
+.nb-user-slot {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin: 0 2px 0 4px;
+}
+
 .nb-cta {
   position: relative;
   isolation: isolate;
@@ -430,6 +437,10 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
+}
+
+.nb-exp-user {
+  margin: 4px 0 10px;
 }
 
 .nb-exp-link {

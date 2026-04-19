@@ -5,6 +5,8 @@ import * as React from 'react'
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from '@/components/ui/sheet'
 import { ScrollArea } from '@/components/ui/scroll-area'
 
+import type { AuthUserDisplay } from '@/lib/auth/user-display'
+
 import { CmsFooter } from './cms-footer'
 import { CmsLayoutProvider } from './cms-layout-context'
 import { CmsMobileSidebarTrigger } from './cms-mobile-sidebar-trigger'
@@ -18,7 +20,7 @@ export function CmsWorkspaceShell({
   children,
 }: Readonly<{
   role: 'admin' | 'member'
-  user: { displayName: string; email: string; initials: string }
+  user: AuthUserDisplay
   children: React.ReactNode
 }>) {
   const [mobileOpen, setMobileOpen] = React.useState(false)

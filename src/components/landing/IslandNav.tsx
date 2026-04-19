@@ -3,6 +3,9 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRef } from 'react'
+
+import { NavUserMenu } from '@/components/auth/nav-user-menu'
+import { authClient } from '@/lib/auth/client'
 import { gsap, useGsapSetup, scopedQuery } from '@/lib/motion'
 
 const LOGO_CHARS = [
@@ -16,6 +19,8 @@ const LOGO_CHARS = [
 
 export function IslandNav() {
   const zoneRef = useRef<HTMLDivElement>(null)
+  const { data: sessionData } = authClient.useSession()
+  const showJoinCta = !sessionData?.user?.email
 
   useGsapSetup(({ reducedMotion, finePtr, addCleanup }) => {
     const zone = zoneRef.current
@@ -275,9 +280,14 @@ export function IslandNav() {
             </span>
           </Link>
         </div>
-        <Link href="/community" className="island-cta">
-          Join Free
-        </Link>
+        <div className="island-actions">
+          <NavUserMenu variant="island" />
+          {showJoinCta ? (
+            <Link href="/community" className="island-cta">
+              Join Free
+            </Link>
+          ) : null}
+        </div>
       </nav>
     </div>
   )

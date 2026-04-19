@@ -6,6 +6,9 @@ import { usePathname } from 'next/navigation'
 import { Menu, X, Github, Mail } from 'lucide-react'
 import gsap from 'gsap'
 
+import { NavUserMenu } from '@/components/auth/nav-user-menu'
+import { authClient } from '@/lib/auth/client'
+
 function DiscordIcon({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden>
@@ -31,6 +34,8 @@ export default function Navbar() {
   const isLanding = pathname === '/'
   const [expanded, setExpanded] = useState(false)
   const navRef = useRef<HTMLElement>(null)
+  const { data: sessionData } = authClient.useSession()
+  const showJoinCta = !sessionData?.user?.email
 
   const [prevPathname, setPrevPathname] = useState(pathname)
   if (prevPathname !== pathname) {
@@ -213,10 +218,12 @@ export default function Navbar() {
             <span className="nb-sep" aria-hidden />
           </div>
 
-          <Link href="/community" className="nb-cta">
-            <span className="nb-cta-shine" aria-hidden />
-            <span className="nb-cta-label">Join Free</span>
-          </Link>
+          {showJoinCta ? (
+            <Link href="/community" className="nb-cta">
+              <span className="nb-cta-shine" aria-hidden />
+              <span className="nb-cta-label">Join Free</span>
+            </Link>
+          ) : null}
 
           <button
             onClick={toggle}
@@ -257,6 +264,10 @@ export default function Navbar() {
 
           <div className="nb-exp-divider" aria-hidden />
 
+          <div className="nb-exp-user">
+            <NavUserMenu variant="expanded" />
+          </div>
+
           <div className="nb-exp-icons">
             {ICON_LINKS.map((link) => {
               const Icon = link.icon
@@ -278,10 +289,18 @@ export default function Navbar() {
             })}
           </div>
 
-          <Link href="/community" className="nb-exp-cta" onClick={collapse} role="menuitem" tabIndex={expanded ? 0 : -1}>
-            <span className="nb-exp-cta-shine" aria-hidden />
-            <span className="nb-exp-cta-label">Join Free</span>
-          </Link>
+          {showJoinCta ? (
+            <Link
+              href="/community"
+              className="nb-exp-cta"
+              onClick={collapse}
+              role="menuitem"
+              tabIndex={expanded ? 0 : -1}
+            >
+              <span className="nb-exp-cta-shine" aria-hidden />
+              <span className="nb-exp-cta-label">Join Free</span>
+            </Link>
+          ) : null}
         </div>
       </nav>
     </div>

@@ -277,9 +277,9 @@
   }
 }
 
-/* Wide nav row: brand block + CTA (expanded only) */
+/* Wide nav row: brand block + actions (expanded only) */
 .landing-v3 #island-nav > .island-brand,
-.landing-v3 #island-nav > .island-cta {
+.landing-v3 #island-nav > .island-actions {
   display: none;
 }
 
@@ -292,7 +292,7 @@
 }
 
 .landing-v3 #island-nav.expanded > .island-brand,
-.landing-v3 #island-nav.expanded > .island-cta {
+.landing-v3 #island-nav.expanded > .island-actions {
   position: relative;
   z-index: 3;
   opacity: 1;
@@ -306,7 +306,14 @@
   flex-shrink: 0;
 }
 
-.landing-v3 #island-nav.expanded > .island-cta {
+.landing-v3 #island-nav.expanded > .island-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.landing-v3 #island-nav.expanded .island-actions .island-cta {
   display: inline-flex;
   flex-shrink: 0;
 }

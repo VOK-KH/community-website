@@ -23,6 +23,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
+import type { AuthUserDisplay } from '@/lib/auth/user-display'
 import { cn } from '@/lib/utils'
 
 import { CmsSidebarAccountFooter } from './cms-sidebar-account-footer'
@@ -177,7 +178,7 @@ export function CmsDesktopSidebar({
   onToggleCollapsed,
 }: Readonly<{
   role: 'admin' | 'member'
-  user: { displayName: string; email: string; initials: string }
+  user: AuthUserDisplay
   collapsed: boolean
   onToggleCollapsed: () => void
 }>) {
@@ -246,6 +247,7 @@ export function CmsDesktopSidebar({
           displayName={user.displayName}
           email={user.email}
           initials={user.initials}
+          image={user.image}
           collapsed={collapsed}
         />
       </div>
@@ -260,7 +262,7 @@ export function CmsMobileNavPanel({
   onNavigate,
 }: Readonly<{
   role: 'admin' | 'member'
-  user: { displayName: string; email: string; initials: string }
+  user: AuthUserDisplay
   onNavigate?: () => void
 }>) {
   return (
@@ -336,6 +338,7 @@ export function CmsMobileNavPanel({
           displayName={user.displayName}
           email={user.email}
           initials={user.initials}
+          image={user.image}
           collapsed={false}
         />
       </div>

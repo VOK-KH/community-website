@@ -15,7 +15,7 @@ export default async function CmsLayout({
   const user = getCmsSessionDisplay(session)
 
   return (
-    <CmsWorkspaceShell role={role === 'admin' ? 'admin' : 'member'} user={user}>
+    <CmsWorkspaceShell role={role} user={user}>
       {children}
     </CmsWorkspaceShell>
   )

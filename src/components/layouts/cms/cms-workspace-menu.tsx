@@ -3,7 +3,8 @@
 import Link from 'next/link'
 import { Check, ChevronDown, Globe, LayoutDashboard } from 'lucide-react'
 
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import type { AuthUserDisplay } from '@/lib/auth/user-display'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,7 +25,7 @@ export function CmsWorkspaceMenu({
   role,
   compact,
 }: Readonly<{
-  user: { displayName: string; email: string; initials: string }
+  user: AuthUserDisplay
   role: 'admin' | 'member'
   compact?: boolean
 }>) {
@@ -41,6 +42,7 @@ export function CmsWorkspaceMenu({
           aria-label={compact ? 'Workspace menu' : 'Open workspace menu'}
         >
           <Avatar className={cn('size-8 shrink-0 border border-zinc-600/80', compact && 'size-9')}>
+            {user.image ? <AvatarImage src={user.image} alt="" className="object-cover" /> : null}
             <AvatarFallback className="bg-linear-to-br from-violet-500 to-fuchsia-600 text-[11px] font-semibold text-white">
               {user.initials}
             </AvatarFallback>
@@ -64,6 +66,7 @@ export function CmsWorkspaceMenu({
           <p className="text-xs font-medium uppercase tracking-wider text-zinc-500">Current workspace</p>
           <div className="mt-2 flex items-center gap-2">
             <Avatar className="size-8 border border-zinc-600/80">
+              {user.image ? <AvatarImage src={user.image} alt="" className="object-cover" /> : null}
               <AvatarFallback className="bg-linear-to-br from-violet-500 to-fuchsia-600 text-[11px] font-semibold text-white">
                 {user.initials}
               </AvatarFallback>
