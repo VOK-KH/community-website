@@ -3,6 +3,7 @@
 import * as React from 'react'
 
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from '@/components/ui/sheet'
+import { ScrollArea } from '@/components/ui/scroll-area'
 
 import { CmsFooter } from './cms-footer'
 import { CmsLayoutProvider } from './cms-layout-context'
@@ -71,13 +72,13 @@ export function CmsWorkspaceShell({
             collapsed={collapsed}
             onToggleCollapsed={toggleCollapsed}
           />
-          <main className="relative z-1 min-h-0 min-w-0 flex-1 overflow-hidden shadow-sm">
-            <div className="flex min-h-0 flex-1 flex-col">
-              <CmsMobileSidebarTrigger />
-              <div className="min-h-0 flex-1 overflow-y-auto overscroll-y-contain">
-                <div className="mx-auto w-full max-w-6xl px-4 py-6 md:px-6 md:py-8">{children}</div>
+          <main className="relative z-10 flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden shadow-sm">
+            <div className="flex h-full min-h-0 flex-1 flex-col">
+              <CmsMobileSidebarTrigger className="shrink-0" />
+              <ScrollArea className="h-full min-h-0 flex-1">
+                <div className="mx-auto w-full px-4 max-w-7xl py-6 md:px-6 md:py-8">{children}</div>
                 <CmsFooter />
-              </div>
+              </ScrollArea>
             </div>
           </main>
         </div>
