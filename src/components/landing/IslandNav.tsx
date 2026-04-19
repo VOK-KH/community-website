@@ -282,11 +282,7 @@ export function IslandNav() {
         </div>
         <div className="island-actions">
           <NavUserMenu variant="island" />
-          {showJoinCta ? (
-            <Link href="/community" className="island-cta">
-              Join Free
-            </Link>
-          ) : null}
+          
         </div>
       </nav>
     </div>
