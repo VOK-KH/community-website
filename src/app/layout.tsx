@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { DM_Sans, Space_Mono, Syne } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { HotToaster } from '@/components/hot-toaster'
 import { ThemeProvider } from '@/components/theme-provider'
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import './globals.css'
@@ -115,6 +116,7 @@ export default function RootLayout({
       <body className="font-sans antialiased">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
+          <HotToaster />
         </ThemeProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
         {process.env.NODE_ENV === 'production' && <SpeedInsights />}

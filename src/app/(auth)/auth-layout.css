@@ -86,12 +86,32 @@
     0 0 80px rgba(0, 229, 255, 0.04);
 }
 
+.auth-landing .auth-brand-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(148, 163, 184, 0.12) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(148, 163, 184, 0.12) 1px, transparent 1px);
+  background-size: 20px 30px;
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 100%, #000 60%, transparent 100%);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 100%, #000 60%, transparent 100%);
+}
+
 .auth-landing .auth-brand-panel::after {
   content: '';
   position: absolute;
   inset: 0;
+  z-index: 1;
   background: radial-gradient(ellipse 90% 60% at 20% 0%, rgba(0, 229, 255, 0.12), transparent 55%);
   pointer-events: none;
+}
+
+.auth-landing .auth-brand-panel > * {
+  position: relative;
+  z-index: 2;
 }
 
 .auth-landing .auth-main-panel {

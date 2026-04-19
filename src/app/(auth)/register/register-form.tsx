@@ -2,7 +2,8 @@
 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useState, useTransition } from 'react'
+import { useTransition } from 'react'
+import toast from 'react-hot-toast'
 
 import { AuthEmailDivider } from '@/app/(auth)/_components/auth-email-divider'
 import { SocialOAuthRow } from '@/app/(auth)/_components/social-oauth-row'
@@ -11,12 +12,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { authClient } from '@/lib/auth/client'
+import { validateAuthEmailPassword } from '@/lib/auth/form-validation'
 
 type Props = { nextPath: string }
 
 export function RegisterForm({ nextPath }: Props) {
   const router = useRouter()
-  const [error, setError] = useState<string | null>(null)
   const [pending, startTransition] = useTransition()
   const site = process.env.NEXT_PUBLIC_SITE_NAME ?? 'VokDev'
 
@@ -32,14 +33,19 @@ export function RegisterForm({ nextPath }: Props) {
 
         <form
           className="space-y-4 pt-1"
+          noValidate
           onSubmit={(e) => {
             e.preventDefault()
-            setError(null)
             const fd = new FormData(e.currentTarget)
             const name = String(fd.get('name') ?? '').trim()
             const email = String(fd.get('email') ?? '').trim()
             const password = String(fd.get('password') ?? '')
             const next = String(fd.get('next') ?? nextPath)
+            const validationError = validateAuthEmailPassword(email, password)
+            if (validationError) {
+              toast.error(validationError)
+              return
+            }
             startTransition(async () => {
               const { error: signError } = await authClient.signUp.email({
                 name: name || email.split('@')[0] || 'Member',
@@ -48,7 +54,7 @@ export function RegisterForm({ nextPath }: Props) {
                 callbackURL: next.startsWith('/cms') ? next : '/cms/dashboard',
               })
               if (signError) {
-                setError(signError.message ?? 'Sign up failed')
+                toast.error(signError.message ?? 'Sign up failed')
                 return
               }
               router.push(next.startsWith('/cms') ? next : '/cms/dashboard')
@@ -80,8 +86,8 @@ export function RegisterForm({ nextPath }: Props) {
               id="email"
               name="email"
               type="email"
+              inputMode="email"
               placeholder="name@company.com"
-              required
               autoComplete="email"
               className="h-11 rounded-lg bg-background"
             />
@@ -98,18 +104,10 @@ export function RegisterForm({ nextPath }: Props) {
               id="password"
               name="password"
               type="password"
-              required
-              minLength={10}
               autoComplete="new-password"
               className="h-11 rounded-lg bg-background"
             />
           </div>
-
-          {error ? (
-            <p className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
-              {error}
-            </p>
-          ) : null}
 
           <Button className="h-11 w-full rounded-lg text-base font-semibold shadow-sm" type="submit" disabled={pending}>
             {pending ? 'Creating account…' : 'Sign up'}
