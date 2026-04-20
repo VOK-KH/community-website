@@ -2,11 +2,20 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useRef } from 'react'
 
 import { NavUserMenu } from '@/components/auth/nav-user-menu'
 import { authClient } from '@/lib/auth/client'
 import { gsap, useGsapSetup, scopedQuery } from '@/lib/motion'
+
+function authNextQuery(pathname: string) {
+  const next = pathname.startsWith('/cms') ? pathname : '/cms/dashboard'
+  return `?next=${encodeURIComponent(next)}`
+}
+
+/** Collapsed pill — keep in sync with `landing-v3.css` `#island-nav` default width/height. */
+const ISLAND_COLLAPSED = { w: 276, h: 38 } as const
 
 const LOGO_CHARS = [
   { ch: 'V', accent: true },
@@ -17,10 +26,15 @@ const LOGO_CHARS = [
   { ch: 'v', accent: false },
 ] as const
 
+const SECONDARY_LINK =
+  'rounded-full px-2 py-1 text-[11px] font-semibold tracking-wide text-white/75 transition-[color,background] hover:bg-white/10 hover:text-[var(--vok-accent)] sm:px-2.5'
+
 export function IslandNav() {
   const zoneRef = useRef<HTMLDivElement>(null)
+  const pathname = usePathname() ?? '/'
   const { data: sessionData } = authClient.useSession()
-  const showJoinCta = !sessionData?.user?.email
+  const signedIn = !!sessionData?.user?.email
+  const nextQ = authNextQuery(pathname)
 
   useGsapSetup(({ reducedMotion, finePtr, addCleanup }) => {
     const zone = zoneRef.current
@@ -70,8 +84,8 @@ export function IslandNav() {
         gsap.set(chars, { clearProps: 'all' })
       }
 
-      const w = window.innerWidth < 720 ? '92vw' : 380
-      const expandedH = 54
+      const w = window.innerWidth < 720 ? '92vw' : 408
+      const expandedH = 56
 
       layoutTl = gsap.timeline()
       layoutTl.to(island, {
@@ -114,8 +128,8 @@ export function IslandNav() {
         const chars = island.querySelectorAll<HTMLElement>('.island-logo-char')
         if (chars.length) gsap.set(chars, { clearProps: 'all' })
         gsap.to(island, {
-          width: 212,
-          height: 36,
+          width: ISLAND_COLLAPSED.w,
+          height: ISLAND_COLLAPSED.h,
           borderRadius: 100,
           duration: immediate ? 0.45 : 0.55,
           ease: 'expo.inOut',
@@ -281,8 +295,31 @@ export function IslandNav() {
           </Link>
         </div>
         <div className="island-actions">
+          <div className="island-nav-cluster flex min-w-0 shrink-0 items-center gap-1 sm:gap-2">
+            <Link
+              href="/community"
+              className={SECONDARY_LINK}
+              prefetch
+              aria-current={pathname === '/community' ? 'page' : undefined}
+            >
+              Community
+            </Link>
+            {signedIn ? (
+              <Link
+                href="/cms/dashboard"
+                className="island-cta"
+                prefetch
+                aria-current={pathname.startsWith('/cms') ? 'page' : undefined}
+              >
+                CMS
+              </Link>
+            ) : (
+              <Link href={`/joint${nextQ}`} className="island-cta" prefetch>
+                Join
+              </Link>
+            )}
+          </div>
           <NavUserMenu variant="island" />
-          
         </div>
       </nav>
     </div>

@@ -147,8 +147,8 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
   overflow: hidden;
   will-change: width, height, transform;
-  width: 212px;
-  height: 36px;
+  width: 276px;
+  height: 38px;
   transform-style: preserve-3d;
 }
 
@@ -277,10 +277,33 @@
   }
 }
 
-/* Wide nav row: brand block + actions (expanded only) */
-.landing-v3 #island-nav > .island-brand,
-.landing-v3 #island-nav > .island-actions {
+/* Brand: hidden until expanded (wide row). */
+.landing-v3 #island-nav > .island-brand {
   display: none;
+}
+
+/*
+ * Collapsed island: keep account menu usable (Sign in / Join / account).
+ * Full-size overlay with pointer-events: none so the pill still receives hover for expand;
+ * only the menu trigger stays interactive.
+ */
+.landing-v3 #island-nav:not(.expanded) > .island-actions {
+  display: flex;
+  position: absolute;
+  inset: 0;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 0.5rem;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.landing-v3 #island-nav:not(.expanded) > .island-actions .island-nav-cluster {
+  display: none;
+}
+
+.landing-v3 #island-nav:not(.expanded) > .island-actions > * {
+  pointer-events: auto;
 }
 
 .landing-v3 #island-nav.expanded {
@@ -307,10 +330,14 @@
 }
 
 .landing-v3 #island-nav.expanded > .island-actions {
+  position: relative;
+  inset: auto;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   flex-shrink: 0;
+  padding-right: 0;
+  pointer-events: auto;
 }
 
 .landing-v3 #island-nav.expanded .island-actions .island-cta {

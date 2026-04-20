@@ -2,7 +2,7 @@
 
 import { Fingerprint } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useEffect, useTransition } from 'react'
+import { useTransition } from 'react'
 import toast from 'react-hot-toast'
 
 import { Button } from '@/components/ui/button'
@@ -16,32 +16,45 @@ function redirectTarget(nextPath: string) {
   return nextPath.startsWith('/cms') ? nextPath : '/cms/dashboard'
 }
 
+/** User dismissed the prompt, timeout, or policy blocked — not a server failure (@better-auth/passkey maps these to AUTH_CANCELLED). */
+function isPasskeyUserDismissedError(error: { code?: string; message?: string } | null | undefined): boolean {
+  if (!error) return false
+  if (error.code === 'AUTH_CANCELLED') return true
+  const m = (error.message ?? '').toLowerCase()
+  return (
+    m.includes('cancel') ||
+    m.includes('not allowed') ||
+    m.includes('abort') ||
+    m.includes('timed out') ||
+    m.includes('timeout')
+  )
+}
+
 export function AuthPasskeySignIn({ nextPath }: Props) {
   const router = useRouter()
   const [pending, startTransition] = useTransition()
 
-  useEffect(() => {
-    if (typeof window === 'undefined' || typeof PublicKeyCredential === 'undefined') return
-    if (!PublicKeyCredential.isConditionalMediationAvailable?.()) return
-    void authClient.signIn.passkey({ autoFill: true }).catch(() => {
-      /* no-op: no passkey or user cancelled preload */
-    })
-  }, [])
-
   function signInWithPasskey() {
     startTransition(async () => {
       const dest = redirectTarget(nextPath)
-      const { error } = await authClient.signIn.passkey({
-        autoFill: false,
-        fetchOptions: {
-          onSuccess: () => {
-            router.push(dest)
-            router.refresh()
+      try {
+        const { error } = await authClient.signIn.passkey({
+          autoFill: false,
+          fetchOptions: {
+            onSuccess: () => {
+              router.push(dest)
+              router.refresh()
+            },
           },
-        },
-      })
-      if (error) {
-        toast.error(error.message ?? 'Passkey sign-in failed')
+        })
+        if (error && !isPasskeyUserDismissedError(error)) {
+          toast.error(error.message ?? 'Passkey sign-in failed')
+        }
+      } catch (e) {
+        if (e instanceof DOMException && e.name === 'NotAllowedError') return
+        if (e instanceof Error && isPasskeyUserDismissedError({ message: e.message })) return
+        const msg = e instanceof Error ? e.message : 'Passkey sign-in failed'
+        toast.error(msg)
       }
     })
   }
