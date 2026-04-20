@@ -20,10 +20,10 @@ export function RegisterForm({ nextPath }: Props) {
   const site = process.env.NEXT_PUBLIC_SITE_NAME ?? 'VokDev'
 
   return (
-    <Card className="border border-white/10 bg-card/90 shadow-2xl shadow-black/30 backdrop-blur-xl sm:rounded-2xl">
+    <Card className="auth-card-surface border text-card-foreground sm:rounded-2xl">
       <CardHeader className="space-y-1 pb-2">
         <CardTitle className="text-2xl font-bold tracking-tight">Create account</CardTitle>
-        <CardDescription className="text-base">Create an account for {site}.</CardDescription>
+        <CardDescription className="text-base text-muted-foreground">Create an account for {site}.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-1">
         <form
@@ -52,6 +52,9 @@ export function RegisterForm({ nextPath }: Props) {
                 toast.error(signError.message ?? 'Sign up failed')
                 return
               }
+              toast.success('Account created. Welcome aboard—taking you to the dashboard…', {
+                duration: 4000,
+              })
               router.push(next.startsWith('/cms') ? next : '/cms/dashboard')
               router.refresh()
             })
@@ -69,7 +72,7 @@ export function RegisterForm({ nextPath }: Props) {
               type="text"
               placeholder="How we should greet you"
               autoComplete="name"
-              className="h-11 rounded-lg bg-background"
+              className="auth-input-ring h-11 rounded-lg bg-background"
             />
           </div>
 
@@ -84,7 +87,7 @@ export function RegisterForm({ nextPath }: Props) {
               inputMode="email"
               placeholder="name@company.com"
               autoComplete="email"
-              className="h-11 rounded-lg bg-background"
+              className="auth-input-ring h-11 rounded-lg bg-background"
             />
           </div>
 
@@ -99,26 +102,28 @@ export function RegisterForm({ nextPath }: Props) {
               id="password"
               name="password"
               type="password"
+              placeholder="At least 10 characters"
               autoComplete="new-password"
-              className="h-11 rounded-lg bg-background"
+              className="auth-input-ring h-11 rounded-lg bg-background"
             />
           </div>
 
-          <Button className="h-11 w-full rounded-lg text-base font-semibold shadow-sm" type="submit" disabled={pending}>
+          <Button
+            className="auth-submit-btn h-11 w-full rounded-lg text-base font-semibold"
+            type="submit"
+            disabled={pending}
+          >
             {pending ? 'Creating account…' : 'Sign up'}
           </Button>
         </form>
 
         <p className="pt-4 text-center text-sm text-muted-foreground sm:text-left">
           Already on {site}?{' '}
-          <Link
-            className="font-semibold text-primary underline-offset-4 hover:underline"
-            href={`/login?next=${encodeURIComponent(nextPath)}`}
-          >
+          <Link className="auth-text-link underline-offset-4" href={`/login?next=${encodeURIComponent(nextPath)}`}>
             Log in
           </Link>
           {' · '}
-          <Link className="underline-offset-4 hover:underline" href={`/joint?next=${encodeURIComponent(nextPath)}`}>
+          <Link className="auth-muted-link underline-offset-4 hover:underline" href={`/joint?next=${encodeURIComponent(nextPath)}`}>
             Join hub
           </Link>
         </p>

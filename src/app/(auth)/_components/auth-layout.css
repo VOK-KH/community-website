@@ -1,0 +1,300 @@
+.auth-landing {
+  --vok-bg: #080b11;
+  --vok-surface: #0f1923;
+  --vok-surface2: #162030;
+  --vok-accent: #00e5ff;
+  --vok-violet: #7c3aed;
+  --vok-emerald: #10b981;
+  --vok-text: #eef2f7;
+  --vok-text2: #8a9ab0;
+  --vok-border: rgba(255, 255, 255, 0.07);
+  --vok-border2: rgba(255, 255, 255, 0.12);
+
+  background: var(--vok-bg);
+  color: var(--vok-text);
+  position: relative;
+  overflow-x: clip;
+}
+
+.auth-landing .auth-noise {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px;
+  opacity: 0.022;
+}
+
+.auth-landing .auth-bg-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.auth-landing .auth-bg-cyber-base {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 120% 90% at 50% -10%, rgba(0, 229, 255, 0.06), transparent 52%),
+    linear-gradient(180deg, #0a0e16 0%, var(--vok-bg) 38%, #060910 100%);
+  pointer-events: none;
+}
+
+.auth-landing .auth-bg-cyber-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(rgba(0, 229, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 229, 255, 0.045) 1px, transparent 1px);
+  background-size: 30px 30px;
+  opacity: 0.85;
+  mask-image: radial-gradient(ellipse 95% 85% at 50% 45%, black 22%, transparent 78%);
+}
+
+@media (min-width: 480px) {
+  .auth-landing .auth-bg-cyber-grid {
+    background-size: 36px 36px;
+    mask-image: radial-gradient(ellipse 100% 90% at 50% 42%, black 18%, transparent 80%);
+  }
+}
+
+@media (min-width: 1024px) {
+  .auth-landing .auth-bg-cyber-grid {
+    background-size: 44px 44px;
+    mask-image: radial-gradient(ellipse 105% 95% at 50% 40%, black 14%, transparent 82%);
+  }
+}
+
+.auth-landing .auth-bg-cyber-fx {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.95;
+  background-image:
+    radial-gradient(circle 2.5px at 10% 14%, rgba(0, 229, 255, 0.85), transparent 55%),
+    radial-gradient(circle 2px at 22% 9%, rgba(0, 229, 255, 0.45), transparent 50%),
+    radial-gradient(circle 2px at 78% 28%, rgba(0, 229, 255, 0.4), transparent 50%),
+    radial-gradient(circle 2.5px at 88% 18%, rgba(0, 229, 255, 0.7), transparent 52%),
+    radial-gradient(circle 2px at 52% 62%, rgba(0, 229, 255, 0.35), transparent 50%),
+    radial-gradient(circle 2px at 34% 78%, rgba(0, 229, 255, 0.5), transparent 50%),
+    radial-gradient(circle 2.5px at 72% 82%, rgba(0, 229, 255, 0.65), transparent 52%),
+    radial-gradient(circle 2px at 14% 56%, rgba(0, 229, 255, 0.38), transparent 50%),
+    linear-gradient(
+      128deg,
+      transparent 0%,
+      transparent 36%,
+      rgba(0, 229, 255, 0.04) 36.2%,
+      transparent 36.8%,
+      transparent 52%,
+      rgba(0, 229, 255, 0.035) 52.3%,
+      transparent 53%
+    ),
+    linear-gradient(
+      52deg,
+      transparent 0%,
+      transparent 28%,
+      rgba(0, 229, 255, 0.028) 28.5%,
+      transparent 29.5%
+    );
+  background-size:
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    100% 100%;
+  mask-image: radial-gradient(ellipse 100% 88% at 50% 48%, black 35%, transparent 92%);
+}
+
+@media (min-width: 1024px) {
+  .auth-landing .auth-bg-cyber-fx {
+    mask-image: radial-gradient(ellipse 95% 85% at 50% 45%, black 30%, transparent 90%);
+  }
+}
+
+.auth-landing .auth-particles-host {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.auth-landing .auth-particles-host .particles-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 1.8s ease-out;
+  pointer-events: none;
+}
+
+.auth-landing .auth-particles-host .particles-bg.particles-visible {
+  opacity: 1;
+}
+
+.auth-landing .auth-particles-host .particles-bg canvas {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.auth-landing .auth-brand-panel {
+  background: linear-gradient(
+    165deg,
+    rgba(15, 25, 35, 0.92) 0%,
+    rgba(6, 10, 15, 0.88) 45%,
+    rgba(22, 32, 48, 0.9) 100%
+  );
+  border-color: var(--vok-border2);
+  box-shadow:
+    inset 0 1px 0 rgba(0, 229, 255, 0.06),
+    0 0 80px rgba(0, 229, 255, 0.04);
+}
+
+.auth-landing .auth-brand-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(148, 163, 184, 0.12) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(148, 163, 184, 0.12) 1px, transparent 1px);
+  background-size: 20px 30px;
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 100%, #000 60%, transparent 100%);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 100%, #000 60%, transparent 100%);
+}
+
+.auth-landing .auth-brand-panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: radial-gradient(ellipse 90% 60% at 20% 0%, rgba(0, 229, 255, 0.12), transparent 55%);
+  pointer-events: none;
+}
+
+.auth-landing .auth-brand-panel > * {
+  position: relative;
+  z-index: 2;
+}
+
+.auth-landing .auth-main-panel {
+  background: linear-gradient(180deg, rgba(6, 10, 15, 0.55) 0%, rgba(6, 10, 15, 0.75) 100%);
+}
+
+.auth-landing .auth-link-muted {
+  color: var(--vok-text2);
+}
+
+.auth-landing .auth-link-muted:hover {
+  color: var(--vok-accent);
+}
+
+.auth-landing .auth-accent-ring {
+  box-shadow: 0 0 0 1px rgba(0, 229, 255, 0.25), 0 0 24px rgba(0, 229, 255, 0.12);
+}
+
+/* --- Per-route UI accent (same card layout, different hue) --- */
+
+.auth-landing .auth-flow--login {
+  --auth-ui-from: #00e5ff;
+  --auth-ui-to: #0891b2;
+  --auth-ui-muted: #67e8f9;
+  --auth-ui-ink: #041016;
+  --auth-ui-card-glow: rgba(0, 229, 255, 0.14);
+  --auth-ui-divider-pill: rgba(15, 25, 35, 0.96);
+}
+
+.auth-landing .auth-flow--register {
+  --auth-ui-from: #c4b5fd;
+  --auth-ui-to: #6d28d9;
+  --auth-ui-muted: #c4b5fd;
+  --auth-ui-ink: #faf5ff;
+  --auth-ui-card-glow: rgba(167, 139, 250, 0.18);
+  --auth-ui-divider-pill: rgba(15, 25, 35, 0.96);
+}
+
+.auth-landing .auth-flow--joint {
+  --auth-ui-from: #6ee7b7;
+  --auth-ui-to: #047857;
+  --auth-ui-muted: #5eead4;
+  --auth-ui-ink: #042f2e;
+  --auth-ui-card-glow: rgba(52, 211, 153, 0.16);
+  --auth-ui-divider-pill: rgba(15, 25, 35, 0.96);
+}
+
+.auth-landing .auth-card-surface {
+  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(15, 25, 35, 0.9);
+  box-shadow:
+    0 0 0 1px var(--auth-ui-card-glow),
+    0 24px 48px -12px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(18px);
+}
+
+.auth-landing .auth-submit-btn:not(:disabled) {
+  background: linear-gradient(135deg, var(--auth-ui-from), var(--auth-ui-to)) !important;
+  color: var(--auth-ui-ink) !important;
+  border: none !important;
+  box-shadow: 0 10px 28px -6px color-mix(in oklab, var(--auth-ui-from) 42%, transparent);
+}
+
+.auth-landing .auth-submit-btn:not(:disabled):hover {
+  filter: brightness(1.05);
+}
+
+.auth-landing .auth-outline-btn {
+  border-color: color-mix(in oklab, var(--auth-ui-muted) 32%, rgba(255, 255, 255, 0.12)) !important;
+  background: color-mix(in oklab, var(--vok-surface2) 72%, transparent) !important;
+  color: var(--vok-text) !important;
+}
+
+.auth-landing .auth-outline-btn:hover {
+  background: rgba(255, 255, 255, 0.07) !important;
+  border-color: color-mix(in oklab, var(--auth-ui-muted) 48%, rgba(255, 255, 255, 0.12)) !important;
+}
+
+.auth-landing .auth-text-link {
+  color: var(--auth-ui-muted);
+  font-weight: 600;
+}
+
+.auth-landing .auth-text-link:hover {
+  color: var(--auth-ui-from);
+  text-decoration: underline;
+}
+
+.auth-landing .auth-muted-link {
+  color: var(--vok-text2);
+}
+
+.auth-landing .auth-muted-link:hover {
+  color: var(--auth-ui-muted);
+}
+
+.auth-landing .auth-input-ring:focus-visible {
+  border-color: color-mix(in oklab, var(--auth-ui-muted) 55%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--auth-ui-muted) 22%, transparent);
+}
+
+.auth-landing .auth-section-divider-pill {
+  background: var(--auth-ui-divider-pill);
+}
+
+.auth-landing .auth-oauth-outline {
+  border-color: rgba(255, 255, 255, 0.16) !important;
+  color: var(--vok-text) !important;
+}
+
+.auth-landing .auth-oauth-outline:hover {
+  border-color: color-mix(in oklab, var(--auth-ui-muted) 40%, rgba(255, 255, 255, 0.2)) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+}

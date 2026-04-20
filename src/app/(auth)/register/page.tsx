@@ -1,6 +1,7 @@
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 
+import { AuthFlowSurface } from '@/app/(auth)/_components/auth-flow-surface'
 import { auth } from '@/lib/auth/server'
 
 import { RegisterForm } from './register-form'
@@ -28,5 +29,9 @@ export default async function CmsRegisterPage({
     redirect(nextPath)
   }
 
-  return <RegisterForm nextPath={nextPath} />
+  return (
+    <AuthFlowSurface variant="register">
+      <RegisterForm nextPath={nextPath} />
+    </AuthFlowSurface>
+  )
 }

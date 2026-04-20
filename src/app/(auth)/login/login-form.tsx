@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation'
 import { useTransition } from 'react'
 import toast from 'react-hot-toast'
 
-import { AuthEmailDivider } from '@/app/(auth)/_components/auth-email-divider'
-import { SocialOAuthRow } from '@/app/(auth)/_components/social-oauth-row'
+import { AuthPasskeySignIn } from '@/app/(auth)/_components/auth-passkey-sign-in'
+import { AuthSectionDivider } from '@/app/(auth)/_components/auth-section-divider'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -25,12 +25,18 @@ export function LoginForm({ nextPath, signUpEnabled }: Props) {
   const site = process.env.NEXT_PUBLIC_SITE_NAME ?? 'VokDev'
 
   return (
-    <Card className="border border-white/10 bg-card/90 shadow-2xl shadow-black/30 backdrop-blur-xl sm:rounded-2xl">
+    <Card className="auth-card-surface border text-card-foreground sm:rounded-2xl">
       <CardHeader className="space-y-1 pb-2">
         <CardTitle className="text-2xl font-bold tracking-tight">Log in</CardTitle>
-        <CardDescription className="text-base">Sign in to {site} with your email.</CardDescription>
+        <CardDescription className="text-base text-muted-foreground">
+          Sign in to {site} with your email.
+        </CardDescription>
       </CardHeader>
       <CardContent className="space-y-1">
+        <div className="space-y-3 pb-1">
+          <AuthPasskeySignIn nextPath={nextPath} />
+          <AuthSectionDivider label="Or sign in with email" />
+        </div>
         <form
           className="space-y-4 pt-1"
           noValidate
@@ -55,6 +61,9 @@ export function LoginForm({ nextPath, signUpEnabled }: Props) {
                 toast.error(signError.message ?? 'Sign in failed')
                 return
               }
+              toast.success('Signed in successfully. Opening your workspace…', {
+                duration: 3800,
+              })
               router.push(next.startsWith('/cms') ? next : '/cms/dashboard')
               router.refresh()
             })
@@ -69,11 +78,14 @@ export function LoginForm({ nextPath, signUpEnabled }: Props) {
             <Input
               id="email"
               name="email"
-              type="email"
+              type="text"
               inputMode="email"
+              autoCapitalize="none"
+              autoCorrect="off"
+              spellCheck={false}
               placeholder="name@company.com"
-              autoComplete="email"
-              className="h-11 rounded-lg bg-background"
+              autoComplete="username webauthn"
+              className="auth-input-ring h-11 rounded-lg bg-background"
             />
           </div>
 
@@ -88,12 +100,17 @@ export function LoginForm({ nextPath, signUpEnabled }: Props) {
               id="password"
               name="password"
               type="password"
-              autoComplete="current-password"
-              className="h-11 rounded-lg bg-background"
+              placeholder="Enter your password"
+              autoComplete="current-password webauthn"
+              className="auth-input-ring h-11 rounded-lg bg-background"
             />
           </div>
 
-          <Button className="h-11 w-full rounded-lg text-base font-semibold shadow-sm" type="submit" disabled={pending}>
+          <Button
+            className="auth-submit-btn h-11 w-full rounded-lg text-base font-semibold"
+            type="submit"
+            disabled={pending}
+          >
             {pending ? 'Signing in…' : 'Log in'}
           </Button>
         </form>
@@ -102,20 +119,17 @@ export function LoginForm({ nextPath, signUpEnabled }: Props) {
           {signUpEnabled ? (
             <p>
               New to {site}?{' '}
-              <Link
-                className="font-semibold text-primary underline-offset-4 hover:underline"
-                href={`/register?next=${encodeURIComponent(nextPath)}`}
-              >
+              <Link className="auth-text-link underline-offset-4" href={`/register?next=${encodeURIComponent(nextPath)}`}>
                 Create an account
               </Link>
             </p>
           ) : null}
           <p>
-            <Link className="underline-offset-4 hover:underline" href={`/joint?next=${encodeURIComponent(nextPath)}`}>
+            <Link className="auth-muted-link underline-offset-4 hover:underline" href={`/joint?next=${encodeURIComponent(nextPath)}`}>
               Join options
             </Link>
             {' · '}
-            <Link className="underline-offset-4 hover:underline" href="/">
+            <Link className="auth-muted-link underline-offset-4 hover:underline" href="/">
               Home
             </Link>
           </p>

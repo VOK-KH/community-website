@@ -1,6 +1,7 @@
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 
+import { AuthFlowSurface } from '@/app/(auth)/_components/auth-flow-surface'
 import { auth } from '@/lib/auth/server'
 
 import { LoginForm } from './login-form'
@@ -26,5 +27,9 @@ export default async function CmsLoginPage({
 
   const signUpEnabled = process.env.CMS_DISABLE_SIGNUP !== 'true'
 
-  return <LoginForm nextPath={nextPath} signUpEnabled={signUpEnabled} />
+  return (
+    <AuthFlowSurface variant="login">
+      <LoginForm nextPath={nextPath} signUpEnabled={signUpEnabled} />
+    </AuthFlowSurface>
+  )
 }

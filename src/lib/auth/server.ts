@@ -4,9 +4,13 @@ import { nextCookies } from 'better-auth/next-js'
 
 import * as authSchema from '@/db/auth-schema'
 
+import { buildBetterAuthSocialProviders } from './oauth-config'
 import { getAuthDrizzle } from './db'
+import { createPasskeyPlugin } from './passkey-plugin'
 
 const isProduction = process.env.NODE_ENV === 'production'
+
+const socialProviders = buildBetterAuthSocialProviders()
 
 function normalizeBaseUrl(url: string | undefined): string | undefined {
   if (!url) return undefined
@@ -71,6 +75,7 @@ export const auth = betterAuth({
     minPasswordLength: 10,
     maxPasswordLength: 128,
   },
+  ...(socialProviders ? { socialProviders } : {}),
   account: {
     encryptOAuthTokens: true,
   },
@@ -93,5 +98,5 @@ export const auth = betterAuth({
       disableIpTracking: false,
     },
   },
-  plugins: [nextCookies()],
+  plugins: [nextCookies(), createPasskeyPlugin()],
 })
