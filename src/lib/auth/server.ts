@@ -13,6 +13,16 @@ function normalizeBaseUrl(url: string | undefined): string | undefined {
   return url.replace(/\/$/, '')
 }
 
+function hostVariants(url: string): string[] {
+  try {
+    const u = new URL(url)
+    const host = u.host.replace(/^www\./, '')
+    return [`${u.protocol}//${host}`, `${u.protocol}//www.${host}`]
+  } catch {
+    return [url]
+  }
+}
+
 function trustedOriginList(): string[] {
   const site = normalizeBaseUrl(process.env.NEXT_PUBLIC_SITE_URL)
   const authUrl = normalizeBaseUrl(process.env.BETTER_AUTH_URL)
@@ -21,7 +31,10 @@ function trustedOriginList(): string[] {
     .map((s) => s.trim())
     .filter(Boolean)
 
-  const base = [site, authUrl, ...extras].filter((x): x is string => !!x)
+  const base = [site, authUrl, ...extras]
+    .filter((x): x is string => !!x)
+    .flatMap(hostVariants)
+
   const devDefaults = isProduction
     ? []
     : ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://[::1]:3000']
